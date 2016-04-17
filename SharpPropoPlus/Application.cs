@@ -18,21 +18,25 @@ namespace SharpPropoPlus
     private static Application _instance;
     private static readonly object Sync = new object();
     private readonly DecoderManager  _decoderManager;
-    private Lazy<IPropoPlusDecoder, IDecoderMetadata> _decoder;
+    private readonly Lazy<IPropoPlusDecoder, IDecoderMetadata> _decoder;
 
 
     private Application()
     {
       _decoderManager = new DecoderManager();
+
+      //TODO: Remove, this is only for testing...
       _decoder = DecoderManager.Decoders.First();
       JoystickHelper.Initialize();
       JoystickInteraction.Initialize();
 
+      //TODO: Remove, this is only for testing...
       GlobalEventAggregator.Instance.AddListener<AudioDataEventArgs>(AudioDataAction);
 
       System.Windows.Application.Current.MainWindow = (Window)new Shell();
     }
 
+    //TODO: Remove, this is only for testing...
     private void AudioDataAction(AudioDataEventArgs args)
     {
       //var bitsPerSample = source.WaveFormat.BitsPerSample;
