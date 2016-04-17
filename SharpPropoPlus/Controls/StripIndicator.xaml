@@ -1,0 +1,29 @@
+﻿<UserControl x:Class="SharpPropoPlus.Controls.StripIndicator"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:SharpPropoPlus.Controls"
+             BorderThickness="0"
+             Background="Transparent"
+             mc:Ignorable="d" 
+             MinHeight="21"
+             d:DesignHeight="300" d:DesignWidth="300">
+
+    <Border 
+        BorderBrush="{Binding BorderBrush, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:StripIndicator}}}" 
+        BorderThickness="{Binding BorderThickness, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:StripIndicator}}}"
+        Background="{Binding Background, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:StripIndicator}}}">
+        <Grid Width="{Binding ProgressBarWidth, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:StripIndicator}}}"
+              Background="{Binding Fill, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:StripIndicator}}}"
+              HorizontalAlignment="Left">
+            <!--<Grid.Background>
+                    <LinearGradientBrush EndPoint="1 0.5" StartPoint="0 0.5">
+                        <GradientStop Color="#aef80f" Offset="0" />
+                        <GradientStop Color="#96fd00" Offset="0.5" />
+                        <GradientStop Color="#40a605" Offset="1" />
+                    </LinearGradientBrush>
+                </Grid.Background>-->
+        </Grid>
+    </Border>
+</UserControl>
