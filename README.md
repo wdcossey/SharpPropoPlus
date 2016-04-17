@@ -1,6 +1,6 @@
 #SharpPropoPlus
 
-#PropoPlus is a C# port of SmartPropoPlus (by Shaul Eizikovich)
+SharpPropoPlus is a C# port of SmartPropoPlus (by Shaul Eizikovich)
 
 SmartPropoPlus homepage: http://www.smartpropoplus.com/
 
