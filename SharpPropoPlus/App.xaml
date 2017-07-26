@@ -15,8 +15,8 @@
                 </ResourceDictionary>
 
                 <ResourceDictionary Source="Resources/Fonts.xaml" ></ResourceDictionary>
-                <ResourceDictionary Source="Themes/MainWindow.xaml" ></ResourceDictionary>
                 <ResourceDictionary Source="Resources/Styles.xaml" ></ResourceDictionary>
+                <ResourceDictionary Source="Themes/MainWindow.xaml" ></ResourceDictionary>
                 
             </ResourceDictionary.MergedDictionaries>
             

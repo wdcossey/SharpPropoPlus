@@ -14,7 +14,7 @@
         <viewModels:JoystickConfigViewModel></viewModels:JoystickConfigViewModel>
     </UserControl.DataContext>-->
     
-    <StackPanel Margin="8">
+    <StackPanel >
 
         <Grid >
             <Grid.RowDefinitions>
@@ -22,18 +22,16 @@
                 <RowDefinition></RowDefinition>
             </Grid.RowDefinitions>
 
-            <TextBlock Margin="0 4" TextAlignment="Left" VerticalAlignment="Center">
-                <Run Text="vJoy Device (v"/><Run FontWeight="SemiBold" Text="{Binding VJoyVersion, Mode=OneWay}"/><Run Text="):"/>
+            <TextBlock Style="{StaticResource TextBlockHeaderStyleKey}">
+                <Run Text="vJoy Device (v"/><Run Text="{Binding VJoyVersion, Mode=OneWay}"/><Run Text=")"/>
             </TextBlock>
-            <ComboBox MinWidth="200" HorizontalAlignment="Left" Grid.Row="1" SelectedIndex="0" ItemsSource="{Binding Devices, Mode=OneWay}" SelectedItem="{Binding SelectedDeviceItem, Mode=TwoWay}" >
-                <ComboBox.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="{Binding Name, Mode=OneWay}">
-                        </TextBlock>
-                    </DataTemplate>
-                </ComboBox.ItemTemplate>
+            <ComboBox Margin="0 8" HorizontalAlignment="Left" Grid.Row="1" SelectedIndex="0" DisplayMemberPath="Name" ItemsSource="{Binding Devices, Mode=OneWay}" SelectedItem="{Binding SelectedDeviceItem, Mode=TwoWay}" >
+
             </ComboBox>
         </Grid>
+
+        <Border HorizontalAlignment="Stretch" SnapsToDevicePixels="True" BorderThickness="0 0 0 1" BorderBrush="#f0f0f0"/>
+
 
         <!--<Grid >
             <Grid.RowDefinitions>

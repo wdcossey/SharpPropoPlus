@@ -162,6 +162,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Application.cs" />
+    <Compile Include="AttachedProperties\WindowBehaviors.cs" />
     <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="Controls\CustomWindow.cs" />
     <Compile Include="Controls\StripIndicator.xaml.cs">

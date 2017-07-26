@@ -8,9 +8,11 @@
         xmlns:views="clr-namespace:SharpPropoPlus.Views"
         xmlns:controls="clr-namespace:SharpPropoPlus.Controls"
         xmlns:viewModels="clr-namespace:SharpPropoPlus.ViewModels"
+        xmlns:attachedProperties="clr-namespace:SharpPropoPlus.AttachedProperties"
         Background="#2d2d30"
         mc:Ignorable="d"
         Style="{StaticResource MainWindow}"
+        
         Title="#PropoPlus" 
                        Height="600" 
                        Width="800"

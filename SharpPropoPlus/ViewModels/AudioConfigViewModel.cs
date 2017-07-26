@@ -43,11 +43,13 @@ namespace SharpPropoPlus.ViewModels
                 new ReadOnlyObservableCollection<AudioEndPoint>(new ObservableCollection<AudioEndPoint>(AudioHelper.Instance.Devices));
 
             SelectedAudioEndPoint =
-                AudioHelper.Instance.Devices.FirstOrDefault(fd => fd.DeviceId == AudioHelper.Instance.DeviceId);
+                AudioEndPointCollection.FirstOrDefault(fd => fd.DeviceId == AudioHelper.Instance.DeviceId);
 
             GlobalEventAggregator.Instance.AddListener<PeakValueEventArgs>(PeakValueChangedListner);
 
-            AudioHelper.Instance.StartRecording();
+            //AudioHelper.Instance.StartRecording();
+
+            
         }
 
         private void PeakValueChangedListner(PeakValueEventArgs args)

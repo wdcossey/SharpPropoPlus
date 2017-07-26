@@ -7,6 +7,10 @@
              xmlns:viewModels="clr-namespace:SharpPropoPlus.ViewModels"
              mc:Ignorable="d" 
              d:DesignHeight="600" d:DesignWidth="800">
+
+    <UserControl.Resources>
+
+    </UserControl.Resources>
     
     <UserControl.DataContext>
         <viewModels:OverviewViewModel></viewModels:OverviewViewModel>
@@ -28,26 +32,32 @@
         </Grid.RowDefinitions>
 
         <Grid.Resources>
-            <Style TargetType="{x:Type TextBlock}">
+            <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource TextBlockLightStyleKey}">
                 <Setter Property="TextAlignment" Value="Right"/>
                 <Setter Property="VerticalAlignment" Value="Center"/>
                 <Setter Property="Padding" Value="8 4"/>
-                <Setter Property="Foreground" Value="#1c1e20"/>
-                <Setter Property="FontFamily" Value="pack://application:,,,/Fonts/#Montserrat Light"/>
                 <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
                 <!--<Setter Property="ToolTip" Value="{Binding Text, Mode=OneWay, RelativeSource={RelativeSource Mode=Self}}"/>-->
-                <!--<Setter Property="Background" Value="#66000000"/>-->
             </Style>
+
+            <Style x:Key="TextBlockRightStyleKey" TargetType="{x:Type TextBlock}" BasedOn="{StaticResource TextBlockDefaultStyleKey}">
+                <Setter Property="TextAlignment" Value="Right"/>
+                <Setter Property="VerticalAlignment" Value="Center"/>
+                <Setter Property="Padding" Value="8 4"/>
+                <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+                <!--<Setter Property="ToolTip" Value="{Binding Text, Mode=OneWay, RelativeSource={RelativeSource Mode=Self}}"/>-->
+            </Style>
+            
 
         </Grid.Resources>
         
         <StackPanel Orientation="Vertical" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="4" Margin="0 0 0 8"  >
             <Border HorizontalAlignment="Stretch" SnapsToDevicePixels="True" BorderThickness="0 0 0 1" BorderBrush="#f0f0f0"/>
-            <TextBlock Margin="0 4" Text="General Information" FontSize="14.5" FontFamily="pack://application:,,,/Fonts/#Montserrat" TextAlignment="Left"/>
+            <TextBlock Style="{StaticResource TextBlockHeaderStyleKey}" Margin="0 4" Text="General Information" FontSize="14.5" FontFamily="pack://application:,,,/Fonts/#Montserrat" TextAlignment="Left"/>
             <!--<Border HorizontalAlignment="Stretch" SnapsToDevicePixels="True" BorderThickness="0 0 0 1" BorderBrush="#f0f0f0"/>-->
         </StackPanel>
 
-        <TextBlock Grid.Column="0" Grid.Row="1" Margin="2 4" Padding="0" Text="Audio Input :" FontFamily="pack://application:,,,/Fonts/#Montserrat"></TextBlock>
+        <TextBlock Grid.Column="0" Grid.Row="1" Margin="2 4" Padding="0" Text="Audio Input :" Style="{StaticResource TextBlockRightStyleKey}"></TextBlock>
         <Border Grid.Column="1" Grid.Row="1" Margin="2 4" BorderThickness="1" SnapsToDevicePixels="True" BorderBrush="#f0f0f0">
             <TextBlock TextAlignment="Left" Text="{Binding DeviceName, Mode=OneWay}"/>
         </Border>
