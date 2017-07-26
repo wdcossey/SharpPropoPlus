@@ -11,7 +11,7 @@ namespace SharpPropoPlus.Decoder
 {
 
 
-  public class DecoderManager : IDisposable
+  public class DecoderManager : IDecoderManager
   {
     [ImportMany]
     private IEnumerable<Lazy<IPropoPlusDecoder, IDecoderMetadata>> _decoders;

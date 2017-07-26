@@ -286,7 +286,7 @@
             </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
-    <Style TargetType="{x:Type ComboBox}">
+    <Style x:Key="Old" TargetType="{x:Type ComboBox}">
         <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
         <Setter Property="Background" Value="{StaticResource ComboBox.Static.Background}"/>
         <Setter Property="BorderBrush" Value="{StaticResource ComboBox.Static.Border}"/>
@@ -310,7 +310,8 @@
 
     <Style TargetType="{x:Type Controls:StripIndicator}">
         <Setter Property="Fill" Value="{DynamicResource AccentBrush}"></Setter>
-        <Setter Property="BorderBrush" Value="{DynamicResource AccentBorderBrush}"></Setter>
+        <Setter Property="BorderBrush" Value="{x:Static SystemColors.DesktopBrush}"></Setter>
+        <Setter Property="SnapsToDevicePixels" Value="True"></Setter>
         <!--<Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Controls:StripIndicator}">

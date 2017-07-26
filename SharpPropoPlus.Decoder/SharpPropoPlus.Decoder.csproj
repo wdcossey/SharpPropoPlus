@@ -52,6 +52,7 @@
     <Compile Include="Enums\TransmitterType.cs" />
     <Compile Include="EventArguments\JoystickChangedEventArgs.cs" />
     <Compile Include="EventArguments\PeakValueEventArgs.cs" />
+    <Compile Include="IDecoderManager.cs" />
     <Compile Include="JoystickInteraction.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PulseProcessor.cs" />

@@ -3,7 +3,7 @@
   public class PeakValues
   {
     private float _left = 0.0f;
-    private float _right = 0.0f;
+    private float? _right = 0.0f;
     private float _master = 0.0f;
     private bool _muted = false;
 
@@ -13,7 +13,7 @@
       internal set { _left = value; }
     }
 
-    public float Right
+    public float? Right
     {
       get { return _right; }
       internal set { _right = value; }
@@ -37,13 +37,13 @@
 
     }
 
-    public PeakValues(bool muted, float master, float left, float right)
+    public PeakValues(bool muted, float master, float left, float? right)
       : this()
     {
       Update(muted, master, left, right);
     }
 
-    private void Update(bool muted, float master, float left, float right)
+    private void Update(bool muted, float master, float left, float? right)
     {
       Muted = muted;
       Master = master;

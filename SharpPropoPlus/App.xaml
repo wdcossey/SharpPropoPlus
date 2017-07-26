@@ -14,8 +14,13 @@
                     <valueConverters:AudioChannelValueConverter x:Key="AudioChannelValueConverter" />
                 </ResourceDictionary>
 
+                <ResourceDictionary Source="Resources/Fonts.xaml" ></ResourceDictionary>
+                <ResourceDictionary Source="Themes/MainWindow.xaml" ></ResourceDictionary>
                 <ResourceDictionary Source="Resources/Styles.xaml" ></ResourceDictionary>
+                
             </ResourceDictionary.MergedDictionaries>
+            
+            
         </ResourceDictionary>
 
     </Application.Resources>

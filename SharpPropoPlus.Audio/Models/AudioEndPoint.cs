@@ -1,11 +1,11 @@
-﻿using System;
-using SharpPropoPlus.Audio.Interfaces;
+﻿using SharpPropoPlus.Audio.Interfaces;
 
-namespace SharpPropoPlus.Audio.EventArguments
+namespace SharpPropoPlus.Audio.Models
 {
-    public class AudioEndPointEventArgs : EventArgs, IAudioEndPoint
+    public class AudioEndPoint : IAudioEndPoint
     {
         private string _deviceName;
+        private string _deviceId;
 
         public string DeviceName
         {
@@ -13,21 +13,13 @@ namespace SharpPropoPlus.Audio.EventArguments
             internal set { _deviceName = value; }
         }
 
-        private string _deviceId;
-
         public string DeviceId
         {
             get { return _deviceId; }
             internal set { _deviceId = value; }
         }
 
-        public AudioEndPointEventArgs()
-        {
-
-        }
-
-        public AudioEndPointEventArgs(string deviceName, string deviceId)
-            : this()
+        public AudioEndPoint(string deviceName, string deviceId)
         {
             DeviceName = deviceName;
             DeviceId = deviceId;

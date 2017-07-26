@@ -10,9 +10,9 @@
              
              d:DesignHeight="400" d:DesignWidth="600">
 
-    <UserControl.DataContext>
+    <!--<UserControl.DataContext>
         <viewModels:JoystickConfigViewModel></viewModels:JoystickConfigViewModel>
-    </UserControl.DataContext>
+    </UserControl.DataContext>-->
     
     <StackPanel Margin="8">
 

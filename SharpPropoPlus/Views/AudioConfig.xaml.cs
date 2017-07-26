@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using SharpPropoPlus.Interfaces;
 
 namespace SharpPropoPlus.Views
 {
@@ -20,9 +21,16 @@ namespace SharpPropoPlus.Views
   /// </summary>
   public partial class AudioConfig : UserControl
   {
-    public AudioConfig()
+
+      public AudioConfig()
+      {
+          
+
+      }
+    public AudioConfig(IAudioConfigViewModel viewModel)
     {
-      InitializeComponent();
+        InitializeComponent();
+        this.DataContext = viewModel;
     }
   }
 }

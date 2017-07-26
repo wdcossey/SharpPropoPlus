@@ -12,17 +12,19 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using SharpPropoPlus.Interfaces;
 
 namespace SharpPropoPlus.Views
 {
-  /// <summary>
-  /// Interaction logic for JoystickInformation.xaml
-  /// </summary>
-  public partial class JoystickConfig : UserControl
-  {
-    public JoystickConfig()
+    /// <summary>
+    /// Interaction logic for JoystickInformation.xaml
+    /// </summary>
+    public partial class JoystickConfig : UserControl
     {
-      InitializeComponent();
+        public JoystickConfig(IJoystickConfigViewModel viewModel)
+        {
+            InitializeComponent();
+            this.DataContext = viewModel;
+        }
     }
-  }
 }

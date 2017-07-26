@@ -24,10 +24,10 @@ namespace SharpPropoPlus.Audio.EventArguments
       Channel = channel;
     }
 
-    public PreferredChannelEventArgs(float leftPeak, float rightPeak)
+    public PreferredChannelEventArgs(float leftPeak, float? rightPeak)
       : this()
     {
-      Channel = (rightPeak > leftPeak) ? AudioChannel.Right : AudioChannel.Left;
+      Channel = (rightPeak.HasValue && rightPeak > leftPeak) ? AudioChannel.Right : AudioChannel.Left;
     }
 
 

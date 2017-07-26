@@ -51,6 +51,8 @@
     <Compile Include="EventArguments\AudioDataEventArgs.cs" />
     <Compile Include="EventArguments\PeakValueEventArgs.cs" />
     <Compile Include="EventArguments\PreferredChannelEventArgs.cs" />
+    <Compile Include="Models\AudioEndPoint.cs" />
+    <Compile Include="Interfaces\IAudioEndPoint.cs" />
     <Compile Include="Models\PeakValues.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
