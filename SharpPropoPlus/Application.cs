@@ -36,6 +36,7 @@ namespace SharpPropoPlus
 
             //TODO: Remove, this is only for testing...
             _decoder = DecoderManager.Decoders.First();
+
             JoystickHelper.Initialize();
             JoystickInteraction.Initialize();
 
@@ -119,6 +120,7 @@ namespace SharpPropoPlus
 
             Container.RegisterInstance<IAudioConfigViewModel>(new AudioConfigViewModel());
             Container.RegisterInstance<IJoystickConfigViewModel>(new JoystickConfigViewModel());
+            Container.RegisterInstance<ITransmitterConfigViewModel>(new TransmitterConfigViewModel());
 
             var mainWindow = Container.Resolve<Shell>(); // Creating Main window
 

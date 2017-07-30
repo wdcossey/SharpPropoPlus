@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.15
+VisualStudioVersion = 15.0.26430.16
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpPropoPlus", "SharpPropoPlus\SharpPropoPlus.csproj", "{F4CB6E43-233C-42F0-BFC5-F9054DE9D6D6}"
 EndProject
@@ -11,13 +11,17 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpPropoPlus.Audio", "Sha
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpPropoPlus.Events", "SharpPropoPlus.Events\SharpPropoPlus.Events.csproj", "{1409EDFB-E81D-4DAA-B7E4-0AE893BE4CAC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpPropoPlus.Decoder.Walkera", "SharpPropoPlus.Decoder.Walkera\SharpPropoPlus.Decoder.Walkera.csproj", "{0F1F030D-7F8B-43C6-B486-B05D0F21455F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpPropoPlus.Decoder.Ppm.Walkera", "SharpPropoPlus.Decoder.Ppm.Walkera\SharpPropoPlus.Decoder.Ppm.Walkera.csproj", "{0F1F030D-7F8B-43C6-B486-B05D0F21455F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpPropoPlus.Decoder", "SharpPropoPlus.Decoder\SharpPropoPlus.Decoder.csproj", "{A10F2EA1-0D67-4F27-B462-92088426395F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Decoders", "Decoders", "{2D72B1FD-82F9-4921-A78A-A227762F1BBF}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "vJoy", "vJoy", "{0D1EF392-3BD6-4433-990D-25B58246F0AC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpPropoPlus.Decoder.Ppm.Turnigy9x", "SharpPropoPlus.Decoder.Ppm.Turnigy9x\SharpPropoPlus.Decoder.Ppm.Turnigy9x.csproj", "{C49F542C-04E8-42C3-9D4F-77CB823D2F43}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpPropoPlus.Decoder.Ppm", "SharpPropoPlus.Decoder.Ppm\SharpPropoPlus.Decoder.Ppm.csproj", "{E1EBC83E-6B57-424F-A27C-22CAB05A1E06}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -99,6 +103,30 @@ Global
 		{A10F2EA1-0D67-4F27-B462-92088426395F}.Release|x64.Build.0 = Release|Any CPU
 		{A10F2EA1-0D67-4F27-B462-92088426395F}.Release|x86.ActiveCfg = Release|Any CPU
 		{A10F2EA1-0D67-4F27-B462-92088426395F}.Release|x86.Build.0 = Release|Any CPU
+		{C49F542C-04E8-42C3-9D4F-77CB823D2F43}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C49F542C-04E8-42C3-9D4F-77CB823D2F43}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C49F542C-04E8-42C3-9D4F-77CB823D2F43}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{C49F542C-04E8-42C3-9D4F-77CB823D2F43}.Debug|x64.Build.0 = Debug|Any CPU
+		{C49F542C-04E8-42C3-9D4F-77CB823D2F43}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{C49F542C-04E8-42C3-9D4F-77CB823D2F43}.Debug|x86.Build.0 = Debug|Any CPU
+		{C49F542C-04E8-42C3-9D4F-77CB823D2F43}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C49F542C-04E8-42C3-9D4F-77CB823D2F43}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C49F542C-04E8-42C3-9D4F-77CB823D2F43}.Release|x64.ActiveCfg = Release|Any CPU
+		{C49F542C-04E8-42C3-9D4F-77CB823D2F43}.Release|x64.Build.0 = Release|Any CPU
+		{C49F542C-04E8-42C3-9D4F-77CB823D2F43}.Release|x86.ActiveCfg = Release|Any CPU
+		{C49F542C-04E8-42C3-9D4F-77CB823D2F43}.Release|x86.Build.0 = Release|Any CPU
+		{E1EBC83E-6B57-424F-A27C-22CAB05A1E06}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E1EBC83E-6B57-424F-A27C-22CAB05A1E06}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E1EBC83E-6B57-424F-A27C-22CAB05A1E06}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{E1EBC83E-6B57-424F-A27C-22CAB05A1E06}.Debug|x64.Build.0 = Debug|Any CPU
+		{E1EBC83E-6B57-424F-A27C-22CAB05A1E06}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{E1EBC83E-6B57-424F-A27C-22CAB05A1E06}.Debug|x86.Build.0 = Debug|Any CPU
+		{E1EBC83E-6B57-424F-A27C-22CAB05A1E06}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E1EBC83E-6B57-424F-A27C-22CAB05A1E06}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E1EBC83E-6B57-424F-A27C-22CAB05A1E06}.Release|x64.ActiveCfg = Release|Any CPU
+		{E1EBC83E-6B57-424F-A27C-22CAB05A1E06}.Release|x64.Build.0 = Release|Any CPU
+		{E1EBC83E-6B57-424F-A27C-22CAB05A1E06}.Release|x86.ActiveCfg = Release|Any CPU
+		{E1EBC83E-6B57-424F-A27C-22CAB05A1E06}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -106,5 +134,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{0F1F030D-7F8B-43C6-B486-B05D0F21455F} = {2D72B1FD-82F9-4921-A78A-A227762F1BBF}
 		{A10F2EA1-0D67-4F27-B462-92088426395F} = {2D72B1FD-82F9-4921-A78A-A227762F1BBF}
+		{C49F542C-04E8-42C3-9D4F-77CB823D2F43} = {2D72B1FD-82F9-4921-A78A-A227762F1BBF}
+		{E1EBC83E-6B57-424F-A27C-22CAB05A1E06} = {2D72B1FD-82F9-4921-A78A-A227762F1BBF}
 	EndGlobalSection
 EndGlobal

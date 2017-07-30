@@ -16,19 +16,14 @@
     
     <StackPanel >
 
-        <Grid >
-            <Grid.RowDefinitions>
-                <RowDefinition></RowDefinition>
-                <RowDefinition></RowDefinition>
-            </Grid.RowDefinitions>
-
+        <StackPanel Margin="0 0 0 8">
             <TextBlock Style="{StaticResource TextBlockHeaderStyleKey}">
                 <Run Text="vJoy Device (v"/><Run Text="{Binding VJoyVersion, Mode=OneWay}"/><Run Text=")"/>
             </TextBlock>
             <ComboBox Margin="0 8" HorizontalAlignment="Left" Grid.Row="1" SelectedIndex="0" DisplayMemberPath="Name" ItemsSource="{Binding Devices, Mode=OneWay}" SelectedItem="{Binding SelectedDeviceItem, Mode=TwoWay}" >
 
             </ComboBox>
-        </Grid>
+        </StackPanel>
 
         <Border HorizontalAlignment="Stretch" SnapsToDevicePixels="True" BorderThickness="0 0 0 1" BorderBrush="#f0f0f0"/>
 

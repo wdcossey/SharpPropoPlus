@@ -25,7 +25,7 @@
 
     <StackPanel>
 
-        <StackPanel Orientation="Vertical" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="4" Margin="0 0 0 8"  >
+        <StackPanel Orientation="Vertical"  Margin="0 0 0 8"  >
             <!--<Border HorizontalAlignment="Stretch" SnapsToDevicePixels="True" BorderThickness="0 0 0 1" BorderBrush="#f0f0f0"/>-->
             <TextBlock Style="{StaticResource TextBlockHeaderStyleKey}" Text="Input Device" />
 
@@ -99,7 +99,18 @@
                 <RowDefinition/>
             </Grid.RowDefinitions>
 
-            <TextBlock Style="{StaticResource TextBlockHeaderStyleKey}" Text="Audio Levels"/>
+            <TextBlock >
+                <TextBlock.Style>
+                    <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource TextBlockHeaderStyleKey}">
+                        <Setter Property="Text" Value="Audio Levels"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding RightChannelPeak}" Value="{x:Null}">
+                                <Setter Property="Text" Value="Audio Level"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
 
             <StackPanel Grid.Row="1">
                 <Grid Margin="0 2">

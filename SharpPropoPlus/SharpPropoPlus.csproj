@@ -179,9 +179,14 @@
     <Compile Include="ViewModels\AudioConfigViewModel.cs" />
     <Compile Include="Interfaces\IAudioConfigViewModel.cs" />
     <Compile Include="Interfaces\IJoystickConfigViewModel.cs" />
+    <Compile Include="Interfaces\ITransmitterConfigViewModel.cs" />
     <Compile Include="ViewModels\JoystickConfigViewModel.cs" />
     <Compile Include="ViewModels\OverviewViewModel.cs" />
     <Compile Include="ViewModels\ToolBarButton.cs" />
+    <Compile Include="ViewModels\TransmitterConfigViewModel.cs" />
+    <Compile Include="Views\TransmitterConfig.xaml.cs">
+      <DependentUpon>TransmitterConfig.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Overview.xaml.cs">
       <DependentUpon>Overview.xaml</DependentUpon>
     </Compile>
@@ -218,6 +223,10 @@
     <Page Include="Themes\MainWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\TransmitterConfig.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\Overview.xaml">
       <SubType>Designer</SubType>

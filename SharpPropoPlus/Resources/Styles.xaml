@@ -39,7 +39,7 @@
                     <Setter Property="Template" >
                         <Setter.Value>
                             <ControlTemplate TargetType="{x:Type MenuItem}">
-                                <Grid Background="#01000000" Cursor="Hand">
+                                <Grid Background="#01000000" Cursor="Hand" >
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="Auto"/>
                                         <ColumnDefinition/>
@@ -179,7 +179,7 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition MinWidth="{DynamicResource {x:Static SystemParameters.VerticalScrollBarWidthKey}}" Width="0"/>
             </Grid.ColumnDefinitions>
-            <Popup x:Name="PART_Popup" AllowsTransparency="true" Grid.ColumnSpan="2" IsOpen="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" Margin="1" Placement="Bottom">
+            <Popup x:Name="PART_Popup"  MinWidth="80" AllowsTransparency="true" Grid.ColumnSpan="2" IsOpen="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" Margin="1" Placement="Bottom">
 
                 <Border Padding="6 6 6 6">
                     <Border x:Name="dropDownBorder" BorderThickness="1" CornerRadius="4" BorderBrush="#c1c1c1" Background="White">
