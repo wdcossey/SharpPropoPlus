@@ -10,6 +10,10 @@ This free program allows you to use your R/C controller (or Transmitter) as a co
 
 The R/C controller is connected by cable to the PC. One end of the cable is connected to the Trainer socket of the R/C Controller The other end is connected to the audio port (Mic/Line in) of the PC.
 
+
+![Input](https://github.com/wdcossey/SharpPropoPlus/blob/master/Images/Input.png)
+
+
 SmartPropoPlus homepage: http://www.smartpropoplus.com/
 
 SmartPropoPlus repository: https://github.com/shauleiz/SmartPropoPlus)
