@@ -29,7 +29,7 @@
             <!--<Border HorizontalAlignment="Stretch" SnapsToDevicePixels="True" BorderThickness="0 0 0 1" BorderBrush="#f0f0f0"/>-->
             <TextBlock Style="{StaticResource TextBlockHeaderStyleKey}" Text="Signal Decoder" />
 
-            <ComboBox Margin="0 8" HorizontalAlignment="Left" Grid.Row="1" DisplayMemberPath="DeviceName" ItemsSource="{Binding AudioEndPointCollection, Mode=OneWay}" SelectedItem="{Binding SelectedAudioEndPoint, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" >
+            <ComboBox Margin="0 8" HorizontalAlignment="Left" Grid.Row="1" DisplayMemberPath="Metadata.Name" ItemsSource="{Binding DecoderCollection, Mode=OneWay}" SelectedItem="{Binding SelectedDecoder, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" >
                 <!--<ComboBox.ItemTemplate>
                     <DataTemplate>
                         <TextBlock Text="{Binding DeviceName}"/>

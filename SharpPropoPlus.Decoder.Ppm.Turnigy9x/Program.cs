@@ -8,7 +8,7 @@ namespace SharpPropoPlus.Decoder.Ppm.Turnigy9x
     //[Export(typeof(IPropoPlusDecoder))]
     //[ExportMetadata("Type", TransmitterType.Ppm)]
     [ExportPropoPlusDecoder("Turnigy 9X", "Turnigy 9X (PPM) pulse processor", TransmitterType.Ppm)]
-    public class Program : PpmPulseProcessor, IPropoPlusDecoder
+    public class Program : PpmPulseProcessor
     {
 
         private static int[] _mPosition;
@@ -40,20 +40,26 @@ namespace SharpPropoPlus.Decoder.Ppm.Turnigy9x
         //static int i = 0;
 
 
-        public double PpmTurnigySeparator => 61.44;
+        #region  PPM Values (Turnigy)
 
-        protected override double PpmTrig => 870.0;
+        protected double PpmTurnigySeparator => 61.44;
 
-        protected override double PpmMinPulseWidth => 130.56;
+        protected double PpmTurnigyTrig => PpmTrig;
 
-        protected override double PpmMaxPulseWidth => 322.56;
+        protected double PpmTurnigyMinPulseWidth => 130.56;
+
+        protected double PpmTurnigyMaxPulseWidth => 322.56;
+
+        #endregion PPM Values (Turnigy)
+
+
 
         /// <summary>
         /// Array of previous width values
         /// </summary>
         private static int[] _prevWidth = new int[14];
 
-        public string[] Description
+        public override string[] Description
         {
             get
             {
@@ -78,7 +84,7 @@ namespace SharpPropoPlus.Decoder.Ppm.Turnigy9x
         /// </summary>
         /// <param name="width"></param>
         /// <param name="input"></param>
-        private void ProcessPulseTurnigy9XPpm(int width, bool input)
+        protected override void Process(int width, bool input)
         {
             //var tbuffer = new char[9];
 
@@ -109,7 +115,7 @@ namespace SharpPropoPlus.Decoder.Ppm.Turnigy9x
 
 
             /* sync is detected at the end of a very long pulse (over 200 samples = 4.5mSec) */
-            if (/*sync == 0 && */width > PpmTrig)
+            if (/*sync == 0 && */width > PpmTurnigyTrig)
             {
                 _sync = true;
                 if (!_datacount.Equals(0))
@@ -127,7 +133,7 @@ namespace SharpPropoPlus.Decoder.Ppm.Turnigy9x
             if (!_sync)
             {
                 /* still waiting for sync */
-                return; 
+                return;
             }
 
             // Two long pulse in a row is an error - resseting
@@ -160,9 +166,9 @@ namespace SharpPropoPlus.Decoder.Ppm.Turnigy9x
 
             /* convert pulse width in samples to joystick position values (newdata)  */
             if (input || _jsChPostProcSelected != -1)
-                newdata = (int)(1024 - (width - PpmMinPulseWidth) / (PpmMaxPulseWidth - PpmMinPulseWidth) * 1024); /* JR */
+                newdata = (int)(1024 - (width - PpmTurnigyMinPulseWidth) / (PpmTurnigyMaxPulseWidth - PpmTurnigyMinPulseWidth) * 1024); /* JR */
             else
-                newdata = (int)((width - PpmMinPulseWidth) / (PpmMaxPulseWidth - PpmMinPulseWidth) * 1024);     /* Futaba */
+                newdata = (int)((width - PpmTurnigyMinPulseWidth) / (PpmTurnigyMaxPulseWidth - PpmTurnigyMinPulseWidth) * 1024);     /* Futaba */
 
 
             /* Trim values into 0-1023 boundries */
@@ -209,7 +215,7 @@ namespace SharpPropoPlus.Decoder.Ppm.Turnigy9x
             //case 11: 	m_Position[11] = data[datacount];	break;/* Assign data to joystick channels */
             //};
 
-            
+
             // Send Position and number of channels to the virtual joystick
             JoystickInteraction.Instance.Send(RawChannelCount, ref _mPosition);
 
@@ -222,20 +228,10 @@ namespace SharpPropoPlus.Decoder.Ppm.Turnigy9x
             _datacount++;
         }
 
-
-        public void ProcessPulse(int sampleRate, int sample)
-        {
-            var negative = false;
-
-            var pulseLength = CalculatePulseLength(sampleRate, sample, ref negative);
-
-            ProcessPulseTurnigy9XPpm(pulseLength.Normalized, negative);
-        }
-
         /// <summary>
         /// Resets the static variables.
         /// </summary>
-        public void Reset()
+        public sealed override void Reset()
         {
             _mPosition = new int[Constants.MAX_JS_CH];
 

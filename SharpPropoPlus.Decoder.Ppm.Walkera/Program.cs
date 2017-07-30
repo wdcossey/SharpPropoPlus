@@ -8,7 +8,7 @@ namespace SharpPropoPlus.Decoder.Ppm.Walkera
     //[Export(typeof(IPropoPlusDecoder))]
     //[ExportMetadata("Type", TransmitterType.Ppm)]
     [ExportPropoPlusDecoder("Walkera", "Walkera WK-2401 (PPM) pulse processor", TransmitterType.Ppm)]
-    public class Program : PpmPulseProcessor, IPropoPlusDecoder
+    public class Program : PpmPulseProcessor
     {
 
         private static int[] _mPosition;
@@ -31,7 +31,7 @@ namespace SharpPropoPlus.Decoder.Ppm.Walkera
         //static int i = 0;
 
 
-        #region MyRegion
+        #region PPM Values (Walkera)
 
         protected double PpmWalkeraMinPulseWidth => 78.4;
 
@@ -50,7 +50,7 @@ namespace SharpPropoPlus.Decoder.Ppm.Walkera
         /// </summary>
         private static int[] _prevWidth = new int[14];
 
-        public string[] Description
+        public override string[] Description
         {
             get
             {
@@ -77,7 +77,7 @@ namespace SharpPropoPlus.Decoder.Ppm.Walkera
         /// </summary>
         /// <param name="width"></param>
         /// <param name="input"></param>
-        private void ProcessPulseWk2401Ppm(int width, bool input)
+        protected override void Process(int width, bool input)
         {
             //var tbuffer = new char[9];
 
@@ -120,7 +120,7 @@ namespace SharpPropoPlus.Decoder.Ppm.Walkera
             /* convert pulse width in samples to joystick Position values (newdata)
             joystick Position of 0 correspond to width over 100 samples (2.25mSec)
             joystick Position of 1023 correspond to width under 30 samples (0.68mSec)*/
-            var newdata = (int) ((width - PpmWalkeraMinPulseWidth) / (PpmWalkeraMaxPulseWidth - PpmWalkeraMinPulseWidth) * 1024);
+            var newdata = (int)((width - PpmWalkeraMinPulseWidth) / (PpmWalkeraMaxPulseWidth - PpmWalkeraMinPulseWidth) * 1024);
 
             /* Trim values into 0-1023 boundries */
             if (newdata < 0)
@@ -165,20 +165,10 @@ namespace SharpPropoPlus.Decoder.Ppm.Walkera
             _datacount++;
         }
 
-
-        public void ProcessPulse(int sampleRate, int sample)
-        {
-            var negative = false;
-
-            var pulseLength = CalculatePulseLength(sampleRate, sample, ref negative);
-
-            ProcessPulseWk2401Ppm(pulseLength.Normalized, negative);
-        }
-
         /// <summary>
         /// Resets the static variables.
         /// </summary>
-        public void Reset()
+        public sealed override void Reset()
         {
             _mPosition = new int[Constants.MAX_JS_CH];
 
@@ -191,6 +181,8 @@ namespace SharpPropoPlus.Decoder.Ppm.Walkera
             //static int i = 0;
             _prevWidth = new int[14]; /* array of previous width values */
         }
+
+        
     }
 
 

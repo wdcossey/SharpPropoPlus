@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SharpPropoPlus.Decoder.Contracts;
 
 namespace SharpPropoPlus.Decoder.Ppm
 {
-    public abstract class PpmPulseProcessor : PulseProcessor
+    public abstract class PpmPulseProcessor : PulseProcessor, IPropoPlusDecoder
     {
         #region PPM Values (General)
 
@@ -50,6 +51,20 @@ namespace SharpPropoPlus.Decoder.Ppm
 
         #endregion
 
-        
+        protected abstract void Process(int width, bool input);
+
+        public abstract string[] Description { get; }
+
+        public virtual void ProcessPulse(int sampleRate, int sample)
+        {
+            var negative = false;
+
+            var pulseLength = CalculatePulseLength(sampleRate, sample, ref negative);
+
+            Process(pulseLength.Normalized, negative);
+        }
+
+        public abstract void Reset();
+
     }
 }
