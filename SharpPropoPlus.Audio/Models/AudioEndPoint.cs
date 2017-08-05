@@ -1,4 +1,5 @@
-﻿using SharpPropoPlus.Audio.Interfaces;
+﻿using CSCore;
+using SharpPropoPlus.Audio.Interfaces;
 
 namespace SharpPropoPlus.Audio.Models
 {
@@ -6,6 +7,7 @@ namespace SharpPropoPlus.Audio.Models
     {
         private string _deviceName;
         private string _deviceId;
+        private WaveFormat _waveFormat;
 
         public string DeviceName
         {

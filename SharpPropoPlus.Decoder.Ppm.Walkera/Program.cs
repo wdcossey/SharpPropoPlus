@@ -33,6 +33,8 @@ namespace SharpPropoPlus.Decoder.Ppm.Walkera
 
         #region PPM Values (Walkera)
 
+        protected override double PpmJitter => 5.5;
+
         protected double PpmWalkeraMinPulseWidth => 78.4;
 
         protected double PpmWalkeraMaxPulseWidth => 304.8;
@@ -112,7 +114,8 @@ namespace SharpPropoPlus.Decoder.Ppm.Walkera
                 return;
 
             // Cancel jitter /* Version 3.3.3 */
-            if (Math.Abs(_prevWidth[_datacount] - width) < PpmJitter)
+            var jitterMinValue = Math.Abs(_prevWidth[_datacount] - width);
+            if (jitterMinValue < PpmJitter)
                 width = _prevWidth[_datacount];
             _prevWidth[_datacount] = width;
 

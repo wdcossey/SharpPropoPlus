@@ -224,7 +224,7 @@
         </ControlTemplate.Triggers>
     </ControlTemplate>
     <Style TargetType="{x:Type ComboBox}">
-        <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
         <Setter Property="Background" Value="{StaticResource ComboBox.Static.Background2}"/>
         <Setter Property="BorderBrush" Value="{StaticResource ComboBox.Static.Border2}"/>
         <Setter Property="Foreground" Value="{StaticResource AccentColorBrush}"/>
@@ -565,7 +565,7 @@
         </ControlTemplate.Triggers>
     </ControlTemplate>
     <Style x:Key="Old" TargetType="{x:Type ComboBox}">
-        <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
         <Setter Property="Background" Value="{StaticResource ComboBox.Static.Background}"/>
         <Setter Property="BorderBrush" Value="{StaticResource ComboBox.Static.Border}"/>
         <Setter Property="Foreground" Value="{StaticResource PrimaryTextBrush}"/>

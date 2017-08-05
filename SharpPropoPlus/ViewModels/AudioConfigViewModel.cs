@@ -173,7 +173,7 @@ namespace SharpPropoPlus.ViewModels
 
                 if (_selectedAudioEndPoint != null)
                 {
-                    AudioHelper.Instance.StartRecording(_selectedAudioEndPoint.DeviceId);
+                    AudioHelper.Instance.StartRecording(_selectedAudioEndPoint);
                 }
                 else
                 {
