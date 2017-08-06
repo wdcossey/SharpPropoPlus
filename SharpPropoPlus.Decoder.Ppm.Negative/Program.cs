@@ -1,50 +1,22 @@
 ﻿using System;
-using System.ComponentModel.Composition;
 using SharpPropoPlus.Decoder.Contracts;
 using SharpPropoPlus.Decoder.Enums;
 
-namespace SharpPropoPlus.Decoder.Ppm.Turnigy9x
+namespace SharpPropoPlus.Decoder.Ppm.Negative
 {
-    //[Export(typeof(IPropoPlusDecoder))]
-    //[ExportMetadata("Type", TransmitterType.Ppm)]
-    [ExportPropoPlusDecoder("Turnigy 9X", "Turnigy 9X (PPM) pulse processor", TransmitterType.Ppm)]
+    [ExportPropoPlusDecoder("Negative", "Negative (PPM) pulse processor", TransmitterType.Ppm)]
     public class Program : PpmPulseProcessor
     {
-        static bool _prevSep = false;
 
-        private int _jsChPostProcSelected = -1;
-
-        /// <summary>
-        /// Added to sypport PPM for Turngy 9x 
-        /// </summary>
-        static int _lastSeparatorWidth = 0;
+        //TODO : inform that a filter has been selected or diselected
+        private static int JsChPostProc_selected = -1;
 
         //static int i = 0;
 
 
-        #region  PPM Values (Turnigy)
+        #region PPM Values (Negative)
 
-        protected override double PpmSeparator()
-        {
-            return 61.44;
-        }
-
-        protected override double PpmTrig()
-        {
-            return base.PpmTrig();
-        }
-
-        protected override double PpmMinPulseWidth()
-        {
-            return 130.56;
-        }
-
-        protected override double PpmMaxPulseWidth()
-        {
-            return 322.56;
-        }
-
-        #endregion PPM Values (Turnigy)
+        #endregion 
 
         public override string[] Description
         {
@@ -52,7 +24,7 @@ namespace SharpPropoPlus.Decoder.Ppm.Turnigy9x
             {
                 return new[]
                 {
-                    "Pulse processor for Turnigy 9X PPM"
+                    "Pulse processor for Negative PPM",
                 };
             }
         }
@@ -63,11 +35,7 @@ namespace SharpPropoPlus.Decoder.Ppm.Turnigy9x
         }
 
         /// <summary>
-        /// <para>Process Pulse for Turnigy 9X PPM</para>
-        /// <para>This is how it works:</para>
-        /// <para>Cycle: 22.46mS</para>
-        /// <para>Separator: 0.30mS-0.34mS - In Normalized values: 	 57.6-65.3</para>
-        /// <para>Data Pulse: 0.68mS , 1.18mS, 1.68mS (Min, Mid, Max) 130.56,  226.56, 	322.56</para>
+        /// <para>Process Pulse for Negative/Futaba PPM</para>
         /// </summary>
         /// <param name="width"></param>
         /// <param name="input"></param>
@@ -75,77 +43,44 @@ namespace SharpPropoPlus.Decoder.Ppm.Turnigy9x
         {
             //var tbuffer = new char[9];
 
-            if (width < PpmGlitch())
+            if (width < 5)
                 return;
 
-            //if (gDebugLevel >= 2 && gCtrlLogFile && !(_strtime_s(tbuffer, 10))/*&& !(i++%50)*/)
-            //    fprintf(gCtrlLogFile, "\n%s - ProcessPulseTurnigy9XPpm(width=%d, input=%d)", tbuffer, width, input);
+            //if (gDebugLevel >= 2 && gCtrlLogFile && !(_strtime_s(tbuffer, 9)) /*&& !(i++%50)*/)
+            //    fprintf(gCtrlLogFile, "\n%s - ProcessPulseFutabaPpm(width=%d, input=%d)", tbuffer, width, input);
 
             /* If pulse is a separator then go to the next one */
-            if (width < PpmSeparator() || FormerSync)
+            if (!input || width < PpmSeparator() || FormerSync)
             {
-                _prevSep = true;
                 FormerSync = false;
                 return;
-                _lastSeparatorWidth = width; /* Added to sypport PPM for Turngy 9x */
-            }
-            ;
-
-
-            // Two separators in a row is an error - resseting
-            if ((width < PpmSeparator()) && _prevSep)
-            {
-                _prevSep = true;
-                RawChannelCount = 0;
-                DataCount = 0;
-                return;
-            }
-            ;
+            };
 
 
             /* sync is detected at the end of a very long pulse (over 200 samples = 4.5mSec) */
-            if ( /*sync == 0 && */width > PpmTrig())
+            if (input && width > PpmTrig())
             {
                 Sync = true;
                 if (!DataCount.Equals(0))
                 {
-                    //m_PosUpdateCounter++;
+                    //  m_PosUpdateCounter++;
                 }
 
                 RawChannelCount = DataCount;
                 DataCount = 0;
                 FormerSync = true;
-                _prevSep = false;
                 return;
             }
 
+            /* still waiting for sync */
             if (!Sync)
-            {
-                /* still waiting for sync */
                 return;
-            }
-
-            // Two long pulse in a row is an error - resseting
-            if (width > base.PpmSeparator())
-            {
-                if (!_prevSep)
-                {
-                    RawChannelCount = 0;
-                    DataCount = 0;
-                    _prevSep = false;
-                    return;
-                }
-                else
-                {
-                    _prevSep = false;
-                }
-            }
-            ;
 
 
+            // Cancel jitter /* Version 3.3.3 */
+            var jitterValue = Math.Abs(PrevWidth[DataCount] - width);
 
-            // Cancel jitter
-            if (Math.Abs(PrevWidth[DataCount] - width) < PpmJitter())
+            if (jitterValue < PpmJitter())
             {
                 width = PrevWidth[DataCount];
             }
@@ -154,13 +89,16 @@ namespace SharpPropoPlus.Decoder.Ppm.Turnigy9x
 
             int newdata;
 
-            /* convert pulse width in samples to joystick position values (newdata)  */
-            if (input || _jsChPostProcSelected != -1)
-                newdata = (int) (1024 - (width - PpmMinPulseWidth()) /
-                                 (PpmMaxPulseWidth() - PpmMinPulseWidth()) * 1024); /* JR */
+            /* 
+             * convert pulse width in samples to joystick position values (newdata)
+             * joystick position of 0 correspond to width over 100 samples (2.25mSec)
+             * joystick position of 1023 correspond to width under 30 samples (0.68mSec)
+             */
+            if (input || JsChPostProc_selected != -1)
+                newdata = (int)(1024 - (width - PpmMinPulseWidth()) / (PpmMaxPulseWidth() - PpmMinPulseWidth()) * 1024); /* JR */
             else
-                newdata = (int) ((width - PpmMinPulseWidth()) /
-                                 (PpmMaxPulseWidth() - PpmMinPulseWidth()) * 1024); /* Futaba */
+                newdata = (int)((width - PpmMinPulseWidth()) / (PpmMaxPulseWidth() - PpmMinPulseWidth()) * 1024);       /* Futaba */
+
 
 
             /* Trim values into 0-1023 boundries */
@@ -173,7 +111,7 @@ namespace SharpPropoPlus.Decoder.Ppm.Turnigy9x
                 newdata = 1023;
             }
 
-            /* Update data - do not allow abrupt change */
+            /* Update _data - do not allow abrupt change */
             if (DataBuffer[DataCount] - newdata > 100)
             {
                 DataBuffer[DataCount] -= 100;
@@ -187,9 +125,8 @@ namespace SharpPropoPlus.Decoder.Ppm.Turnigy9x
                 DataBuffer[DataCount] = (DataBuffer[DataCount] + newdata) / 2;
             }
 
-
             //if (input|| m_JsChPostProc_selected!=-1)
-            ChannelData[DataCount] = DataBuffer[DataCount]; /* JR - Assign data to joystick channels */
+            ChannelData[DataCount] = DataBuffer[DataCount];
             //else
             //	switch (datacount)
             //{ // Futaba
@@ -207,15 +144,18 @@ namespace SharpPropoPlus.Decoder.Ppm.Turnigy9x
             //case 11: 	m_Position[11] = data[datacount];	break;/* Assign data to joystick channels */
             //};
 
-
             // Send Position and number of channels to the virtual joystick
-            JoystickInteraction.Instance.Send(RawChannelCount, ChannelData);
+            JoystickInteraction.Instance.Send(11, ChannelData);
 
             //if (gDebugLevel >= 3 && gCtrlLogFile /*&& !(i++%50)*/)
             //    fprintf(gCtrlLogFile, " data[%d]=%d", datacount, data[datacount]);
 
+
             if (DataCount == 11)
-                Sync = false; /* Reset sync after channel 12 */
+            {
+                /* Reset _sync after channel 12 */
+                Sync = false; 
+            }
 
             DataCount++;
         }
@@ -225,17 +165,17 @@ namespace SharpPropoPlus.Decoder.Ppm.Turnigy9x
         /// </summary>
         public sealed override void Reset()
         {
-            ChannelData = new int[BufferLength];
-
             Sync = false;
-
             DataBuffer = new int[BufferLength]; /* Array of pulse widthes in joystick values */
             DataCount = 0; /* pulse index (corresponds to channel index) */
             FormerSync = false;
+            ChannelData = new int[BufferLength];
 
             //static int i = 0;
             PrevWidth = new int[BufferLength]; /* array of previous width values */
         }
+
+
     }
 
 

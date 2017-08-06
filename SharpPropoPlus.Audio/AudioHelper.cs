@@ -23,7 +23,7 @@ namespace SharpPropoPlus.Audio
     {
 
         private Task _pollingTask;
-        private bool _quitPolling;
+        //private bool _quitPolling;
         private CancellationTokenSource _pollingCancellationTokenSource;
         private readonly MMDeviceEnumerator _deviceEnumerator;
         private string _deviceId;
@@ -41,7 +41,7 @@ namespace SharpPropoPlus.Audio
 
         private AudioHelper()
         {
-            _quitPolling = false;
+            //_quitPolling = false;
             _deviceEnumerator = new MMDeviceEnumerator();
             _lastPeakValues = new PeakValues();
 
@@ -193,13 +193,20 @@ namespace SharpPropoPlus.Audio
             //var channels = deviceFormat.Channels;
 
 
-            _soundIn = new WasapiCapture();
+            _soundIn =
+                new WasapiCapture(false, AudioClientShareMode.Exclusive, 0, deviceFormat,
+                    ThreadPriority.Highest)
+                {
+                    Device = device
+                };
 
-            _soundIn.Device = device;
             _soundIn.Initialize();
 
             //var soundInSource = new SoundInSource(_soundIn);
-            SoundInSource soundInSource = new SoundInSource(_soundIn) { FillWithZeros = false };
+            SoundInSource soundInSource = new SoundInSource(_soundIn)
+            {
+                FillWithZeros = false
+            };
 
             _convertedSource = soundInSource
                 .ChangeSampleRate(192000) // sample rate
@@ -251,33 +258,32 @@ namespace SharpPropoPlus.Audio
 
             //keep reading as long as we still get some data
             //if you're using such a loop, make sure that soundInSource.FillWithZeros is set to false
-            while ((read = _convertedSource.Read(buffer, 0, buffer.Length)) > 0)
-            {
-                //write the read data to a file
-                // ReSharper disable once AccessToDisposedClosure
-                //waveWriter.Write(buffer, 0, read);
+            read = _convertedSource.Read(buffer, 0, buffer.Length);
 
-                var message = new AudioDataEventArgs(_convertedSource.WaveFormat.SampleRate, _convertedSource.WaveFormat.Channels, buffer.Length, buffer);
-                GlobalEventAggregator.Instance.SendMessage(message);
-            }
 
-           
+            var message = new AudioDataEventArgs(_convertedSource.WaveFormat.SampleRate,
+                _convertedSource.WaveFormat.Channels, read, buffer.Take(read).ToArray());
+
+            GlobalEventAggregator.Instance.SendMessage(message);
         }
 
         public void StopRecording()
         {
-            _quitPolling = true;
+            _pollingCancellationTokenSource?.Cancel();
+
+            _pollingTask?.Wait();
+
+            //_quitPolling = true;
 
             if (_soundIn != null)
             {
                 _soundIn.DataAvailable -= SoundInSourceOnDataAvailable;
-                _soundIn.Stop();
-                _soundIn.Dispose();
-                _soundIn = null;
             }
+
+            _soundIn?.Stop();
+            _soundIn?.Dispose();
+            _soundIn = null;
             
-            _pollingCancellationTokenSource?.Cancel();
-            _pollingTask?.Wait();
             _pollingCancellationTokenSource = new CancellationTokenSource();
 
         }
@@ -285,14 +291,14 @@ namespace SharpPropoPlus.Audio
         private void PollAudioLevels()
         {
 
-            _quitPolling = false;
+            //_quitPolling = false;
 
             _pollingTask = Task.Factory.StartNew(() =>
             {
 
                 var device = _deviceEnumerator.GetDevice(DeviceId);
 
-                while (!_quitPolling)
+                while (!_pollingCancellationTokenSource.IsCancellationRequested)
                 {
 
 
@@ -325,7 +331,7 @@ namespace SharpPropoPlus.Audio
                     //Task.Delay(200, _pollingCancellationTokenSource.Token);
                 }
 
-                _quitPolling = false;
+                //_quitPolling = false;
 
             }, _pollingCancellationTokenSource.Token);
 
@@ -349,7 +355,7 @@ namespace SharpPropoPlus.Audio
 
         public void Dispose()
         {
-            if (_pollingTask.Status == TaskStatus.Running)
+            if (_pollingTask.Status == TaskStatus.Running || !_pollingCancellationTokenSource.IsCancellationRequested)
                 StopRecording();
 
             _soundIn?.Dispose();

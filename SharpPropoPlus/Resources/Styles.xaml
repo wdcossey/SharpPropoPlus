@@ -236,7 +236,6 @@
         <Setter Property="ScrollViewer.PanningMode" Value="Both"/>
         <Setter Property="Stylus.IsFlicksEnabled" Value="False"/>
 
-
         <Setter Property="ItemContainerStyle">
             <Setter.Value>
                 <Style TargetType="{x:Type ComboBoxItem}">
@@ -276,6 +275,7 @@
             </Setter.Value>
         </Setter>
         <Setter Property="Template" Value="{StaticResource ComboBoxTemplate2}"/>
+
         <Style.Triggers>
             <Trigger Property="IsEditable" Value="true">
                 <Setter Property="IsTabStop" Value="false"/>

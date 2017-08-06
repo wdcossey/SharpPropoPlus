@@ -14,7 +14,7 @@ namespace SharpPropoPlus.Decoder.Contracts
         throw new ArgumentException("Export requires a name", nameof(name));
 
       Name = name;
-      Type = type;
+      TransmitterType = type;
       Description = description;
     }
 
@@ -22,6 +22,6 @@ namespace SharpPropoPlus.Decoder.Contracts
 
     public string Description { get; private set; }
 
-    public TransmitterType Type { get; private set; }
+    public TransmitterType TransmitterType { get; private set; }
   }
 }

@@ -9,6 +9,7 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary>
+                    <valueConverters:DescriptionAttributeValueConverter x:Key="DescriptionAttributeValueConverter" />
                     <valueConverters:SystemColorValueConverter x:Key="SystemColorValueConverter" />
                     <valueConverters:AudioBitrateValueConverter x:Key="AudioBitrateValueConverter" />
                     <valueConverters:AudioChannelValueConverter x:Key="AudioChannelValueConverter" />

@@ -8,6 +8,6 @@ namespace SharpPropoPlus.Decoder.Contracts
 
     string Description { get; }
 
-    TransmitterType Type { get; }
+    TransmitterType TransmitterType { get; }
   }
 }

@@ -7,6 +7,7 @@ using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Interop;
 using Microsoft.Practices.Unity;
+using SharpPropoPlus.Audio;
 using SharpPropoPlus.Audio.EventArguments;
 using SharpPropoPlus.Decoder;
 using SharpPropoPlus.Decoder.Contracts;
@@ -23,7 +24,6 @@ namespace SharpPropoPlus
     {
         private static Application _instance;
         private static readonly object Sync = new object();
-        private readonly DecoderManager _decoderManager;
         private readonly Lazy<IPropoPlusDecoder, IDecoderMetadata> _decoder;
         private IUnityContainer _container;
 
@@ -32,7 +32,7 @@ namespace SharpPropoPlus
         {
             //_decoderManager = new DecoderManager();
 
-            _decoderManager = Container.Resolve<DecoderManager>();
+            DecoderManager = Container.Resolve<DecoderManager>();
 
             //TODO: Remove, this is only for testing...
             _decoder = DecoderManager.Decoders.First();
@@ -90,10 +90,7 @@ namespace SharpPropoPlus
             }
         }
 
-        public DecoderManager DecoderManager
-        {
-            get { return _decoderManager; }
-        }
+        public DecoderManager DecoderManager { get; }
 
         public IUnityContainer Container
         {
@@ -203,6 +200,7 @@ namespace SharpPropoPlus
 
         public void Dispose()
         {
+            AudioHelper.Instance.Dispose();
             //GlobalEventAggregator.Instance.AddListener<AudioDataEventArgs>(AudioDataAction);
         }
     }

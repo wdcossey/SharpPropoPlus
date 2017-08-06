@@ -6,7 +6,8 @@
              xmlns:local="clr-namespace:SharpPropoPlus.Views"
              xmlns:viewModels="clr-namespace:SharpPropoPlus.ViewModels"
              xmlns:controls="clr-namespace:SharpPropoPlus.Controls"
-             xmlns:Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero2" x:Class="SharpPropoPlus.Views.TransmitterConfig"
+             xmlns:componentModel="clr-namespace:System.ComponentModel;assembly=WindowsBase"
+             x:Class="SharpPropoPlus.Views.TransmitterConfig"
              mc:Ignorable="d" 
              d:DesignHeight="400" d:DesignWidth="600">
 
@@ -17,6 +18,22 @@
         <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource TextBlockLightStyleKey}">
 
         </Style>
+
+
+        <CollectionViewSource 
+            x:Key="DecoderCollection"
+            Source="{Binding DecoderCollection}">
+            
+            <!-- Grouping -->
+            <CollectionViewSource.GroupDescriptions>
+                <PropertyGroupDescription PropertyName="Metadata.TransmitterType"  />
+            </CollectionViewSource.GroupDescriptions>
+
+            <CollectionViewSource.SortDescriptions>
+                <componentModel:SortDescription Direction="Ascending" PropertyName="Metadata.Name"  />
+            </CollectionViewSource.SortDescriptions>
+
+        </CollectionViewSource>
 
     </UserControl.Resources>
     <!--<UserControl.DataContext>
@@ -29,7 +46,37 @@
             <!--<Border HorizontalAlignment="Stretch" SnapsToDevicePixels="True" BorderThickness="0 0 0 1" BorderBrush="#f0f0f0"/>-->
             <TextBlock Style="{StaticResource TextBlockHeaderStyleKey}" Text="Signal Decoder" />
 
-            <ComboBox Margin="0 8" HorizontalAlignment="Left" Grid.Row="1" DisplayMemberPath="Metadata.Name" ItemsSource="{Binding DecoderCollection, Mode=OneWay}" SelectedItem="{Binding SelectedDecoder, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" >
+            <ComboBox Margin="0 8" HorizontalAlignment="Left" Grid.Row="1" DisplayMemberPath="Metadata.Name" ItemsSource="{Binding Source={StaticResource DecoderCollection}}" SelectedItem="{Binding SelectedDecoder, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" >
+                <ComboBox.GroupStyle>
+                    <GroupStyle>
+
+                        <GroupStyle.ContainerStyle>
+                            <Style TargetType="GroupItem">
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="GroupItem" >
+                                            <Grid>
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition/>
+                                                    <RowDefinition/>
+                                                </Grid.RowDefinitions>
+
+                                                <Grid Grid.Row="0" Margin="0" Background="#01000000" Opacity="0.75" >
+                                                    <Border VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Grid.Column="1" Padding="16 6 48 6">
+                                                        <ContentPresenter x:Name="ContentControl" Content="{Binding Name, Mode=OneWay, Converter={StaticResource DescriptionAttributeValueConverter}}" TextBlock.FontWeight="Light" TextBlock.FontSize="11" TextBlock.FontFamily="pack://application:,,,/Fonts/#Montserrat Light" />
+
+                                                    </Border>
+                                                </Grid>
+                                                <ItemsPresenter Grid.Row="1"/>
+                                            </Grid>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </GroupStyle.ContainerStyle>
+                    </GroupStyle>
+                </ComboBox.GroupStyle>
+
                 <!--<ComboBox.ItemTemplate>
                     <DataTemplate>
                         <TextBlock Text="{Binding DeviceName}"/>

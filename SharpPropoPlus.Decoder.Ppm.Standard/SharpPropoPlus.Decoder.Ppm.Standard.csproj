@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{0F1F030D-7F8B-43C6-B486-B05D0F21455F}</ProjectGuid>
+    <ProjectGuid>{E9519B88-A527-4A94-8A67-F6B404070E28}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SharpPropoPlus.Decoder.Ppm.Walkera</RootNamespace>
-    <AssemblyName>SharpPropoPlus.Decoder.Ppm.Walkera</AssemblyName>
+    <RootNamespace>SharpPropoPlus.Decoder.Ppm.Standard</RootNamespace>
+    <AssemblyName>SharpPropoPlus.Decoder.Ppm.Standard</AssemblyName>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

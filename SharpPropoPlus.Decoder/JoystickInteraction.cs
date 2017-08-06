@@ -116,13 +116,13 @@ namespace SharpPropoPlus.Decoder
     private static vJoy.JoystickState _joystickState;
     private static bool _initialized;
 
-    public void Send(int nChannels, ref int[] channel)
+    public void Send(int nChannels, int[] channel)
     {
       bool writeOk;
       //uint rId = 2; //m_vJoyDeviceId;
       int i;
       int k;
-      var ch = new int[Constants.MAX_JS_CH];
+      var ch = new int[channel.Length];
       var nCh = 0;
 
       if (VJoy.GetVJDStatus(vJoyDeviceId) == VjdStat.VJD_STAT_FREE)

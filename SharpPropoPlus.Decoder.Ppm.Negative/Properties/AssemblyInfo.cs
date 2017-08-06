@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("SharpPropoPlus.Decoder.Ppm.Turnigy9x")]
+[assembly: AssemblyTitle("SharpPropoPlus.Decoder.Ppm.Negative")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("SharpPropoPlus.Decoder.Ppm.Turnigy9x")]
+[assembly: AssemblyProduct("SharpPropoPlus.Decoder.Ppm.Negative")]
 [assembly: AssemblyCopyright("Copyright © 2016-2017")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
