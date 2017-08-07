@@ -46,10 +46,10 @@
             <!--<Border HorizontalAlignment="Stretch" SnapsToDevicePixels="True" BorderThickness="0 0 0 1" BorderBrush="#f0f0f0"/>-->
             <TextBlock Style="{StaticResource TextBlockHeaderStyleKey}" Text="Signal Decoder" />
 
-            <ComboBox Margin="0 8" HorizontalAlignment="Left" Grid.Row="1" DisplayMemberPath="Metadata.Name" ItemsSource="{Binding Source={StaticResource DecoderCollection}}" SelectedItem="{Binding SelectedDecoder, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" >
+            <!--DisplayMemberPath="Metadata.Name"-->
+            <ComboBox Margin="0 8" HorizontalAlignment="Left" DisplayMemberPath="Metadata.Name" Grid.Row="1"  ItemsSource="{Binding Source={StaticResource DecoderCollection}}" SelectedItem="{Binding SelectedDecoder, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" >
                 <ComboBox.GroupStyle>
                     <GroupStyle>
-
                         <GroupStyle.ContainerStyle>
                             <Style TargetType="GroupItem">
                                 <Setter Property="Template">
@@ -77,11 +77,14 @@
                     </GroupStyle>
                 </ComboBox.GroupStyle>
 
-                <!--<ComboBox.ItemTemplate>
+                <!--<ComboBox.SelectionBoxItemTemplate >
                     <DataTemplate>
-                        <TextBlock Text="{Binding DeviceName}"/>
+                        <TextBlock >
+                            <Run Text="{Binding Metadata.Name, Mode=OneWay}"></Run>
+                            <Run Text="{Binding Metadata.TransmitterType, Mode=OneWay}"></Run>
+                        </TextBlock>
                     </DataTemplate>
-                </ComboBox.ItemTemplate>-->
+                </ComboBox.SelectionBoxItemTemplate>-->
             </ComboBox>
         </StackPanel>
 

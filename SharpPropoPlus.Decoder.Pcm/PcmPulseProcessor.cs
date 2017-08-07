@@ -24,5 +24,20 @@ namespace SharpPropoPlus.Decoder.Pcm
 
         public abstract void Reset();
 
+        /// <summary>
+        /// smooth
+        /// </summary>
+        /// <param name="orig"></param>
+        /// <param name="newval"></param>
+        /// <returns></returns>
+        protected int Smooth(int orig, int newval)
+        {
+            if ((orig - newval > 100) || (newval - orig > 100))
+                return (newval + orig) / 2;
+
+            return newval;
+
+        }
+
     }
 }
