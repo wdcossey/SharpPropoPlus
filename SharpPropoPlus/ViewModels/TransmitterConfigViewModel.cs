@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Windows.Data;
-using SharpPropoPlus.Audio.Enums;
-using SharpPropoPlus.Decoder;
 using SharpPropoPlus.Decoder.Contracts;
 using SharpPropoPlus.Interfaces;
 

@@ -1,5 +1,4 @@
-﻿using System;
-using SharpPropoPlus.Audio;
+﻿using SharpPropoPlus.Audio;
 using SharpPropoPlus.Audio.Enums;
 using SharpPropoPlus.Audio.EventArguments;
 using SharpPropoPlus.Decoder;

@@ -2,7 +2,6 @@
 using System.Linq;
 using SharpPropoPlus.Decoder.EventArguments;
 using SharpPropoPlus.Decoder.Models;
-using SharpPropoPlus.Decoder.Structs;
 using SharpPropoPlus.Events;
 using vJoyInterfaceWrap;
 

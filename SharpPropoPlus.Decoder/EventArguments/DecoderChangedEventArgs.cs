@@ -1,5 +1,4 @@
-﻿using SharpPropoPlus.Decoder.Contracts;
-using SharpPropoPlus.Decoder.Enums;
+﻿using SharpPropoPlus.Decoder.Enums;
 
 namespace SharpPropoPlus.Decoder.EventArguments
 {

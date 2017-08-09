@@ -1,17 +1,12 @@
 ﻿using System;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using SharpPropoPlus.Annotations;
 using SharpPropoPlus.Audio;
 using SharpPropoPlus.Audio.Enums;
 using SharpPropoPlus.Audio.EventArguments;
 using SharpPropoPlus.Audio.Models;
 using SharpPropoPlus.Events;
-using SharpPropoPlus.Events.Events;
 using SharpPropoPlus.Interfaces;
-using SharpPropoPlus.vJoyMonitor;
 
 namespace SharpPropoPlus.ViewModels
 {

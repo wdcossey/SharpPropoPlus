@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel.Composition;
 using SharpPropoPlus.Decoder.Contracts;
 using SharpPropoPlus.Decoder.Enums;
 

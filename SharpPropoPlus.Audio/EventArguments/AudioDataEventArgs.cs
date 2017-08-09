@@ -1,5 +1,4 @@
 ﻿using System;
-using SharpPropoPlus.Audio.Models;
 
 namespace SharpPropoPlus.Audio.EventArguments
 {

@@ -1,5 +1,4 @@
-﻿using System;
-using SharpPropoPlus.Decoder.Contracts;
+﻿using SharpPropoPlus.Decoder.Contracts;
 using SharpPropoPlus.Decoder.Enums;
 
 namespace SharpPropoPlus.Decoder.Pcm.AirtronicsSanwa

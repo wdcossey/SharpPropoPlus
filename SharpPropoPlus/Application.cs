@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Runtime.InteropServices;
-using System.Windows;
 using System.Windows.Interop;
 using Microsoft.Practices.Unity;
 using SharpPropoPlus.Audio;
@@ -16,7 +12,6 @@ using SharpPropoPlus.Helpers;
 using SharpPropoPlus.Interfaces;
 using SharpPropoPlus.vJoyMonitor;
 using SharpPropoPlus.ViewModels;
-using SharpPropoPlus.Views;
 
 namespace SharpPropoPlus
 {
