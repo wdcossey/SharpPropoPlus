@@ -80,7 +80,22 @@ namespace SharpPropoPlus.Decoder.Ppm
             Process(pulseLength.Normalized, negative);
         }
 
-        public abstract void Reset();
+        public virtual void Reset()
+        {
+            ChannelData = new int[BufferLength];
+
+            Sync = false;
+
+            DataBuffer = new int[BufferLength]; /* Array of pulse widthes in joystick values */
+            DataCount = 0; /* pulse index (corresponds to channel index) */
+
+            FormerSync = false;
+
+            PosUpdateCounter = 0;
+
+            //static int i = 0;
+            PrevWidth = new int[BufferLength]; /* array of previous width values */
+        }
 
     }
 }

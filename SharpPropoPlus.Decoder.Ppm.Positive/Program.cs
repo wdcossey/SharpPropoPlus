@@ -66,7 +66,7 @@ namespace SharpPropoPlus.Decoder.Ppm.Positive
                 Sync = true;
                 if (!DataCount.Equals(0))
                 {
-                    //  m_PosUpdateCounter++;
+                    PosUpdateCounter++;
                 }
                 RawChannelCount = DataCount;
                 DataCount = 0;
@@ -157,15 +157,7 @@ namespace SharpPropoPlus.Decoder.Ppm.Positive
         /// </summary>
         public sealed override void Reset()
         {
-            Sync = false;
-            ChannelData = new int[BufferLength];
-            DataCount = 0; /* pulse index (corresponds to channel index) */
-            FormerSync = false;
-
-            DataBuffer = new int[BufferLength]; /* Array of pulse widthes in joystick values */
-
-            //static int i = 0;
-            PrevWidth = new int[BufferLength]; /* array of previous width values */
+            base.Reset();
         }
 
 

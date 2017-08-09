@@ -36,6 +36,11 @@ namespace SharpPropoPlus.Decoder
         private static int _rawChannelCount;
 
         /// <summary>
+        /// m_PosUpdateCounter
+        /// </summary>
+        private static int _posUpdateCounter = 0;
+
+        /// <summary>
         /// Sticky minimum sample value
         /// </summary>
         private static double _minSampleValue;
@@ -164,6 +169,20 @@ namespace SharpPropoPlus.Decoder
             }
         }
 
+        /// <summary>
+        /// m_PosUpdateCounter
+        /// </summary>
+        protected static int PosUpdateCounter
+        {
+            get { return _posUpdateCounter; }
+            set
+            {
+                //if (_posUpdateCounter == value)
+                //  return;
+
+                _posUpdateCounter = value;
+            }
+        }
 
         /// <summary>
         /// <para>Buffer Length/Size</para>

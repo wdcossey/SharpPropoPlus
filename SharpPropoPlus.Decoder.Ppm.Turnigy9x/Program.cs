@@ -109,7 +109,7 @@ namespace SharpPropoPlus.Decoder.Ppm.Turnigy9x
                 Sync = true;
                 if (!DataCount.Equals(0))
                 {
-                    //m_PosUpdateCounter++;
+                    PosUpdateCounter++;
                 }
 
                 RawChannelCount = DataCount;
@@ -225,16 +225,7 @@ namespace SharpPropoPlus.Decoder.Ppm.Turnigy9x
         /// </summary>
         public sealed override void Reset()
         {
-            ChannelData = new int[BufferLength];
-
-            Sync = false;
-
-            DataBuffer = new int[BufferLength]; /* Array of pulse widthes in joystick values */
-            DataCount = 0; /* pulse index (corresponds to channel index) */
-            FormerSync = false;
-
-            //static int i = 0;
-            PrevWidth = new int[BufferLength]; /* array of previous width values */
+            base.Reset();
         }
     }
 

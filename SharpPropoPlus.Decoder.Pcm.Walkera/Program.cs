@@ -127,15 +127,7 @@ namespace SharpPropoPlus.Decoder.Pcm.Walkera
         /// </summary>
         public sealed override void Reset()
         {
-            RawChannelCount = BufferLength;
-            Sync = false;
-            DataBuffer = new int[BufferLength]; /* Array of pulse widthes in joystick values */
-            DataCount = 0; /* pulse index (corresponds to channel index) */
-            FormerSync = false;
-            ChannelData = new int[BufferLength];
-
-            //static int i = 0;
-            PrevWidth = new int[BufferLength]; /* array of previous width values */
+            base.Reset();
         }
 
         #region Walkera PCM helper functions

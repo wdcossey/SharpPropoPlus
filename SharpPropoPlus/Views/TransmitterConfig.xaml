@@ -47,7 +47,7 @@
             <TextBlock Style="{StaticResource TextBlockHeaderStyleKey}" Text="Signal Decoder" />
 
             <!--DisplayMemberPath="Metadata.Name"-->
-            <ComboBox Margin="0 8" HorizontalAlignment="Left" DisplayMemberPath="Metadata.Name" Grid.Row="1"  ItemsSource="{Binding Source={StaticResource DecoderCollection}}" SelectedItem="{Binding SelectedDecoder, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" >
+            <ComboBox Margin="0 8" HorizontalAlignment="Left" MaxDropDownHeight="8" DisplayMemberPath="Metadata.Name"  ItemsSource="{Binding Source={StaticResource DecoderCollection}}" SelectedItem="{Binding SelectedDecoder, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" >
                 <ComboBox.GroupStyle>
                     <GroupStyle>
                         <GroupStyle.ContainerStyle>
@@ -62,8 +62,9 @@
                                                 </Grid.RowDefinitions>
 
                                                 <Grid Grid.Row="0" Margin="0" Background="#01000000" Opacity="0.75" >
-                                                    <Border VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Grid.Column="1" Padding="16 6 48 6">
+                                                    <Border VerticalAlignment="Stretch" SnapsToDevicePixels="True" BorderBrush="#f0f0f0" BorderThickness="0 0 0 1" HorizontalAlignment="Stretch" Grid.Column="1" Margin="8 0" Padding="8 6 40 6">
                                                         <ContentPresenter x:Name="ContentControl" Content="{Binding Name, Mode=OneWay, Converter={StaticResource DescriptionAttributeValueConverter}}" TextBlock.FontWeight="Light" TextBlock.FontSize="11" TextBlock.FontFamily="pack://application:,,,/Fonts/#Montserrat Light" />
+                                                        
 
                                                     </Border>
                                                 </Grid>
