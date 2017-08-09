@@ -47,7 +47,8 @@
             <TextBlock Style="{StaticResource TextBlockHeaderStyleKey}" Text="Signal Decoder" />
 
             <!--DisplayMemberPath="Metadata.Name"-->
-            <ComboBox Margin="0 8" HorizontalAlignment="Left" MaxDropDownHeight="8" DisplayMemberPath="Metadata.Name"  ItemsSource="{Binding Source={StaticResource DecoderCollection}}" SelectedItem="{Binding SelectedDecoder, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" >
+            <ComboBox Margin="0 8" HorizontalAlignment="Left" DisplayMemberPath="Metadata.Name" MaxDropDownHeight="8" ItemsSource="{Binding Source={StaticResource DecoderCollection}}" SelectedItem="{Binding SelectedDecoder, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" >
+
                 <ComboBox.GroupStyle>
                     <GroupStyle>
                         <GroupStyle.ContainerStyle>

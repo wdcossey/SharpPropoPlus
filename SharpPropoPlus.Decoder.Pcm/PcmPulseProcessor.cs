@@ -5,13 +5,37 @@ namespace SharpPropoPlus.Decoder.Pcm
     public abstract class PcmPulseProcessor : PulseProcessor, IPropoPlusDecoder
     {
         #region PCM Values (General)
-        
+
 
         #endregion
+
+        private int _bit;
+
+        private int _bitCount;
+
+        private int _bitStream;
 
         protected abstract void Process(int width, bool input);
 
         public abstract string[] Description { get; }
+
+        protected int Bit
+        {
+            get { return _bit; }
+            set { _bit = value; }
+        }
+
+        protected int BitCount
+        {
+            get { return _bitCount; }
+            set { _bitCount = value; }
+        }
+
+        protected int BitStream
+        {
+            get { return _bitStream; }
+            set { _bitStream = value; }
+        }
 
         public virtual void ProcessPulse(int sampleRate, int sample)
         {
@@ -30,6 +54,12 @@ namespace SharpPropoPlus.Decoder.Pcm
             DataCount = 0; /* pulse index (corresponds to channel index) */
             FormerSync = false;
             ChannelData = new int[BufferLength];
+
+            #region PCM
+            Bit = 0;
+            BitCount = 0;
+            BitStream = 0;
+            #endregion
 
             PosUpdateCounter = 0;
 
@@ -51,6 +81,8 @@ namespace SharpPropoPlus.Decoder.Pcm
             return newval;
 
         }
+
+        
 
     }
 }

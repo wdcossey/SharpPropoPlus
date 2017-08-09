@@ -177,7 +177,6 @@ namespace SharpPropoPlus.Decoder.Ppm.Walkera
             _polarity = false;
         }
 
-
     }
 
 

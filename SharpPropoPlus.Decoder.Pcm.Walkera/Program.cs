@@ -8,6 +8,9 @@ namespace SharpPropoPlus.Decoder.Pcm.Walkera
     public class Program : PcmPulseProcessor
     {
 
+        private int _nPulse; 
+        private int[] _cycle;
+
         #region PCM Values (Walkera)
 
         #endregion
@@ -27,6 +30,8 @@ namespace SharpPropoPlus.Decoder.Pcm.Walkera
         public Program()
         {
             Reset();
+            _nPulse = 0;
+            _cycle = new int[50];
         }
 
         /// <summary>
@@ -43,18 +48,8 @@ namespace SharpPropoPlus.Decoder.Pcm.Walkera
         /// <param name="input"></param>
         protected override void Process(int width, bool input)
         {
-            int nPulse = 0;
-            int[] cycle = new int[50];
-            int Elevator = 0;
-            int Ailerons = 0;
-            int Throttle = 0;
-            int Rudder = 0;
-            int Gear = 0;
-            int Pitch = 0;
-            int Gyro = 0;
-            int Ch8 = 0;
-            const int fixed_n_channel = 8;
-            var m_nChannels = 8;
+            //const int fixed_n_channel = 8;
+            //var m_nChannels = 8;
             int vPulse;
             int[] cs;
 
@@ -63,7 +58,7 @@ namespace SharpPropoPlus.Decoder.Pcm.Walkera
             /* Detect Sync pulse - if detected then reset pulse counter and return */
             if (width > 56)
             {
-                nPulse = 1;
+                _nPulse = 1;
                 return;
             };
 
@@ -72,33 +67,35 @@ namespace SharpPropoPlus.Decoder.Pcm.Walkera
                 return;
 
             /* Even pulses are binary, Odd pulses are Octal */
-            if ((nPulse & 1) != 0)
+            if ((_nPulse & 1) != 0)
                 vPulse = WalkeraConvert2Bin(width);
             else
                 vPulse = WalkeraConvert2Oct(width);
             if (vPulse < 8)
-                cycle[nPulse] = vPulse;
+            {
+                _cycle[_nPulse] = vPulse;
+            }
 
-            nPulse++;
+            _nPulse++;
 
             /* At the end of the 50-pulse cycle - calculate the channels */
-            if (nPulse == 50)
+            if (_nPulse == 50)
             {
                 /* Channels */
-                Elevator = WalkeraElevator(cycle);  /* Ch1: Elevator */
-                Ailerons = WalkeraAilerons(cycle);  /* Ch2: Ailerons */
-                Throttle = WalkeraThrottle(cycle);  /* Ch3: Throttle */
-                Rudder = WalkeraRudder(cycle);      /* Ch4: Rudder   */
-                Gear = WalkeraGear(cycle);          /* Ch5: Gear     */
-                Pitch = WalkeraPitch(cycle);        /* Ch6: Pitch    */
-                Gyro = WalkeraGyro(cycle);          /* Ch7: Gyro     */ /* version 3.3.1 */
-                Ch8 = WalkeraChannel8(cycle);       /* Ch8: Not used */ /* version 3.3.1 */
+                var Elevator = WalkeraElevator(_cycle);
+                var Ailerons = WalkeraAilerons(_cycle);
+                var Throttle = WalkeraThrottle(_cycle);
+                var Rudder = WalkeraRudder(_cycle);
+                var Gear = WalkeraGear(_cycle);
+                var Pitch = WalkeraPitch(_cycle);
+                var Gyro = WalkeraGyro(_cycle); /* version 3.3.1 */
+                var Ch8 = WalkeraChannel8(_cycle); /* version 3.3.1 */
 
                 /* Checksum */
-                cs = WalkeraCheckSum(cycle); /* version 3.3.1 */
+                cs = WalkeraCheckSum(_cycle); /* version 3.3.1 */
 
                 /* Copy data to joystick positions if checksum is valid (ch1-ch4) */
-                if (cs[0] == cycle[21] && cs[1] == cycle[22])
+                if (cs[0] == _cycle[21] && cs[1] == _cycle[22])
                 {
                     ChannelData[0] = Smooth(ChannelData[0], Elevator);
                     ChannelData[1] = Smooth(ChannelData[1], Ailerons);
@@ -107,7 +104,7 @@ namespace SharpPropoPlus.Decoder.Pcm.Walkera
                 }
 
                 /* Copy data to joystick positions if checksum is valid (ch5-ch8) */
-                if (cs[2] == cycle[47] && cs[3] == cycle[48])
+                if (cs[2] == _cycle[47] && cs[3] == _cycle[48])
                 {
                     ChannelData[4] = Smooth(ChannelData[4], Gear);
                     ChannelData[5] = Smooth(ChannelData[5], Pitch);
@@ -115,7 +112,7 @@ namespace SharpPropoPlus.Decoder.Pcm.Walkera
                     ChannelData[7] = Smooth(ChannelData[7], Ch8);
                 }
 
-                nPulse = 0;
+                _nPulse = 0;
 
                 //Send2vJoy(fixed_n_channel, m_Position);
                 JoystickInteraction.Instance.Send(RawChannelCount, ChannelData);

@@ -345,6 +345,5 @@ namespace SharpPropoPlus.Decoder
 
         }
 
-
     }
 }
