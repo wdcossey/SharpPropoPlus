@@ -51,6 +51,7 @@ namespace SharpPropoPlus.Decoder.Pcm.AirtronicsSanwaSecond
         public sealed override void Reset()
         {
             base.Reset();
+            DataBuffer = new int[10];
         }
 
         #region Airtronics/Sanwa [2] PCM helper functions

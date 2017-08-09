@@ -51,6 +51,7 @@ namespace SharpPropoPlus.Decoder.Pcm.JrGraupner
         public sealed override void Reset()
         {
             base.Reset();
+            DataBuffer = new int[30];
         }
 
         #region JR/Graupner PCM helper functions

@@ -51,6 +51,7 @@ namespace SharpPropoPlus.Decoder.Pcm.Futaba
         public sealed override void Reset()
         {
             base.Reset();
+            DataBuffer = new int[30];
         }
 
         #region Futaba PCM helper functions
