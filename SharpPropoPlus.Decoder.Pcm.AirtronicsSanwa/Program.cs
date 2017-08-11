@@ -6,6 +6,9 @@ namespace SharpPropoPlus.Decoder.Pcm.AirtronicsSanwa
     [ExportPropoPlusDecoder("Airtronics/Sanwa [1]", "Airtronics/Sanwa [1] (PCM) pulse processor", TransmitterType.Pcm)]
     public class Program : PcmPulseProcessor
     {
+        private int _chunk;
+
+        private int _pulse;
 
         #region PCM Values (Airtronics/Sanwa [1])
 
@@ -41,11 +44,8 @@ namespace SharpPropoPlus.Decoder.Pcm.AirtronicsSanwa
         /// <param name="input"></param>
         protected override void Process(int width, bool input)
         {
-            int nPulse;
+            
 
-            int bitcount = 0;
-            int bitstream = 0;
-            int chunk = -1;
             int shift;
 
             //if (gDebugLevel >= 2 && gCtrlLogFile && i++ % 10 && !(_strtime_s(tbuffer, 9)))
@@ -56,16 +56,16 @@ namespace SharpPropoPlus.Decoder.Pcm.AirtronicsSanwa
                 return;
 
             if (width < 50)
-                nPulse = 1;
+                _pulse = 1;
             else if (width < 90)
-                nPulse = 2;
+                _pulse = 2;
             else if (width < 130)
-                nPulse = 3;
+                _pulse = 3;
             else
-                nPulse = 4;
+                _pulse = 4;
 
             // 4-bit pulse marks a bigining of a data chunk
-            if (nPulse == 4)  
+            if (_pulse == 4)  
             {
                 if (!input)
                 {
@@ -89,11 +89,11 @@ namespace SharpPropoPlus.Decoder.Pcm.AirtronicsSanwa
 
                 // Sync bit is set for the first 10 bits of the chunk (No channel data here)
                 Sync = true;     
-                bitstream = 0;
-                bitcount = -1;
+                BitStream = 0;
+                BitCount = -1;
 
                 // Mark chunk polarity - 0: Low channels, 1: High channels
-                chunk = input ? 1 : 0;  
+                _chunk = input ? 1 : 0;  
                 //return 0;
 
                 if (DataCount == 5 && width < 160)
@@ -107,13 +107,13 @@ namespace SharpPropoPlus.Decoder.Pcm.AirtronicsSanwa
             // 15: Read a channel data
             shift = Sync ? 9 : 15;
 
-            bitstream = ((bitstream << 1) + 1) << (nPulse - 1);
-            bitcount += nPulse;
+            BitStream = ((BitStream << 1) + 1) << (_pulse - 1);
+            BitCount += _pulse;
 
-            if (bitcount >= shift)
+            if (BitCount >= shift)
             {
-                bitcount -= shift;
-                DataBuffer[DataCount] = (bitstream >> bitcount) & 0x7FFF; // Put raw 15-bit channel data
+                BitCount -= shift;
+                DataBuffer[DataCount] = (BitStream >> BitCount) & 0x7FFF; // Put raw 15-bit channel data
                 DataCount++;
                 Sync = false;
                 if (DataCount >= BufferLength + 2)
@@ -128,6 +128,9 @@ namespace SharpPropoPlus.Decoder.Pcm.AirtronicsSanwa
         public sealed override void Reset()
         {
             base.Reset();
+
+            _chunk = -1;
+
             DataBuffer = new int[10];
         }
 
@@ -144,6 +147,7 @@ namespace SharpPropoPlus.Decoder.Pcm.AirtronicsSanwa
             -1, -1, 9, 0, -1, 5, 13, 4, -1, 3, 11, 1, -1, 7, 15, -1,
         };
 
+        
         private static int Convert15Bits(int input)
         {
             int[] quintet = new int[3];
