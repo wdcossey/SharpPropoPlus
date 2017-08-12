@@ -43,6 +43,7 @@
     <Compile Include="Contracts\IPropoPlusDecoder.cs" />
     <Compile Include="Contracts\IDecoderMetadata.cs" />
     <Compile Include="DecoderManager.cs" />
+    <Compile Include="Enums\HidUsageFlags.cs" />
     <Compile Include="Enums\TransmitterType.cs" />
     <Compile Include="EventArguments\DecoderChangedEventArgs.cs" />
     <Compile Include="EventArguments\JoystickChangedEventArgs.cs" />

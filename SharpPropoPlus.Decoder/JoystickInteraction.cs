@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using SharpPropoPlus.Decoder.Enums;
 using SharpPropoPlus.Decoder.EventArguments;
 using SharpPropoPlus.Decoder.Models;
 using SharpPropoPlus.Events;
@@ -153,7 +154,7 @@ namespace SharpPropoPlus.Decoder
 
 
       // Fill-in the structure to be fed to the vJoy device - Axes the Buttons
-      for (i = 0; /*i<=n_ch &&*/ i <= Constants.HID_USAGE_SL1 - Constants.HID_USAGE_X; i++)
+      for (i = 0; /*i<=n_ch &&*/ i <= (int)HidUsageFlags.HID_USAGE_SL1 - (int)HidUsageFlags.HID_USAGE_X; i++)
       {
 
         //iMapped = Map2Nibble(m_Mapping, i); // Prepare mapping re-indexing
@@ -166,7 +167,7 @@ namespace SharpPropoPlus.Decoder
         if (ch[iMapped - 1] < 0)
           return;
 
-        writeOk = SetAxisDelayed(ref _joystickState, 32 * ch[iMapped - 1], Constants.HID_USAGE_X + i);
+        writeOk = SetAxisDelayed(ref _joystickState, 32 * ch[iMapped - 1], (HidUsageFlags?)((int)HidUsageFlags.HID_USAGE_X + i));
         // TODO: the normalization to default values should be done in the calling functions
       }
 
@@ -251,39 +252,39 @@ namespace SharpPropoPlus.Decoder
     /// <param name="axisValue"></param>
     /// <param name="axis"></param>
     /// <returns></returns>
-    private bool SetAxisDelayed(ref vJoy.JoystickState joystickState, int axisValue, int axis)
+    private bool SetAxisDelayed(ref vJoy.JoystickState joystickState, int axisValue, HidUsageFlags? axis)
     {
 
-      if (axis < Constants.HID_USAGE_X || axis > Constants.HID_USAGE_WHL)
+      if (!axis.HasValue || (int)axis < (int)HidUsageFlags.HID_USAGE_X || (int)axis > (int)HidUsageFlags.HID_USAGE_WHL)
         return false;
 
       switch (axis)
       {
-        case Constants.HID_USAGE_X:
+        case HidUsageFlags.HID_USAGE_X:
           joystickState.AxisX = axisValue;
           break;
-        case Constants.HID_USAGE_Y:
+        case HidUsageFlags.HID_USAGE_Y:
           joystickState.AxisY = axisValue;
           break;
-        case Constants.HID_USAGE_Z:
+        case HidUsageFlags.HID_USAGE_Z:
           joystickState.AxisZ = axisValue;
           break;
-        case Constants.HID_USAGE_RX:
+        case HidUsageFlags.HID_USAGE_RX:
           joystickState.AxisXRot = axisValue;
           break;
-        case Constants.HID_USAGE_RY:
+        case HidUsageFlags.HID_USAGE_RY:
           joystickState.AxisYRot = axisValue;
           break;
-        case Constants.HID_USAGE_RZ:
+        case HidUsageFlags.HID_USAGE_RZ:
           joystickState.AxisZRot = axisValue;
           break;
-        case Constants.HID_USAGE_SL0:
+        case HidUsageFlags.HID_USAGE_SL0:
           joystickState.Slider = axisValue;
           break;
-        case Constants.HID_USAGE_SL1:
+        case HidUsageFlags.HID_USAGE_SL1:
           joystickState.Dial = axisValue;
           break;
-        case Constants.HID_USAGE_WHL:
+        case HidUsageFlags.HID_USAGE_WHL:
           joystickState.Wheel = axisValue;
           break;
         default:
