@@ -14,6 +14,7 @@ namespace SharpPropoPlus.ViewModels
         private int _rawChannels;
         private string _joystickName = string.Empty;
         private string _decoderName;
+        private string _decoderDescription;
 
         public OverviewViewModel()
         {
@@ -35,7 +36,8 @@ namespace SharpPropoPlus.ViewModels
             if (args == null)
                 return;
 
-            DecoderName = args.Name;
+            DecoderName = $"{args.TransmitterType.ToString().ToUpperInvariant()} - {args.Name}";
+            DecoderDescription = args.Description;
         }
 
         public string DecoderName
@@ -48,6 +50,20 @@ namespace SharpPropoPlus.ViewModels
                     return;
 
                 _decoderName = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string DecoderDescription
+        {
+            get => _decoderDescription;
+
+            private set
+            {
+                if (_decoderDescription == value)
+                    return;
+
+                _decoderDescription = value;
                 OnPropertyChanged();
             }
         }

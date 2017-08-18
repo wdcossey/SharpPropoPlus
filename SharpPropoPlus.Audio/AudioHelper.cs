@@ -35,6 +35,7 @@ namespace SharpPropoPlus.Audio
         private IList<AudioEndPoint> _devices;
         private IWaveSource _convertedSource;
 
+        public event EventHandler<AudioDataEventArgs> DataAvailable;
 
         private AudioHelper()
         {
@@ -231,37 +232,21 @@ namespace SharpPropoPlus.Audio
             if (source == null)
                 return;
 
-            var bitsPerSample = args.Format.BitsPerSample;
-            var sampleRate = args.Format.SampleRate;
-            var channels = args.Format.Channels;
-
-            int samplesDesired = args.ByteCount / channels;
-
-            //int[] left = new int[samplesDesired];
-            //int[] right = new int[samplesDesired];
-            //int index = 0;
-
-            //for (var sample = 0; sample < args.BytesRecorded / 4; sample++)
-            //{
-
-            //  //left[sample] = BitConverter.ToInt16(args.Buffer, index);
-            //  index += 2;
-            //  right[sample] = BitConverter.ToInt16(args.Buffer, index);
-            //  index += 2;
-            //}
 
             byte[] buffer = new byte[_convertedSource.WaveFormat.BytesPerSecond / 2];
-            int read;
 
             //keep reading as long as we still get some data
             //if you're using such a loop, make sure that soundInSource.FillWithZeros is set to false
-            read = _convertedSource.Read(buffer, 0, buffer.Length);
+            var elementsRead = _convertedSource.Read(buffer, 0, buffer.Length);
+            
+            var eventArgs = new AudioDataEventArgs(_convertedSource.WaveFormat.SampleRate, _convertedSource.WaveFormat.BitsPerSample,
+                _convertedSource.WaveFormat.Channels, elementsRead, buffer.Take(elementsRead).ToArray());
+             
+            //Raise the event handler
+            DataAvailable?.Invoke(this, eventArgs);
 
-
-            var message = new AudioDataEventArgs(_convertedSource.WaveFormat.SampleRate,
-                _convertedSource.WaveFormat.Channels, read, buffer.Take(read).ToArray());
-
-            GlobalEventAggregator.Instance.SendMessage(message);
+            //Publish the message (same as the event handler [above])
+            GlobalEventAggregator.Instance.SendMessage(eventArgs);
         }
 
         public void StopRecording()

@@ -36,19 +36,18 @@ namespace SharpPropoPlus
             JoystickInteraction.Initialize();
 
             //TODO: Remove, this is only for testing...
-            GlobalEventAggregator.Instance.AddListener<AudioDataEventArgs>(AudioDataAction);
-
-            //System.Windows.Application.Current.MainWindow = (Window)new Shell();
+            //GlobalEventAggregator.Instance.AddListener<AudioDataEventArgs>(AudioDataAction);
+            //TODO: Remove, this is only for testing...
+            AudioHelper.Instance.DataAvailable += AudioDataAvailable;
         }
 
         //TODO: Remove, this is only for testing...
-        private void AudioDataAction(AudioDataEventArgs args)
+        private void AudioDataAvailable(object o, AudioDataEventArgs args)
         {
-            //var bitsPerSample = source.WaveFormat.BitsPerSample;
-            //var sampleRate = source.WaveFormat.SampleRate;
-            //var channels = source.WaveFormat.Channels;
-
             var samplesDesired = args.BytesRecorded / args.Channels;
+            var sampleRate = args.SampleRate;
+            var bitsPerSample = args.BitsPerSample;
+            var channels = args.Channels;
 
             var left = new int[samplesDesired];
             var right = new int[samplesDesired];
@@ -57,15 +56,40 @@ namespace SharpPropoPlus
             for (var sample = 0; sample < args.BytesRecorded / 4; sample++)
             {
 
-                //left[sample] = BitConverter.ToInt16(args.Buffer, index);
+                left[sample] = BitConverter.ToInt16(args.Buffer, index);
                 index += 2;
                 right[sample] = BitConverter.ToInt16(args.Buffer, index);
                 index += 2;
 
                 _decoder.Value.ProcessPulse(args.SampleRate, right[sample]);
             }
-
         }
+
+        //TODO: Remove, this is only for testing...
+        //private void AudioDataAction(AudioDataEventArgs args)
+        //{
+        //    //var bitsPerSample = source.WaveFormat.BitsPerSample;
+        //    //var sampleRate = source.WaveFormat.SampleRate;
+        //    //var channels = source.WaveFormat.Channels;
+
+        //    var samplesDesired = args.BytesRecorded / args.Channels;
+
+        //    var left = new int[samplesDesired];
+        //    var right = new int[samplesDesired];
+        //    var index = 0;
+
+        //    for (var sample = 0; sample < args.BytesRecorded / 4; sample++)
+        //    {
+
+        //        //left[sample] = BitConverter.ToInt16(args.Buffer, index);
+        //        index += 2;
+        //        right[sample] = BitConverter.ToInt16(args.Buffer, index);
+        //        index += 2;
+
+        //        _decoder.Value.ProcessPulse(args.SampleRate, right[sample]);
+        //    }
+
+        //}
 
 
         public static Application Instance
@@ -120,8 +144,8 @@ namespace SharpPropoPlus
             {
                 var windowHandle = new WindowInteropHelper(mainWindow).Handle;
 
-                HwndSource source = HwndSource.FromHwnd(windowHandle);
-                source.AddHook(new HwndSourceHook(WndProc));
+                var source = HwndSource.FromHwnd(windowHandle);
+                source?.AddHook(WndProc);
 
                 DeviceNotification.RegisterDeviceNotification(windowHandle, true);
             };
@@ -195,6 +219,7 @@ namespace SharpPropoPlus
 
         public void Dispose()
         {
+            AudioHelper.Instance.DataAvailable -= AudioDataAvailable;
             AudioHelper.Instance.Dispose();
             //GlobalEventAggregator.Instance.AddListener<AudioDataEventArgs>(AudioDataAction);
         }

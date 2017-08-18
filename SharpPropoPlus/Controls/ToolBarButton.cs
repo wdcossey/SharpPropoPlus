@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows;
 
-namespace SharpPropoPlus.ViewModels
+namespace SharpPropoPlus.Controls
 {
     public class ToolBarButton : DependencyObject
     {

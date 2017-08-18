@@ -3,7 +3,6 @@
 namespace SharpPropoPlus.Decoder.Enums
 {
     #region HID Descriptor definitions
-    [Flags]
     public enum HidUsageFlags
     {
         // ReSharper disable InconsistentNaming

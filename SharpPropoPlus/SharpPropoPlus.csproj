@@ -111,7 +111,7 @@
     <Reference Include="Microsoft.Practices.Unity.RegistrationByConvention, Version=4.0.0.0, Culture=neutral, PublicKeyToken=6d32ff45e0ccc69f, processorArchitecture=MSIL">
       <HintPath>..\packages\Unity.4.0.1\lib\net45\Microsoft.Practices.Unity.RegistrationByConvention.dll</HintPath>
     </Reference>
-    <Reference Include="PresentationFramework.Aero2" />
+    <Reference Include="PresentationFramework.AeroLite" />
     <Reference Include="SharpDX, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
       <HintPath>..\packages\SharpDX.4.0.1\lib\net45\SharpDX.dll</HintPath>
     </Reference>
@@ -186,7 +186,7 @@
     <Compile Include="Interfaces\ITransmitterConfigViewModel.cs" />
     <Compile Include="ViewModels\JoystickConfigViewModel.cs" />
     <Compile Include="ViewModels\OverviewViewModel.cs" />
-    <Compile Include="ViewModels\ToolBarButton.cs" />
+    <Compile Include="Controls\ToolBarButton.cs" />
     <Compile Include="ViewModels\TransmitterConfigViewModel.cs" />
     <Compile Include="Views\TransmitterConfig.xaml.cs">
       <DependentUpon>TransmitterConfig.xaml</DependentUpon>

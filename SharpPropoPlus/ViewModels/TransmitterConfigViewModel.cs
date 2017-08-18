@@ -2,6 +2,8 @@
 using System.Collections.ObjectModel;
 using System.Linq;
 using SharpPropoPlus.Decoder.Contracts;
+using SharpPropoPlus.Decoder.EventArguments;
+using SharpPropoPlus.Events;
 using SharpPropoPlus.Interfaces;
 
 namespace SharpPropoPlus.ViewModels
@@ -50,7 +52,16 @@ namespace SharpPropoPlus.ViewModels
             get { return _selectedDecoder; }
             set
             {
+                if (_selectedDecoder == value)
+                    return;
+
                 _selectedDecoder = value;
+
+                var eventArgs = new DecoderChangedEventArgs(_selectedDecoder.Metadata.Name, _selectedDecoder.Metadata.Description, _selectedDecoder.Metadata.TransmitterType);
+
+                //Publish the message 
+                GlobalEventAggregator.Instance.SendMessage(eventArgs);
+
                 OnPropertyChanged();
             }
         }

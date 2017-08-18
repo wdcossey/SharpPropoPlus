@@ -3,7 +3,9 @@
 // 
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -42,7 +44,7 @@ namespace SharpPropoPlus.Controls
         /// </summary>
         public CustomWindow()
         {
-            MenuItems = new List<ToolBarButton>();
+            ToolBarItems = new ObservableCollection<ToolBarButton>();
 
             CreateCommandBindings();
 
@@ -54,15 +56,19 @@ namespace SharpPropoPlus.Controls
         }
 
 
-        public List<ToolBarButton> MenuItems
+        public ObservableCollection<ToolBarButton> ToolBarItems
         {
-            get { return (List<ToolBarButton>)this.GetValue(MenuItemsProperty); }
+            get { return (ObservableCollection<ToolBarButton>)this.GetValue(MenuItemsProperty); }
             set { this.SetValue(MenuItemsProperty, value); }
         }
 
         public static readonly DependencyProperty MenuItemsProperty = DependencyProperty.Register(
-            "MenuItems", typeof(List<ToolBarButton>), typeof(CustomWindow), new FrameworkPropertyMetadata(new List<ToolBarButton>()));
-         
+            nameof(ToolBarItems), typeof(ObservableCollection<ToolBarButton>), typeof(CustomWindow), new FrameworkPropertyMetadata(new ObservableCollection<ToolBarButton>())
+            {
+                BindsTwoWayByDefault = true,
+                AffectsRender = true,
+            });
+
         public ICommand NavigateCommand
         {
             get
@@ -269,9 +275,9 @@ namespace SharpPropoPlus.Controls
 
         private void SetActiveMenuButton()
         {
-            if (((IList<ToolBarButton>)MenuItems).Select(s => s.Type).Contains(InitialPage))
+            if (ToolBarItems.Select(s => s.Type).Contains(InitialPage))
             {
-                ((IList<ToolBarButton>)MenuItems).First(f => f.Type == InitialPage).IsChecked = true;
+                ToolBarItems.First(f => f.Type == InitialPage).IsChecked = true;
             }
         }
 

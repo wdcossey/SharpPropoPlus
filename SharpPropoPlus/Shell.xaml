@@ -11,23 +11,55 @@
         xmlns:attachedProperties="clr-namespace:SharpPropoPlus.AttachedProperties"
         Background="#2d2d30"
         mc:Ignorable="d"
+                       
         Style="{StaticResource MainWindow}"
         
         Title="#PropoPlus" 
                        Height="600" 
                        Width="800"
-                       InitialPage="{x:Type views:AudioConfig}">
+                       InitialPage="{x:Type views:AudioConfig}" WindowStartupLocation="CenterScreen">
 
-    <controls:CustomWindow.MenuItems>
-        <viewModels:ToolBarButton Content="Input" Type="{x:Type views:AudioConfig}"></viewModels:ToolBarButton>
-        <viewModels:ToolBarButton Content="Transmitter" Type="{x:Type views:TransmitterConfig}"></viewModels:ToolBarButton>
-        <viewModels:ToolBarButton Content="Filter"></viewModels:ToolBarButton>
-        <viewModels:ToolBarButton Content="Joystick" Type="{x:Type views:JoystickConfig}"></viewModels:ToolBarButton>
-        <viewModels:ToolBarButton Content="Advanced"></viewModels:ToolBarButton>
-    </controls:CustomWindow.MenuItems>
+    <controls:CustomWindow.ToolBarItems>
+        <controls:ToolBarButton Content="Input" Type="{x:Type views:AudioConfig}"/>
+        <controls:ToolBarButton Content="Transmitter" Type="{x:Type views:TransmitterConfig}"/>
+        <controls:ToolBarButton Content="Filter"/>
+        <controls:ToolBarButton Content="Joystick" Type="{x:Type views:JoystickConfig}"/>
+        <controls:ToolBarButton Content="Advanced"/>
+    </controls:CustomWindow.ToolBarItems>
     
     <controls:CustomWindow.Footer>
-        <views:Overview Grid.Row="1"></views:Overview>
+        <views:Overview Grid.Row="1"/>
     </controls:CustomWindow.Footer>
     
 </controls:CustomWindow>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
