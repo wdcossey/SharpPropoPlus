@@ -1,11 +1,12 @@
 ﻿using System;
+using SharpPropoPlus.Decoder.Contracts;
 using SharpPropoPlus.Decoder.EventArguments;
 using SharpPropoPlus.Decoder.Structs;
 using SharpPropoPlus.Events;
 
 namespace SharpPropoPlus.Decoder
 {
-    public abstract class PulseProcessor
+    public abstract class PulseProcessor : IPropoPlusDecoder
     {
 
         /// <summary>
@@ -344,6 +345,21 @@ namespace SharpPropoPlus.Decoder
             }
 
         }
+
+        public abstract string[] Description { get; }
+
+        public virtual void ProcessPulse(int sampleRate, int sample)
+        {
+            var negative = false;
+
+            var pulseLength = CalculatePulseLength(sampleRate, sample, ref negative);
+
+            Process(pulseLength.Normalized, negative);
+        }
+
+        public abstract void Reset();
+
+        protected abstract void Process(int width, bool input);
 
     }
 }

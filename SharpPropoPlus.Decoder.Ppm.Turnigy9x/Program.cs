@@ -45,16 +45,10 @@ namespace SharpPropoPlus.Decoder.Ppm.Turnigy9x
 
         #endregion PPM Values (Turnigy)
 
-        public override string[] Description
+        public override string[] Description => new[]
         {
-            get
-            {
-                return new[]
-                {
-                    "Pulse processor for Turnigy 9X PPM"
-                };
-            }
-        }
+            "Pulse processor for Turnigy 9X PPM"
+        };
 
         public Program()
         {

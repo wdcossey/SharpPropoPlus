@@ -22,16 +22,10 @@ namespace SharpPropoPlus.Decoder.Ppm.Positive
 
         #endregion
 
-        public override string[] Description
+        public override string[] Description => new[]
         {
-            get
-            {
-                return new[]
-                {
-                    "Pulse processor for Positive PPM",
-                };
-            }
-        }
+            "Pulse processor for Positive PPM",
+        };
 
         public Program()
         {

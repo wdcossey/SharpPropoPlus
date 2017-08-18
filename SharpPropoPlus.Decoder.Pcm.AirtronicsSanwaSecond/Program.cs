@@ -16,16 +16,10 @@ namespace SharpPropoPlus.Decoder.Pcm.AirtronicsSanwaSecond
 
         #endregion
 
-        public override string[] Description
+        public override string[] Description => new[]
         {
-            get
-            {
-                return new[]
-                {
-                    "Pulse processor for Airtronics/Sanwa [2] PCM"
-                };
-            }
-        }
+            "Pulse processor for Airtronics/Sanwa [2] PCM"
+        };
 
         public Program()
         {

@@ -38,16 +38,10 @@ namespace SharpPropoPlus.Decoder.Pcm.JrGraupner
 
         #endregion
 
-        public override string[] Description
+        public override string[] Description => new[]
         {
-            get
-            {
-                return new[]
-                {
-                    "Pulse processor for JR/Graupner PCM"
-                };
-            }
-        }
+            "Pulse processor for JR/Graupner PCM"
+        };
 
         public Program()
         {

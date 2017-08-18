@@ -87,16 +87,10 @@ namespace SharpPropoPlus.Decoder.Pcm.Futaba
 
         #endregion
 
-        public override string[] Description
+        public override string[] Description => new[]
         {
-            get
-            {
-                return new[]
-                {
-                    "Pulse processor for Futaba PCM"
-                };
-            }
-        }
+            "Pulse processor for Futaba PCM"
+        };
 
         public Program()
         {
@@ -104,8 +98,8 @@ namespace SharpPropoPlus.Decoder.Pcm.Futaba
         }
 
         /// <summary>
-        /// <para>Buffer Length/Size<br/></para>
-        /// 8
+        /// <para>Buffer Length/Size</para>
+        /// 9
         /// </summary>
         protected override int BufferLength => 9;
 

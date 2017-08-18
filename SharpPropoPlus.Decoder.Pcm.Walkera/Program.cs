@@ -14,17 +14,11 @@ namespace SharpPropoPlus.Decoder.Pcm.Walkera
 
         #endregion
 
-        public override string[] Description
+        public override string[] Description => new[]
         {
-            get
-            {
-                return new[]
-                {
-                    "Pulse processor for Walkera PCM",
-                    "** Tested with Walkera WK-0701"
-                };
-            }
-        }
+            "Pulse processor for Walkera PCM",
+            "** Tested with Walkera WK-0701"
+        };
 
         public Program()
         {

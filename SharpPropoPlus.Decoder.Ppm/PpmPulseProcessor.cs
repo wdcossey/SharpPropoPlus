@@ -2,7 +2,7 @@
 
 namespace SharpPropoPlus.Decoder.Ppm
 {
-    public abstract class PpmPulseProcessor : PulseProcessor, IPropoPlusDecoder
+    public abstract class PpmPulseProcessor : PulseProcessor
     {
         #region PPM Values (General)
 
@@ -62,20 +62,11 @@ namespace SharpPropoPlus.Decoder.Ppm
 
         #endregion
 
-        protected abstract void Process(int width, bool input);
+        protected abstract override void Process(int width, bool input);
 
-        public abstract string[] Description { get; }
+        public abstract override string[] Description { get; }
 
-        public virtual void ProcessPulse(int sampleRate, int sample)
-        {
-            var negative = false;
-
-            var pulseLength = CalculatePulseLength(sampleRate, sample, ref negative);
-
-            Process(pulseLength.Normalized, negative);
-        }
-
-        public virtual void Reset()
+        public override void Reset()
         {
             ChannelData = new int[BufferLength];
 

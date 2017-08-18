@@ -2,7 +2,7 @@
 
 namespace SharpPropoPlus.Decoder.Pcm
 {
-    public abstract class PcmPulseProcessor : PulseProcessor, IPropoPlusDecoder
+    public abstract class PcmPulseProcessor : PulseProcessor
     {
         #region PCM Values (General)
 
@@ -15,9 +15,9 @@ namespace SharpPropoPlus.Decoder.Pcm
 
         private int _bitStream;
 
-        protected abstract void Process(int width, bool input);
+        protected abstract override void Process(int width, bool input);
 
-        public abstract string[] Description { get; }
+        public override string[] Description { get; }
 
         protected int Bit
         {
@@ -37,16 +37,7 @@ namespace SharpPropoPlus.Decoder.Pcm
             set { _bitStream = value; }
         }
 
-        public virtual void ProcessPulse(int sampleRate, int sample)
-        {
-            var negative = false;
-
-            var pulseLength = CalculatePulseLength(sampleRate, sample, ref negative);
-
-            Process(pulseLength.Normalized, negative);
-        }
-
-        public virtual void Reset()
+        public override void Reset()
         {
             RawChannelCount = BufferLength;
             Sync = false;

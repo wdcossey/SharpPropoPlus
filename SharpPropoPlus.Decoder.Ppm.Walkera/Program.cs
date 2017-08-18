@@ -43,20 +43,11 @@ namespace SharpPropoPlus.Decoder.Ppm.Walkera
 
         #endregion PPM Values (Walkera)
 
-
-
-
-        public override string[] Description
+        public override string[] Description => new[]
         {
-            get
-            {
-                return new[]
-                {
-                    "Pulse processor for Walkera WK-2401 PPM",
-                    "This is just a permiscuous PPM that does not follow the PPM standard"
-                };
-            }
-        }
+            "Pulse processor for Walkera WK-2401 PPM",
+            "This is just a permiscuous PPM that does not follow the PPM standard"
+        };
 
         public Program()
         {

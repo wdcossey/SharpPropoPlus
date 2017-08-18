@@ -26,16 +26,10 @@ namespace SharpPropoPlus.Decoder.Ppm.Standard
 
         #endregion 
 
-        public override string[] Description
+        public override string[] Description => new[]
         {
-            get
-            {
-                return new[]
-                {
-                    "Pulse processor for Standard PPM",
-                };
-            }
-        }
+            "Pulse processor for Standard PPM",
+        };
 
         public Program()
         {

@@ -18,16 +18,10 @@ namespace SharpPropoPlus.Decoder.Ppm.Negative
 
         #endregion 
 
-        public override string[] Description
+        public override string[] Description => new[]
         {
-            get
-            {
-                return new[]
-                {
-                    "Pulse processor for Negative PPM",
-                };
-            }
-        }
+            "Pulse processor for Negative PPM",
+        };
 
         public Program()
         {
