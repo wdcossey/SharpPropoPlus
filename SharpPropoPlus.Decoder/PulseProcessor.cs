@@ -66,7 +66,7 @@ namespace SharpPropoPlus.Decoder
         /// </summary>
         protected static int RawChannelCount
         {
-            get { return _rawChannelCount; }
+            get => _rawChannelCount;
             set
             {
                 //if (_nChannels == value)
@@ -83,7 +83,7 @@ namespace SharpPropoPlus.Decoder
         /// </summary>
         protected static int[] ChannelData
         {
-            get { return _channelData; }
+            get => _channelData;
             set
             {
                 //if (_channelData == value)
@@ -98,7 +98,7 @@ namespace SharpPropoPlus.Decoder
         /// </summary>
         protected static int[] PrevWidth
         {
-            get { return _prevWidth; }
+            get => _prevWidth;
             set
             {
                 //if (_prevWidth == value)
@@ -113,7 +113,7 @@ namespace SharpPropoPlus.Decoder
         /// </summary>
         protected static bool Sync
         {
-            get { return _sync; }
+            get => _sync;
             set
             {
                 //if (_sync == value)
@@ -129,7 +129,7 @@ namespace SharpPropoPlus.Decoder
         /// </summary>
         protected static int DataCount
         {
-            get { return _dataCount; }
+            get => _dataCount;
             set
             {
                 //if (_datacount == value)
@@ -145,7 +145,7 @@ namespace SharpPropoPlus.Decoder
         /// </summary>
         protected static int[] DataBuffer
         {
-            get { return _dataBuffer; }
+            get => _dataBuffer;
             set
             {
                 //if (_dataBuffer == value)
@@ -160,7 +160,7 @@ namespace SharpPropoPlus.Decoder
         /// </summary>
         protected static bool FormerSync
         {
-            get { return _formerSync; }
+            get => _formerSync;
             set
             {
                 //if (_former_sync == value)
@@ -175,7 +175,7 @@ namespace SharpPropoPlus.Decoder
         /// </summary>
         protected static int PosUpdateCounter
         {
-            get { return _posUpdateCounter; }
+            get => _posUpdateCounter;
             set
             {
                 //if (_posUpdateCounter == value)
