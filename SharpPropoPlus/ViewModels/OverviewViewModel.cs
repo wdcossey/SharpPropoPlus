@@ -22,7 +22,7 @@ namespace SharpPropoPlus.ViewModels
             PrefferedChannel = AudioChannel.Left.ToString();
 
             GlobalEventAggregator.Instance.AddListener<PreferredChannelEventArgs>(PrefferedChannelListner);
-            GlobalEventAggregator.Instance.AddListener<AudioEndPointEventArgs>(DeviceInfoListner);
+            GlobalEventAggregator.Instance.AddListener<AudioEndPointEventArgs>(AudioEndPointListner);
             GlobalEventAggregator.Instance.AddListener<PollChannelsEventArgs>(PollChannelListner);
             GlobalEventAggregator.Instance.AddListener<JoystickChangedEventArgs>(JoystickChangedListener);
             GlobalEventAggregator.Instance.AddListener<DecoderChangedEventArgs>(DecoderChangedListener);
@@ -84,7 +84,7 @@ namespace SharpPropoPlus.ViewModels
             RawChannels = args.RawChannels;
         }
 
-        private void DeviceInfoListner(AudioEndPointEventArgs args)
+        private void AudioEndPointListner(AudioEndPointEventArgs args)
         {
             if (args == null)
                 return;
@@ -159,7 +159,7 @@ namespace SharpPropoPlus.ViewModels
         public override void Dispose()
         {
             GlobalEventAggregator.Instance.RemoveListener<PreferredChannelEventArgs>(PrefferedChannelListner);
-            GlobalEventAggregator.Instance.RemoveListener<AudioEndPointEventArgs>(DeviceInfoListner);
+            GlobalEventAggregator.Instance.RemoveListener<AudioEndPointEventArgs>(AudioEndPointListner);
             GlobalEventAggregator.Instance.RemoveListener<PollChannelsEventArgs>(PollChannelListner);
             GlobalEventAggregator.Instance.RemoveListener<JoystickChangedEventArgs>(JoystickChangedListener);
             GlobalEventAggregator.Instance.RemoveListener<DecoderChangedEventArgs>(DecoderChangedListener);

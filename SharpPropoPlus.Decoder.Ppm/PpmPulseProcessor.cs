@@ -1,4 +1,5 @@
-﻿using SharpPropoPlus.Decoder.Contracts;
+﻿using System.Linq;
+using SharpPropoPlus.Decoder.Contracts;
 
 namespace SharpPropoPlus.Decoder.Ppm
 {
@@ -58,6 +59,33 @@ namespace SharpPropoPlus.Decoder.Ppm
         protected virtual double PpmJitter()
         {
             return 5.0;
+        }
+
+        /// <summary>
+        /// Trims the input array, taking the last N values
+        /// </summary>
+        /// <param name="length"></param>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        private double[] TrimInput(int length = 4, params double[] input)
+        {
+            return input.Reverse().Take(length).Reverse().ToArray();
+        }
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="length"></param>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        protected double AverageJitter(int length = 4, params double[] input)
+        {
+            var trimmedInput = TrimInput(length, input);
+
+            var sum = input.Sum();
+            var result = sum / trimmedInput.Length;
+            return result;
         }
 
         #endregion

@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:SharpPropoPlus.Views"
              xmlns:viewModels="clr-namespace:SharpPropoPlus.ViewModels"
              xmlns:controls="clr-namespace:SharpPropoPlus.Controls"
-             xmlns:Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero2" x:Class="SharpPropoPlus.Views.AudioConfig"
+             x:Class="SharpPropoPlus.Views.AudioConfig"
              mc:Ignorable="d" 
              d:DesignHeight="400" d:DesignWidth="600">
 

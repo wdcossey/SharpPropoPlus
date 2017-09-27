@@ -36,6 +36,7 @@ namespace SharpPropoPlus.Audio
         private IWaveSource _convertedSource;
 
         public event EventHandler<AudioDataEventArgs> DataAvailable;
+        public event EventHandler<AudioEndPointEventArgs> AudioEndPointChanged;
 
         private AudioHelper()
         {
@@ -73,7 +74,7 @@ namespace SharpPropoPlus.Audio
 
         public void RefreshDevices()
         {
-            Devices = _deviceEnumerator.EnumAudioEndpoints(DataFlow.Capture, DeviceState.Active).Select(s => new AudioEndPoint(s.FriendlyName, s.DeviceID)).ToList();
+            Devices = _deviceEnumerator.EnumAudioEndpoints(DataFlow.Capture, DeviceState.Active).Select(s => new AudioEndPoint(s.FriendlyName, s.DeviceID, GetDeviceFormat(s).Channels)).ToList();
         }
 
         private static WaveFormat WaveFormatFromBlob(Blob blob)
@@ -132,6 +133,12 @@ namespace SharpPropoPlus.Audio
             StartRecording(device);
         }
 
+        private WaveFormat GetDeviceFormat(MMDevice device)
+        {
+            return WaveFormatFromBlob(device.PropertyStore[
+                new PropertyKey(new Guid(0xf19f064d, 0x82c, 0x4e27, 0xbc, 0x73, 0x68, 0x82, 0xa1, 0xbb, 0x8e, 0x4c), 0)].BlobValue);
+        }
+
         private void StartRecording(MMDevice device)
         {
 
@@ -176,20 +183,21 @@ namespace SharpPropoPlus.Audio
             //  GlobalEventAggregator.Instance.SendMessage(new PeakValueEventArgs(new PeakValues(data.Muted, data.MasterVolume, data.ChannelVolume[0], data.ChannelVolume[1])));
             //};
 
-            var args = new AudioEndPointEventArgs(device.FriendlyName, device.DeviceID);
-            //OnDeviceChanged(args);
-            GlobalEventAggregator.Instance.SendMessage(args);
 
             //var x = _deviceEnumerator.EnumerateAudioEndPoints(DataFlow.Capture, DeviceState.All)
             //  .FirstOrDefault(w => w.ID == _deviceId);
 
-            var deviceFormat = WaveFormatFromBlob(device.PropertyStore[
-                new PropertyKey(new Guid(0xf19f064d, 0x82c, 0x4e27, 0xbc, 0x73, 0x68, 0x82, 0xa1, 0xbb, 0x8e, 0x4c), 0)].BlobValue);
+
 
             //deviceFormat = new WaveFormat(192000, 16, deviceFormat.Channels);
 
+            var deviceFormat = GetDeviceFormat(device);
+
             //var channels = deviceFormat.Channels;
 
+            var audioEndPointArgs = new AudioEndPointEventArgs(device.FriendlyName, device.DeviceID, deviceFormat.Channels);
+            AudioEndPointChanged?.Invoke(this, audioEndPointArgs);
+            GlobalEventAggregator.Instance.SendMessage(audioEndPointArgs);
 
             _soundIn =
                 new WasapiCapture(false, AudioClientShareMode.Exclusive, 0, deviceFormat,
