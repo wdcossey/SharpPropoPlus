@@ -7,6 +7,7 @@
              xmlns:viewModels="clr-namespace:SharpPropoPlus.ViewModels"
              xmlns:controls="clr-namespace:SharpPropoPlus.Controls"
              xmlns:componentModel="clr-namespace:System.ComponentModel;assembly=WindowsBase"
+             xmlns:enums="clr-namespace:SharpPropoPlus.Decoder.Enums;assembly=SharpPropoPlus.Decoder"
              x:Class="SharpPropoPlus.Views.TransmitterConfig"
              mc:Ignorable="d" 
              d:DesignHeight="400" d:DesignWidth="600">
@@ -63,10 +64,8 @@
                                                 </Grid.RowDefinitions>
 
                                                 <Grid Grid.Row="0" Margin="0" Background="#01000000" Opacity="0.75" >
-                                                    <Border VerticalAlignment="Stretch" SnapsToDevicePixels="True" BorderBrush="#f0f0f0" BorderThickness="0 0 0 1" HorizontalAlignment="Stretch" Grid.Column="1" Margin="8 0" Padding="8 6 40 6">
+                                                    <Border VerticalAlignment="Stretch" SnapsToDevicePixels="True" BorderBrush="#f0f0f0" BorderThickness="0 0 0 1" HorizontalAlignment="Stretch" Margin="8 0" Padding="8 6 40 6">
                                                         <ContentPresenter x:Name="ContentControl" Content="{Binding Name, Mode=OneWay, Converter={StaticResource DescriptionAttributeValueConverter}}" TextBlock.FontWeight="Light" TextBlock.FontSize="11" TextBlock.FontFamily="pack://application:,,,/Fonts/#Montserrat Light" />
-                                                        
-
                                                     </Border>
                                                 </Grid>
                                                 <ItemsPresenter Grid.Row="1"/>
@@ -90,7 +89,81 @@
             </ComboBox>
         </StackPanel>
 
-        <Border HorizontalAlignment="Stretch" SnapsToDevicePixels="True" BorderThickness="0 0 0 1" BorderBrush="#f0f0f0"/>
+        <Border Style="{StaticResource BorderSeparator}"/>
+
+        <StackPanel Orientation="Vertical"  Margin="0 0 0 8">
+            <StackPanel.Style>
+                <Style TargetType="{x:Type StackPanel}">
+                    <Setter Property="Visibility" Value="Collapsed"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding SelectedDecoder.Metadata.TransmitterType}" Value="{x:Static enums:TransmitterType.Ppm}">
+                            <Setter Property="Visibility" Value="Visible"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </StackPanel.Style>
+            <!--<Border HorizontalAlignment="Stretch" SnapsToDevicePixels="True" BorderThickness="0 0 0 1" BorderBrush="#f0f0f0"/>-->
+            <TextBlock Style="{StaticResource TextBlockHeaderStyleKey}" Text="Decoder Settings" />
+
+            <Grid Margin="8 0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Grid.Column="0" Grid.Row="0" HorizontalAlignment="Right" VerticalAlignment="Center" Style="{StaticResource TextBlockDefaultStyleKey}" Text="Pulse Width (Min) :" />
+                <TextBox Grid.Column="1" Grid.Row="0" Margin="8 2 4 2" IsReadOnly="True" Width="60" Text="{Binding SelectedDecoder.Value.PpmMinPulseWidth, Mode=OneWay}"/>
+                <TextBlock Grid.Column="2" Grid.Row="0" VerticalAlignment="Center" Style="{StaticResource TextBlockLightStyleKey}">
+                    <Run Text="("/><Run Text="{Binding SelectedDecoder.Value.PpmMinPulseWidth, Converter={StaticResource MathValueConverter}, ConverterParameter=@VALUE/192, StringFormat='{}{0:0.###}'}"/><Run FontSize="10" Text="ms"/><Run Text=")"/>
+                </TextBlock>
+
+                <TextBlock Grid.Column="0" Grid.Row="1" HorizontalAlignment="Right" VerticalAlignment="Center" Style="{StaticResource TextBlockDefaultStyleKey}" Text="Pulse Width (Max) :" />
+                <TextBox Grid.Column="1" Grid.Row="1" Margin="8 2 4 2" IsReadOnly="True" Width="60" Text="{Binding SelectedDecoder.Value.PpmMaxPulseWidth, Mode=OneWay}"/>
+                <TextBlock Grid.Column="2" Grid.Row="1" VerticalAlignment="Center" Style="{StaticResource TextBlockLightStyleKey}" >
+                    <Run Text="("/><Run Text="{Binding SelectedDecoder.Value.PpmMaxPulseWidth, Converter={StaticResource MathValueConverter}, ConverterParameter=@VALUE/192, StringFormat='{}{0:0.###}'}"/><Run FontSize="10" Text="ms"/><Run Text=")"/>
+                </TextBlock>
+
+                <TextBlock Grid.Column="0" Grid.Row="2" HorizontalAlignment="Right" VerticalAlignment="Center" Style="{StaticResource TextBlockDefaultStyleKey}" Text="Packet Separator :" />
+                <TextBox Grid.Column="1" Grid.Row="2" Margin="8 2 4 2" IsReadOnly="True" Width="60" Text="{Binding SelectedDecoder.Value.PpmTrig, Mode=OneWay}"/>
+                <TextBlock Grid.Column="2" Grid.Row="2" VerticalAlignment="Center" Style="{StaticResource TextBlockLightStyleKey}" >
+                    <Run Text="("/><Run Text="{Binding SelectedDecoder.Value.PpmTrig, Converter={StaticResource MathValueConverter}, ConverterParameter=@VALUE/192, StringFormat='{}{0:0.###}'}"/><Run FontSize="10" Text="ms"/><Run Text=")"/>
+                </TextBlock>
+
+                <TextBlock Grid.Column="0" Grid.Row="3" HorizontalAlignment="Right" VerticalAlignment="Center" Style="{StaticResource TextBlockDefaultStyleKey}" Text="Channel Separator :" />
+                <TextBox Grid.Column="1" Grid.Row="3" Margin="8 2 4 2" IsReadOnly="True" Width="60" Text="{Binding SelectedDecoder.Value.PpmSeparator, Mode=OneWay}"/>
+                <TextBlock Grid.Column="2" Grid.Row="3" VerticalAlignment="Center" Style="{StaticResource TextBlockLightStyleKey}" >
+                    <Run Text="("/><Run Text="{Binding SelectedDecoder.Value.PpmSeparator, Converter={StaticResource MathValueConverter}, ConverterParameter=@VALUE/192, StringFormat='{}{0:0.###}'}"/><Run FontSize="10" Text="ms"/><Run Text=")"/>
+                </TextBlock>
+
+                <TextBlock Grid.Column="0" Grid.Row="4" HorizontalAlignment="Right" VerticalAlignment="Center" Style="{StaticResource TextBlockDefaultStyleKey}" Text="Glitch :" />
+                <TextBox Grid.Column="1" Grid.Row="4" Margin="8 2 4 2" IsReadOnly="True" Width="60" Text="{Binding SelectedDecoder.Value.PpmGlitch, Mode=OneWay}"/>
+                <TextBlock Grid.Column="2" Grid.Row="4" VerticalAlignment="Center" Style="{StaticResource TextBlockLightStyleKey}" >
+                    <Run Text="("/><Run Text="{Binding SelectedDecoder.Value.PpmGlitch, Converter={StaticResource MathValueConverter}, ConverterParameter=@VALUE/192, StringFormat='{}{0:0.###}'}"/><Run FontSize="10" Text="ms"/><Run Text=")"/>
+                </TextBlock>
+
+                <TextBlock Grid.Column="0" Grid.Row="5" HorizontalAlignment="Right" VerticalAlignment="Center" Style="{StaticResource TextBlockDefaultStyleKey}" Text="Jitter :" />
+                <TextBox Grid.Column="1" Grid.Row="5" Margin="8 2 4 2" IsReadOnly="True" Width="60" Text="{Binding SelectedDecoder.Value.PpmJitter, Mode=OneWay}"/>
+                <TextBlock Grid.Column="2" Grid.Row="5" VerticalAlignment="Center" Style="{StaticResource TextBlockLightStyleKey}" >
+                    <Run Text="("/><Run Text="{Binding SelectedDecoder.Value.PpmJitter, Converter={StaticResource MathValueConverter}, ConverterParameter=@VALUE/192, StringFormat='{}{0:0.###}'}"/><Run FontSize="10" Text="ms"/><Run Text=")"/>
+                </TextBlock>
+                
+                
+            </Grid>
+
+            
+        </StackPanel>
+
+        <Border Style="{StaticResource BorderSeparator}"/>
 
         <Grid Margin="0 8" >
             <Grid.RowDefinitions>
@@ -109,7 +182,7 @@
             </ComboBox>-->
         </Grid>
 
-        <Border HorizontalAlignment="Stretch" SnapsToDevicePixels="True" BorderThickness="0 0 0 1" BorderBrush="#f0f0f0"/>
+        <Border Style="{StaticResource BorderSeparator}"/>
 
 
     </StackPanel>

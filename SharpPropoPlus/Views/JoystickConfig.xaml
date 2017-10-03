@@ -25,7 +25,8 @@
             </ComboBox>
         </StackPanel>
 
-        <Border HorizontalAlignment="Stretch" SnapsToDevicePixels="True" BorderThickness="0 0 0 1" BorderBrush="#f0f0f0"/>
+        <Border Style="{StaticResource BorderSeparator}"/>
+
 
 
         <!--<Grid >

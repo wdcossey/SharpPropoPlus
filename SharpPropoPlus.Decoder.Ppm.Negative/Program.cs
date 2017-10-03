@@ -44,37 +44,36 @@ namespace SharpPropoPlus.Decoder.Ppm.Negative
             //    fprintf(gCtrlLogFile, "\n%s - ProcessPulseFutabaPpm(width=%d, input=%d)", tbuffer, width, input);
 
             /* If pulse is a separator then go to the next one */
-            if (!input || width < PpmSeparator() || FormerSync)
+            if (!input || width < PpmSeparator || FormerSync)
             {
                 FormerSync = false;
                 return;
-            };
-
+            }
 
             /* sync is detected at the end of a very long pulse (over 200 samples = 4.5mSec) */
-            if (input && width > PpmTrig())
+            if (input && width > PpmTrig)
             {
                 Sync = true;
                 if (!DataCount.Equals(0))
                 {
                     PosUpdateCounter++;
                 }
-
                 RawChannelCount = DataCount;
                 DataCount = 0;
                 FormerSync = true;
                 return;
             }
 
-            /* still waiting for sync */
             if (!Sync)
+            {
+                /* still waiting for sync */
                 return;
-
+            }
 
             // Cancel jitter /* Version 3.3.3 */
             var jitterValue = Math.Abs(PrevWidth[DataCount] - width);
 
-            if (jitterValue < PpmJitter())
+            if (jitterValue < PpmJitter)
             {
                 width = PrevWidth[DataCount];
             }
@@ -89,11 +88,9 @@ namespace SharpPropoPlus.Decoder.Ppm.Negative
              * joystick position of 1023 correspond to width under 30 samples (0.68mSec)
              */
             if (input || JsChPostProc_selected != -1)
-                newdata = (int)(1024 - (width - PpmMinPulseWidth()) / (PpmMaxPulseWidth() - PpmMinPulseWidth()) * 1024); /* JR */
+                newdata = (int)(1024 - (width - PpmMinPulseWidth) / (PpmMaxPulseWidth - PpmMinPulseWidth) * 1024); /* JR */
             else
-                newdata = (int)((width - PpmMinPulseWidth()) / (PpmMaxPulseWidth() - PpmMinPulseWidth()) * 1024);       /* Futaba */
-
-
+                newdata = (int)((width - PpmMinPulseWidth) / (PpmMaxPulseWidth - PpmMinPulseWidth) * 1024);       /* Futaba */
 
             /* Trim values into 0-1023 boundries */
             if (newdata < 0)

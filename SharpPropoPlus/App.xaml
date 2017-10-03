@@ -13,6 +13,7 @@
                     <valueConverters:SystemColorValueConverter x:Key="SystemColorValueConverter" />
                     <valueConverters:AudioBitrateValueConverter x:Key="AudioBitrateValueConverter" />
                     <valueConverters:AudioChannelValueConverter x:Key="AudioChannelValueConverter" />
+                    <valueConverters:MathValueConverter x:Key="MathValueConverter" />
                 </ResourceDictionary>
 
                 <ResourceDictionary Source="Resources/Fonts.xaml" ></ResourceDictionary>

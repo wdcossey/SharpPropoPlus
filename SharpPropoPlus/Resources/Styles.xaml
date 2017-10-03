@@ -602,4 +602,11 @@
         </Setter>-->
     </Style>
 
+    <Style x:Key="BorderSeparator" TargetType="{x:Type Border}">
+        <Setter Property="HorizontalAlignment" Value="Stretch"/>
+        <Setter Property="SnapsToDevicePixels" Value="True"/>
+        <Setter Property="BorderThickness" Value="0 0 0 1"/>
+        <Setter Property="BorderBrush" Value="#f0f0f0"/>
+    </Style>
+
 </ResourceDictionary>

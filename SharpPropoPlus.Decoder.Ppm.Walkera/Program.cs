@@ -18,28 +18,27 @@ namespace SharpPropoPlus.Decoder.Ppm.Walkera
 
         //static int i = 0;
 
-
         #region PPM Values (Walkera)
 
-        protected override double PpmJitter()
-        {
-            return 4.25;
-        }
+        /// <summary>
+        /// 
+        /// </summary>
+        public override double PpmJitterDefault => 4.25;
 
-        protected override double PpmMinPulseWidth()
-        {
-            return 78.4;
-        }
+        /// <summary>
+        /// 
+        /// </summary>
+        public override double PpmMinPulseWidthDefault => 78.4;
 
-        protected override double PpmMaxPulseWidth()
-        {
-            return 304.8;
-        }
+        /// <summary>
+        /// 
+        /// </summary>
+        public override double PpmMaxPulseWidthDefault => 304.8;
 
-        protected override double PpmSeparator()
-        {
-            return 65.3;
-        }
+        /// <summary>
+        /// 
+        /// </summary>
+        public override double PpmSeparatorDefault => 65.3;
 
         #endregion PPM Values (Walkera)
 
@@ -75,32 +74,35 @@ namespace SharpPropoPlus.Decoder.Ppm.Walkera
             //  fprintf(gCtrlLogFile, "\n%s - ProcessPulseWk2401Ppm(width=%d, input=%d)", tbuffer, width, input);
 
             //_sync is detected at the end of a very long pulse (over  4.5mSec)
-            if (width > PpmTrig())
+            if (width > PpmTrig)
             {
                 Sync = true;
                 if (!DataCount.Equals(0))
                 {
                     PosUpdateCounter++;
                 }
-
-                //m_nChannels = _datacount;
                 RawChannelCount = DataCount;
-
                 DataCount = 0;
                 _polarity = input;
                 return;
             }
 
             if (!Sync)
-                return; /* still waiting for _sync */
+            {
+                /* still waiting for _sync */
+                return;
+            }
 
             // If this pulse is a separator - read the next pulse
             if (_polarity != input)
+            {
                 return;
+            }
 
             // Cancel jitter /* Version 3.3.3 */
+            //CalculateAverage(4, PrevWidth);
             var jitterValue = Math.Abs(PrevWidth[DataCount] - width);
-            if (jitterValue < PpmJitter())
+            if (jitterValue < PpmJitter)
             {
                 width = PrevWidth[DataCount];
             }
@@ -111,8 +113,8 @@ namespace SharpPropoPlus.Decoder.Ppm.Walkera
             /* convert pulse width in samples to joystick Position values (newdata)
             joystick Position of 0 correspond to width over 100 samples (2.25mSec)
             joystick Position of 1023 correspond to width under 30 samples (0.68mSec)*/
-            var newdata = (int) ((width - PpmMinPulseWidth()) /
-                                 (PpmMaxPulseWidth() - PpmMinPulseWidth()) * 1024);
+            var newdata = (int) ((width - PpmMinPulseWidth) /
+                                 (PpmMaxPulseWidth - PpmMinPulseWidth) * 1024);
 
             /* Trim values into 0-1023 boundries */
             if (newdata < 0)
@@ -168,6 +170,4 @@ namespace SharpPropoPlus.Decoder.Ppm.Walkera
         }
 
     }
-
-
 }

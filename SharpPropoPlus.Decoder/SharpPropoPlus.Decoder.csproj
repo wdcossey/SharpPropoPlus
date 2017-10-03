@@ -42,6 +42,7 @@
     <Compile Include="Contracts\ExportDecoderAttribute.cs" />
     <Compile Include="Contracts\IPropoPlusDecoder.cs" />
     <Compile Include="Contracts\IDecoderMetadata.cs" />
+    <Compile Include="Contracts\IPropoPlusPpmDecoder.cs" />
     <Compile Include="DecoderManager.cs" />
     <Compile Include="Enums\HidUsageFlags.cs" />
     <Compile Include="Enums\TransmitterType.cs" />

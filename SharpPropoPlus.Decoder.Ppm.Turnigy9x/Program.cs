@@ -23,25 +23,12 @@ namespace SharpPropoPlus.Decoder.Ppm.Turnigy9x
 
         #region  PPM Values (Turnigy)
 
-        protected override double PpmSeparator()
-        {
-            return 61.44;
-        }
+        public override double PpmSeparatorDefault => 61.44;
 
-        protected override double PpmTrig()
-        {
-            return base.PpmTrig();
-        }
+        public override double PpmMinPulseWidthDefault => 130.56;
 
-        protected override double PpmMinPulseWidth()
-        {
-            return 130.56;
-        }
-
-        protected override double PpmMaxPulseWidth()
-        {
-            return 322.56;
-        }
+        public override double PpmMaxPulseWidthDefault => 322.56;
+    
 
         #endregion PPM Values (Turnigy)
 
@@ -68,14 +55,14 @@ namespace SharpPropoPlus.Decoder.Ppm.Turnigy9x
         {
             //var tbuffer = new char[9];
 
-            if (width < PpmGlitch())
+            if (width < PpmGlitch)
                 return;
 
             //if (gDebugLevel >= 2 && gCtrlLogFile && !(_strtime_s(tbuffer, 10))/*&& !(i++%50)*/)
             //    fprintf(gCtrlLogFile, "\n%s - ProcessPulseTurnigy9XPpm(width=%d, input=%d)", tbuffer, width, input);
 
             /* If pulse is a separator then go to the next one */
-            if (width < PpmSeparator() || FormerSync)
+            if (width < PpmSeparator || FormerSync)
             {
                 _prevSep = true;
                 FormerSync = false;
@@ -86,7 +73,7 @@ namespace SharpPropoPlus.Decoder.Ppm.Turnigy9x
 
 
             // Two separators in a row is an error - resseting
-            if ((width < PpmSeparator()) && _prevSep)
+            if ((width < PpmSeparator) && _prevSep)
             {
                 _prevSep = true;
                 RawChannelCount = 0;
@@ -97,7 +84,7 @@ namespace SharpPropoPlus.Decoder.Ppm.Turnigy9x
 
 
             /* sync is detected at the end of a very long pulse (over 200 samples = 4.5mSec) */
-            if ( /*sync == 0 && */width > PpmTrig())
+            if ( /*sync == 0 && */width > PpmTrig)
             {
                 Sync = true;
                 if (!DataCount.Equals(0))
@@ -119,7 +106,7 @@ namespace SharpPropoPlus.Decoder.Ppm.Turnigy9x
             }
 
             // Two long pulse in a row is an error - resseting
-            if (width > base.PpmSeparator())
+            if (width > base.PpmSeparator)
             {
                 if (!_prevSep)
                 {
@@ -138,7 +125,7 @@ namespace SharpPropoPlus.Decoder.Ppm.Turnigy9x
 
 
             // Cancel jitter
-            if (Math.Abs(PrevWidth[DataCount] - width) < PpmJitter())
+            if (Math.Abs(PrevWidth[DataCount] - width) < PpmJitter)
             {
                 width = PrevWidth[DataCount];
             }
@@ -149,11 +136,11 @@ namespace SharpPropoPlus.Decoder.Ppm.Turnigy9x
 
             /* convert pulse width in samples to joystick position values (newdata)  */
             if (input || _jsChPostProcSelected != -1)
-                newdata = (int) (1024 - (width - PpmMinPulseWidth()) /
-                                 (PpmMaxPulseWidth() - PpmMinPulseWidth()) * 1024); /* JR */
+                newdata = (int) (1024 - (width - PpmMinPulseWidth) /
+                                 (PpmMaxPulseWidth - PpmMinPulseWidth) * 1024); /* JR */
             else
-                newdata = (int) ((width - PpmMinPulseWidth()) /
-                                 (PpmMaxPulseWidth() - PpmMinPulseWidth()) * 1024); /* Futaba */
+                newdata = (int) ((width - PpmMinPulseWidth) /
+                                 (PpmMaxPulseWidth - PpmMinPulseWidth) * 1024); /* Futaba */
 
 
             /* Trim values into 0-1023 boundries */

@@ -178,6 +178,7 @@
     <Compile Include="ValueConverters\AudioChannelValueConverter.cs" />
     <Compile Include="ValueConverters\AudioBitrateValueConverter.cs" />
     <Compile Include="ValueConverters\DescriptionAttributeValueConverter.cs" />
+    <Compile Include="ValueConverters\MathValueConverter.cs" />
     <Compile Include="ValueConverters\SystemColorValueConverter.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\AudioConfigViewModel.cs" />

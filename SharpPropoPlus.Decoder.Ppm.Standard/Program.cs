@@ -46,7 +46,7 @@ namespace SharpPropoPlus.Decoder.Ppm.Standard
         /// <param name="input"></param>
         protected override void Process(int width, bool input)
         {
-            if (width < PpmGlitch())
+            if (width < PpmGlitch)
                 return;
 
             //if (gDebugLevel >= 2 && gCtrlLogFile && !(_strtime_s(tbuffer, 10))/*&& !(i++%50)*/)
@@ -54,7 +54,7 @@ namespace SharpPropoPlus.Decoder.Ppm.Standard
 
 
             /* If pulse is a separator then go to the next one */
-            if (width < PpmSeparator() || FormerSync)
+            if (width < PpmSeparator || FormerSync)
             {
                 _prevSeparator = true;
                 FormerSync = false;
@@ -62,7 +62,7 @@ namespace SharpPropoPlus.Decoder.Ppm.Standard
             };
 
             // Two separators in a row is an error - resseting
-            if ((width < PpmSeparator()) && _prevSeparator)
+            if ((width < PpmSeparator) && _prevSeparator)
             {
                 _prevSeparator = true;
                 RawChannelCount = 0;
@@ -71,7 +71,7 @@ namespace SharpPropoPlus.Decoder.Ppm.Standard
             };
 
             /* sync is detected at the end of a very long pulse (over 200 samples = 4.5mSec) */
-            if (/*sync == 0 && */width > PpmTrig())
+            if (/*sync == 0 && */width > PpmTrig)
             {
                 Sync = true;
                 if (!DataCount.Equals(0))
@@ -92,7 +92,7 @@ namespace SharpPropoPlus.Decoder.Ppm.Standard
             }
 
             // Two long pulse in a row is an error - resseting
-            if (width > PpmSeparator())
+            if (width > PpmSeparator)
             {
                 if (!_prevSeparator)
                 {
@@ -107,7 +107,7 @@ namespace SharpPropoPlus.Decoder.Ppm.Standard
 
             // Cancel jitter /* Version 3.3.3 */
             var jitterValue = Math.Abs(PrevWidth[DataCount] - width);
-            if (jitterValue < PpmJitter())
+            if (jitterValue < PpmJitter)
             {
                 width = PrevWidth[DataCount];
             }
@@ -123,9 +123,9 @@ namespace SharpPropoPlus.Decoder.Ppm.Standard
              * joystick position of 1023 correspond to width under 30 samples (0.68mSec)
              */
             if (input || JsChPostProc_selected != -1)
-                newdata = (int)(1024 - (width - PpmMinPulseWidth()) / (PpmMaxPulseWidth() - PpmMinPulseWidth()) * 1024); /* JR */
+                newdata = (int)(1024 - (width - PpmMinPulseWidth) / (PpmMaxPulseWidth - PpmMinPulseWidth) * 1024); /* JR */
             else
-                newdata = (int)((width - PpmMinPulseWidth()) / (PpmMaxPulseWidth() - PpmMinPulseWidth()) * 1024);		/* Futaba */
+                newdata = (int)((width - PpmMinPulseWidth) / (PpmMaxPulseWidth - PpmMinPulseWidth) * 1024);		/* Futaba */
 
             /* Trim values into 0-1023 boundries */
             if (newdata < 0)
