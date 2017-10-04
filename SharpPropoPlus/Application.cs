@@ -6,7 +6,6 @@ using Microsoft.Practices.Unity;
 using SharpPropoPlus.Audio;
 using SharpPropoPlus.Audio.EventArguments;
 using SharpPropoPlus.Decoder;
-using SharpPropoPlus.Decoder.Contracts;
 using SharpPropoPlus.Decoder.EventArguments;
 using SharpPropoPlus.Events;
 using SharpPropoPlus.Helpers;
@@ -20,9 +19,7 @@ namespace SharpPropoPlus
     {
         private static Application _instance;
         private static readonly object Sync = new object();
-        private IPropoPlusDecoder _decoder;
         private IUnityContainer _container;
-
 
         private Application()
         {
