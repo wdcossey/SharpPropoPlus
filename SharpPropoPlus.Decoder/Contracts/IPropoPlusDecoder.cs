@@ -1,6 +1,6 @@
 ﻿namespace SharpPropoPlus.Decoder.Contracts
 {
-  public interface IPropoPlusDecoder
+  public interface IPropoPlusDecoder 
   {
     string[] Description { get; }
 

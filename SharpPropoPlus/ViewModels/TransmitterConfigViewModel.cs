@@ -57,7 +57,7 @@ namespace SharpPropoPlus.ViewModels
 
                 _selectedDecoder = value;
 
-                var eventArgs = new DecoderChangedEventArgs(_selectedDecoder.Metadata.Name, _selectedDecoder.Metadata.Description, _selectedDecoder.Metadata.TransmitterType);
+                var eventArgs = new DecoderChangedEventArgs(_selectedDecoder.Metadata.Name, _selectedDecoder.Metadata.Description, _selectedDecoder.Metadata.TransmitterType, _selectedDecoder.Value);
 
                 //Publish the message 
                 GlobalEventAggregator.Instance.SendMessage(eventArgs);

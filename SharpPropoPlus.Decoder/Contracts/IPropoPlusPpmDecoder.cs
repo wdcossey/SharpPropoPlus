@@ -25,5 +25,7 @@
         double PpmJitterDefault { get; }
         
         double PpmJitter { get; set; }
+
+        double[] PpmJitterAlpha { get; set; }
     }
 }

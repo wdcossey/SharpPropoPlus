@@ -175,6 +175,11 @@ namespace SharpPropoPlus.ViewModels
                     AudioHelper.Instance.StopRecording();
                 }
 
+                if (_selectedAudioEndPoint == null || _selectedAudioEndPoint.Channels == 1)
+                {
+                    SelectedChannelItem = AudioChannel.Automatic;
+                }
+
                 OnPropertyChanged();
             }
         }

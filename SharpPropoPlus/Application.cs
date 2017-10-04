@@ -7,6 +7,7 @@ using SharpPropoPlus.Audio;
 using SharpPropoPlus.Audio.EventArguments;
 using SharpPropoPlus.Decoder;
 using SharpPropoPlus.Decoder.Contracts;
+using SharpPropoPlus.Decoder.EventArguments;
 using SharpPropoPlus.Events;
 using SharpPropoPlus.Helpers;
 using SharpPropoPlus.Interfaces;
@@ -19,7 +20,7 @@ namespace SharpPropoPlus
     {
         private static Application _instance;
         private static readonly object Sync = new object();
-        private readonly Lazy<IPropoPlusDecoder, IDecoderMetadata> _decoder;
+        private IPropoPlusDecoder _decoder;
         private IUnityContainer _container;
 
 
@@ -28,9 +29,6 @@ namespace SharpPropoPlus
             //_decoderManager = new DecoderManager();
 
             DecoderManager = Container.Resolve<DecoderManager>();
-
-            //TODO: Remove, this is only for testing...
-            _decoder = DecoderManager.Decoders.First();
 
             JoystickHelper.Initialize();
             JoystickInteraction.Initialize();
@@ -61,7 +59,7 @@ namespace SharpPropoPlus
                 right[sample] = BitConverter.ToInt16(args.Buffer, index);
                 index += 2;
 
-                _decoder.Value.ProcessPulse(args.SampleRate, right[sample]);
+                DecoderManager.Decoder.ProcessPulse(args.SampleRate, right[sample]);
             }
         }
 

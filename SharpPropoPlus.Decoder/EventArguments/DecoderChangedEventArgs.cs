@@ -1,18 +1,20 @@
-﻿using SharpPropoPlus.Decoder.Enums;
+﻿using System;
+using SharpPropoPlus.Decoder.Contracts;
+using SharpPropoPlus.Decoder.Enums;
 
 namespace SharpPropoPlus.Decoder.EventArguments
 {
-    public class DecoderChangedEventArgs
+    public class DecoderChangedEventArgs : EventArgs
     {
-
         internal DecoderChangedEventArgs()
         {
-            
+
         }
 
-        public DecoderChangedEventArgs(string name, string description, TransmitterType transmitterType)
+        public DecoderChangedEventArgs(string name, string description, TransmitterType transmitterType, IPropoPlusDecoder decoder)
             : this()
         {
+            Decoder = decoder;
             Name = name;
             Description = description;
             TransmitterType = transmitterType;
@@ -23,5 +25,7 @@ namespace SharpPropoPlus.Decoder.EventArguments
         public string Description { get; }
 
         public TransmitterType TransmitterType { get; }
+
+        public IPropoPlusDecoder Decoder { get; }
     }
 }

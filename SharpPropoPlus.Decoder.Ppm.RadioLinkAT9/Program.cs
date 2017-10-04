@@ -79,16 +79,9 @@ namespace SharpPropoPlus.Decoder.Ppm.RadioLinkAT9
                 return;
             }
 
-            // Cancel jitter /* Version 3.3.3 */
-            var jitterValue = Math.Abs(PrevWidth[DataCount] - width);
-
-            if (jitterValue < PpmJitter)
-            {
-                width = PrevWidth[DataCount];
-            }
-
-            PrevWidth[DataCount] = width;
-
+            // Cancel jitter
+            width = PrevWidth[DataCount] = JitterFilter(width);
+            
             int newdata;
 
             /* 

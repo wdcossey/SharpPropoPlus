@@ -105,7 +105,7 @@
             <!--<Border HorizontalAlignment="Stretch" SnapsToDevicePixels="True" BorderThickness="0 0 0 1" BorderBrush="#f0f0f0"/>-->
             <TextBlock Style="{StaticResource TextBlockHeaderStyleKey}" Text="Decoder Settings" />
 
-            <Grid Margin="8 0">
+            <Grid Margin="8">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="Auto"/>

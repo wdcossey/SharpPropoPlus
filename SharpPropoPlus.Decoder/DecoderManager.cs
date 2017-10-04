@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using SharpPropoPlus.Decoder.Contracts;
+using SharpPropoPlus.Decoder.EventArguments;
+using SharpPropoPlus.Events;
 
 namespace SharpPropoPlus.Decoder
 {
@@ -17,11 +20,14 @@ namespace SharpPropoPlus.Decoder
 
         private readonly AggregateCatalog _catalog;
         private readonly CompositionContainer _container;
+        private IPropoPlusDecoder _decoder;
 
         public IEnumerable<Lazy<IPropoPlusDecoder, IDecoderMetadata>> Decoders => _decoders;
 
         public DecoderManager()
         {
+            GlobalEventAggregator.Instance.AddListener<DecoderChangedEventArgs>(DecoderChangedListener);
+
             //An aggregate catalog that combines multiple catalogs
             _catalog = new AggregateCatalog();
 
@@ -36,6 +42,37 @@ namespace SharpPropoPlus.Decoder
 
             //Fill the imports of this object
             _container.ComposeParts(this);
+
+            Decoder = GetDefaultDecoder();
+        }
+
+        private void DecoderChangedListener(DecoderChangedEventArgs args)
+        {
+            ChangeDecoder(args.Decoder);
+        }
+
+        private IPropoPlusDecoder GetDefaultDecoder()
+        {
+            return Decoders.First()?.Value;
+        }
+        
+        public void ChangeDecoder(IPropoPlusDecoder decoder)
+        {
+            Decoder = decoder;
+        }
+        
+        public IPropoPlusDecoder Decoder
+        {
+            get => _decoder;
+            private set
+            {
+                if (_decoder != null && _decoder == value)
+                {
+                    return;
+                }
+
+                _decoder = value;
+            }
         }
 
         public void Dispose()
