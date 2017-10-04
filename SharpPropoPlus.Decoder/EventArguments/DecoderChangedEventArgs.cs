@@ -6,7 +6,7 @@ namespace SharpPropoPlus.Decoder.EventArguments
 {
     public class DecoderChangedEventArgs : EventArgs
     {
-        internal DecoderChangedEventArgs()
+        private DecoderChangedEventArgs()
         {
 
         }

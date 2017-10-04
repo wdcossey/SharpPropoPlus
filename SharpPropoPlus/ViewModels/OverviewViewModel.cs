@@ -27,8 +27,11 @@ namespace SharpPropoPlus.ViewModels
             GlobalEventAggregator.Instance.AddListener<JoystickChangedEventArgs>(JoystickChangedListener);
             GlobalEventAggregator.Instance.AddListener<DecoderChangedEventArgs>(DecoderChangedListener);
 
+            Application.Instance.DecoderManager.Notify();
+            
             DeviceName = AudioHelper.Instance.DeviceName;
             JoystickName = JoystickInteraction.Instance.CurrentDevice.Name;
+            
         }
 
         private void DecoderChangedListener(DecoderChangedEventArgs args)

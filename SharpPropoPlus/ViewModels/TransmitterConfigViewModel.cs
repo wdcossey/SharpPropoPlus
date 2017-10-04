@@ -24,6 +24,22 @@ namespace SharpPropoPlus.ViewModels
 
             DecoderCollection =
                new ReadOnlyObservableCollection<Lazy<IPropoPlusDecoder, IDecoderMetadata>>(new ObservableCollection<Lazy<IPropoPlusDecoder, IDecoderMetadata>>(Application.Instance.DecoderManager.Decoders.ToList()));
+
+            GlobalEventAggregator.Instance.AddListener<DecoderChangedEventArgs>(DecoderChangedListener);
+
+            //SelectedDecoder =
+            //    DecoderCollection.FirstOrDefault(fd => fd.Value == Application.Instance.DecoderManager.Decoder);
+        }
+
+        private void DecoderChangedListener(DecoderChangedEventArgs args)
+        {
+            if (args?.Decoder == null)
+            {
+                return;
+            }
+
+            SelectedDecoder =
+                DecoderCollection.FirstOrDefault(fd => fd.Value == args?.Decoder);
         }
 
         //public ListCollectionView DecoderCollection

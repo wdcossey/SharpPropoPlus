@@ -61,12 +61,23 @@ namespace SharpPropoPlus.Decoder
             Decoder = decoder;
         }
         
+        public void Notify()
+        {
+            var decoder = Decoders.FirstOrDefault(fd => fd.Value == Decoder);
+
+            if (decoder != null)
+            {
+                GlobalEventAggregator.Instance.SendMessage(new DecoderChangedEventArgs(decoder.Metadata.Name,
+                    decoder.Metadata.Description, decoder.Metadata.TransmitterType, decoder.Value));
+            }
+        }
+        
         public IPropoPlusDecoder Decoder
         {
             get => _decoder;
             private set
             {
-                if (_decoder != null && _decoder == value)
+                if (value == null || _decoder == value)
                 {
                     return;
                 }
