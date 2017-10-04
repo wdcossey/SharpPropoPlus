@@ -1,1 +1,10 @@
+SharpPropoPlus.Audio.dll
+SharpPropoPlus.Audio.pdb
 SharpPropoPlus.Decoder.dll
+SharpPropoPlus.Decoder.pdb
+SharpPropoPlus.Events.dll
+SharpPropoPlus.Events.pdb
+SharpPropoPlus.vJoyMonitor.dll
+SharpPropoPlus.vJoyMonitor.pdb
+vJoyInterface.dll
+vJoyInterfaceWrap.dll
