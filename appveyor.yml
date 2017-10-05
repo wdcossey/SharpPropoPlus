@@ -5,5 +5,7 @@ branches:
 image: Visual Studio 2017
 configuration: Release
 platform: x64
+before_build:
+- cmd: nuget restore SharpPropoPlus.sln
 build:
   verbosity: minimal
