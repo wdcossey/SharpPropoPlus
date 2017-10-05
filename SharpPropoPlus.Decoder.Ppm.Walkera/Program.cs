@@ -7,7 +7,7 @@ namespace SharpPropoPlus.Decoder.Ppm.Walkera
     //[Export(typeof(IPropoPlusDecoder))]
     //[ExportMetadata("Type", TransmitterType.Ppm)]
     [ExportPropoPlusDecoder("Walkera", "Walkera WK-2401 (PPM) pulse processor", TransmitterType.Ppm)]
-    public class Program : PpmPulseProcessor
+    public class Program : PpmPulseProcessor<int>
     {
         /// <summary>
         /// Polarity ('input') of the Sync pulse is the polarity of the following data pulses
@@ -100,7 +100,6 @@ namespace SharpPropoPlus.Decoder.Ppm.Walkera
             }
 
             // Cancel jitter /* Version 3.3.3 */
-            //CalculateAverage(4, PrevWidth);
             var jitterValue = Math.Abs(PrevWidth[DataCount] - width);
             if (jitterValue < PpmJitter)
             {
@@ -108,7 +107,6 @@ namespace SharpPropoPlus.Decoder.Ppm.Walkera
             }
 
             PrevWidth[DataCount] = width;
-
 
             /* convert pulse width in samples to joystick Position values (newdata)
             joystick Position of 0 correspond to width over 100 samples (2.25mSec)

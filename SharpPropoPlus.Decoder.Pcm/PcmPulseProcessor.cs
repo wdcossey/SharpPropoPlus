@@ -2,7 +2,7 @@
 
 namespace SharpPropoPlus.Decoder.Pcm
 {
-    public abstract class PcmPulseProcessor : PulseProcessor
+    public abstract class PcmPulseProcessor : PulseProcessor<int>
     {
         #region PCM Values (General)
 

@@ -6,7 +6,7 @@ using SharpPropoPlus.Events;
 
 namespace SharpPropoPlus.Decoder
 {
-    public abstract class PulseProcessor : IPropoPlusDecoder
+    public abstract class PulseProcessor<TDataType> : IPropoPlusDecoder
     {
 
         /// <summary>
@@ -31,7 +31,7 @@ namespace SharpPropoPlus.Decoder
         /// <summary>
         /// Array of previous width values
         /// </summary>
-        private static int[] _prevWidth;
+        private static TDataType[] _prevWidth;
 
 
         private static int _rawChannelCount;
@@ -96,7 +96,7 @@ namespace SharpPropoPlus.Decoder
         /// <summary>
         /// Array of previous width values
         /// </summary>
-        protected static int[] PrevWidth
+        protected static TDataType[] PrevWidth
         {
             get => _prevWidth;
             set

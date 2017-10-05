@@ -7,7 +7,7 @@ namespace SharpPropoPlus.Decoder.Ppm.Standard
     //[Export(typeof(IPropoPlusDecoder))]
     //[ExportMetadata("Type", TransmitterType.Ppm)]
     [ExportPropoPlusDecoder("Standard", "Standard (PPM) pulse processor", TransmitterType.Ppm)]
-    public class Program : PpmPulseProcessor
+    public class Program : PpmPulseProcessor<int>
     {
         /// <summary>
         /// _prev_sep

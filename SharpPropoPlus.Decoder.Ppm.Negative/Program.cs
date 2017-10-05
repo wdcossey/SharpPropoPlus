@@ -5,7 +5,7 @@ using SharpPropoPlus.Decoder.Enums;
 namespace SharpPropoPlus.Decoder.Ppm.Negative
 {
     [ExportPropoPlusDecoder("Negative", "Negative (PPM) pulse processor", TransmitterType.Ppm)]
-    public class Program : PpmPulseProcessor
+    public class Program : PpmPulseProcessor<int>
     {
 
         //TODO : inform that a filter has been selected or diselected

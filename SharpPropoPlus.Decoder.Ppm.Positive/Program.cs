@@ -7,7 +7,7 @@ namespace SharpPropoPlus.Decoder.Ppm.Positive
     //[Export(typeof(IPropoPlusDecoder))]
     //[ExportMetadata("Type", TransmitterType.Ppm)]
     [ExportPropoPlusDecoder("Positive", "Positive (PPM) pulse processor", TransmitterType.Ppm)]
-    public class Program : PpmPulseProcessor
+    public class Program : PpmPulseProcessor<int>
     {
 
         //TODO : inform that a filter has been selected or diselected
