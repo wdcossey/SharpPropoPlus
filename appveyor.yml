@@ -9,10 +9,10 @@ build_script:
 - cmd: >-
     nuget restore SharpPropoPlus.sln
 
-    msbuild SharpPropoPlus.Decoder.Ppm.Walkera/SharpPropoPlus.Decoder.Ppm.Walkera.csproj /logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll" /property:Platform="Any CPU" /p:PreBuildEvent=;PostBuildEvent=
+    msbuild SharpPropoPlus.Decoder.Ppm.Walkera/SharpPropoPlus.Decoder.Ppm.Walkera.csproj /p:PublishDir=Decoders/Release /logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll" /property:Platform="Any CPU" /p:PreBuildEvent=;PostBuildEvent=
 
-    appveyor PushArtifact SharpPropoPlus.Decoder.Ppm.Walkera/bin/Release/SharpPropoPlus.Decoder.Ppm.Walkera.dll
+    appveyor PushArtifact Decoders/Release/SharpPropoPlus.Decoder.Ppm.Walkera.dll
 
-    msbuild SharpPropoPlus.Decoder.Ppm.RadioLinkAT9/SharpPropoPlus.Decoder.Ppm.RadioLinkAT9.csproj /logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll" /property:Platform="Any CPU" /p:PreBuildEvent=;PostBuildEvent=
+    msbuild SharpPropoPlus.Decoder.Ppm.RadioLinkAT9/SharpPropoPlus.Decoder.Ppm.RadioLinkAT9.csproj /p:PublishDir=Decoders/Release /logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll" /property:Platform="Any CPU" /p:PreBuildEvent=;PostBuildEvent=
 
-    appveyor PushArtifact SharpPropoPlus.Decoder.Ppm.RadioLinkAT9/bin/Release/SharpPropoPlus.Decoder.Ppm.RadioLinkAT9.dll
+    appveyor PushArtifact Decoders/Release/SharpPropoPlus.Decoder.Ppm.RadioLinkAT9.dll
