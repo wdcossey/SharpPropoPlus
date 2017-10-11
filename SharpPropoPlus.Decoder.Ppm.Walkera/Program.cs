@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using SharpPropoPlus.Contracts.Types;
 using SharpPropoPlus.Decoder.Contracts;
 
@@ -65,6 +66,9 @@ namespace SharpPropoPlus.Decoder.Ppm.Walkera
         /// <param name="input"></param>
         protected override void Process(int width, bool input)
         {
+            if (Monitor.IsEntered(MonitorLock))
+                return;
+
             //var tbuffer = new char[9];
 
             if (width < 5)
@@ -162,9 +166,19 @@ namespace SharpPropoPlus.Decoder.Ppm.Walkera
         /// </summary>
         public sealed override void Reset()
         {
-            base.Reset();
+            if (!Monitor.TryEnter(MonitorLock))
+                return;
 
-            _polarity = false;
+            try
+            {
+                base.Reset();
+                _polarity = false;
+            }
+            finally
+            {
+                Monitor.Exit(MonitorLock);
+            }
+            
         }
 
     }

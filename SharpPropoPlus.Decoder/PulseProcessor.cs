@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using SharpPropoPlus.Decoder.Contracts;
 using SharpPropoPlus.Decoder.EventArguments;
 using SharpPropoPlus.Decoder.Structs;
@@ -8,7 +9,6 @@ namespace SharpPropoPlus.Decoder
 {
     public abstract class PulseProcessor<TDataType> : IPropoPlusDecoder
     {
-
         /// <summary>
         /// m_Position
         /// </summary>
@@ -348,13 +348,24 @@ namespace SharpPropoPlus.Decoder
 
         public abstract string[] Description { get; }
 
+        public object MonitorLock { get; } = new object();
+
         public virtual void ProcessPulse(int sampleRate, int sample)
         {
-            var negative = false;
+            try
+            {
+                var negative = false;
 
-            var pulseLength = CalculatePulseLength(sampleRate, sample, ref negative);
+                var pulseLength = CalculatePulseLength(sampleRate, sample, ref negative);
 
-            Process(pulseLength.Normalized, negative);
+                Process(pulseLength.Normalized, negative);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+                //throw;
+            }
+            
         }
 
         public abstract void Reset();

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using SharpPropoPlus.Contracts.Types;
 using SharpPropoPlus.Decoder.Contracts;
 
@@ -46,6 +47,9 @@ namespace SharpPropoPlus.Decoder.Ppm.Standard
         /// <param name="input"></param>
         protected override void Process(int width, bool input)
         {
+            if (Monitor.IsEntered(MonitorLock))
+                return;
+
             if (width < PpmGlitch)
                 return;
 
@@ -188,8 +192,19 @@ namespace SharpPropoPlus.Decoder.Ppm.Standard
         /// </summary>
         public sealed override void Reset()
         {
-            base.Reset();
-            _prevSeparator = false;
+            if (!Monitor.TryEnter(MonitorLock))
+                return;
+
+            try
+            {
+                base.Reset();
+                _prevSeparator = false;
+            }
+            finally
+            {
+                Monitor.Exit(MonitorLock);
+            }
+            
         }
 
 

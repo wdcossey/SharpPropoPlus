@@ -1,4 +1,5 @@
-﻿using SharpPropoPlus.Contracts.Types;
+﻿using System.Threading;
+using SharpPropoPlus.Contracts.Types;
 using SharpPropoPlus.Decoder.Contracts;
 
 namespace SharpPropoPlus.Decoder.Pcm.Walkera
@@ -41,6 +42,9 @@ namespace SharpPropoPlus.Decoder.Pcm.Walkera
         /// <param name="input"></param>
         protected override void Process(int width, bool input)
         {
+            if (Monitor.IsEntered(MonitorLock))
+                return;
+
             //const int fixed_n_channel = 8;
             //var m_nChannels = 8;
             int vPulse;
@@ -117,7 +121,17 @@ namespace SharpPropoPlus.Decoder.Pcm.Walkera
         /// </summary>
         public sealed override void Reset()
         {
-            base.Reset();
+            if (!Monitor.TryEnter(MonitorLock))
+                return;
+
+            try
+            {
+                base.Reset();
+            }
+            finally
+            {
+                Monitor.Exit(MonitorLock);
+            }
         }
 
         #region Walkera PCM helper functions

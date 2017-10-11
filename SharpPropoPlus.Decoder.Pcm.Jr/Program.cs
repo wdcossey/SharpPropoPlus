@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using SharpPropoPlus.Contracts.Types;
 using SharpPropoPlus.Decoder.Contracts;
 
@@ -62,6 +63,9 @@ namespace SharpPropoPlus.Decoder.Pcm.JrGraupner
         /// <param name="input"></param>
         protected override void Process(int width, bool input)
         {
+            if (Monitor.IsEntered(MonitorLock))
+                return;
+
             //if (gDebugLevel >= 2 && gCtrlLogFile && !(i++ % 50) && !(_strtime_s(tbuffer, 9)))
             //    fprintf(gCtrlLogFile, "\n%s - ProcessPulseJrPcm(%d)", tbuffer, width);
 
@@ -147,11 +151,21 @@ namespace SharpPropoPlus.Decoder.Pcm.JrGraupner
         /// </summary>
         public sealed override void Reset()
         {
-            base.Reset();
+            if (!Monitor.TryEnter(MonitorLock))
+                return;
 
-            _i = 0;
+            try
+            {
+                base.Reset();
 
-            DataBuffer = new int[30];
+                _i = 0;
+
+                DataBuffer = new int[30];
+            }
+            finally
+            {
+                Monitor.Exit(MonitorLock);
+            }
         }
 
         #region JR/Graupner PCM helper functions

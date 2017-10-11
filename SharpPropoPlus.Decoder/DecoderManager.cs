@@ -78,9 +78,13 @@ namespace SharpPropoPlus.Decoder
                     return;
                 }
 
+                value.Reset();
+
                 _decoder = value;
 
                 var lazyDecoder = GetDecoder(_decoder);
+
+
                 var message = new DecoderChangedEventArgs(lazyDecoder.Metadata.Name, lazyDecoder.Metadata.Description, lazyDecoder.Metadata.TransmitterType, lazyDecoder.Value);
                 GlobalEventAggregator.Instance.SendMessage(message);
 

@@ -1,4 +1,6 @@
-﻿using SharpPropoPlus.Contracts.Types;
+﻿using System;
+using System.Threading;
+using SharpPropoPlus.Contracts.Types;
 using SharpPropoPlus.Decoder.Contracts;
 
 namespace SharpPropoPlus.Decoder.Pcm.AirtronicsSanwaSecond
@@ -8,6 +10,7 @@ namespace SharpPropoPlus.Decoder.Pcm.AirtronicsSanwaSecond
     {
         private bool? _chunk;
 
+        
         private static readonly int[] Air2Symbol = {
             -1, -1, -1, -1,  0,  0, -1,  2, -1, -1, -1, -1,  1,  1, -1,  3
         };
@@ -30,7 +33,7 @@ namespace SharpPropoPlus.Decoder.Pcm.AirtronicsSanwaSecond
         /// <para>Buffer Length/Size<br/></para>
         /// 8
         /// </summary>
-        protected override int BufferLength => 8;
+        protected override int BufferLength => 6;
 
         /// <summary>
         /// <para>Process Walkera PCM pulse (Tested with Walkera WK-0701)</para>
@@ -40,6 +43,9 @@ namespace SharpPropoPlus.Decoder.Pcm.AirtronicsSanwaSecond
         /// <param name="input"></param>
         protected override void Process(int width, bool input)
         {
+            if (Monitor.IsEntered(MonitorLock))
+                return;
+
             int pulse;
             int shift;
 
@@ -119,11 +125,21 @@ namespace SharpPropoPlus.Decoder.Pcm.AirtronicsSanwaSecond
         /// </summary>
         public sealed override void Reset()
         {
-            base.Reset();
+            if (!Monitor.TryEnter(MonitorLock))
+                return;
 
-            _chunk = null;
+            try
+            {
+                base.Reset();
 
-            DataBuffer = new int[10];
+                _chunk = null;
+
+                DataBuffer = new int[10];
+            }
+            finally
+            {
+                Monitor.Exit(MonitorLock);
+            }
         }
 
         #region Airtronics/Sanwa [2] PCM helper functions

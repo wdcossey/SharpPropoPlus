@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using SharpPropoPlus.Contracts.Types;
 using SharpPropoPlus.Decoder.Contracts;
 
@@ -117,6 +118,8 @@ namespace SharpPropoPlus.Decoder.Pcm.Futaba
         /// <param name="input"></param>
         protected override void Process(int width, bool input)
         {
+            if (Monitor.IsEntered(MonitorLock))
+                return;
 
             width = Convert.ToInt32(Math.Floor(width / PwFutaba));
 
@@ -279,12 +282,22 @@ namespace SharpPropoPlus.Decoder.Pcm.Futaba
         /// </summary>
         public sealed override void Reset()
         {
-            base.Reset();
+            if (!Monitor.TryEnter(MonitorLock))
+                return;
 
-            Sync = 0;
-            _i = 0;
+            try
+            {
+                base.Reset();
 
-            DataBuffer = new int[32];
+                Sync = 0;
+                _i = 0;
+
+                DataBuffer = new int[32];
+            }
+            finally
+            {
+                Monitor.Exit(MonitorLock);
+            }
         }
 
         #region Futaba PCM helper functions

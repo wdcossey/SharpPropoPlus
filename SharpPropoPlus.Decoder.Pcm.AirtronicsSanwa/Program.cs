@@ -1,4 +1,5 @@
-﻿using SharpPropoPlus.Contracts.Types;
+﻿using System.Threading;
+using SharpPropoPlus.Contracts.Types;
 using SharpPropoPlus.Decoder.Contracts;
 
 namespace SharpPropoPlus.Decoder.Pcm.AirtronicsSanwa
@@ -38,9 +39,9 @@ namespace SharpPropoPlus.Decoder.Pcm.AirtronicsSanwa
         /// <param name="input"></param>
         protected override void Process(int width, bool input)
         {
-            
 
-            int shift;
+            if (Monitor.IsEntered(MonitorLock))
+                return;
 
             //if (gDebugLevel >= 2 && gCtrlLogFile && i++ % 10 && !(_strtime_s(tbuffer, 9)))
             //    fprintf(gCtrlLogFile, "\n%s - ProcessPulseAirPcm1(%d)", tbuffer, width);
@@ -99,7 +100,7 @@ namespace SharpPropoPlus.Decoder.Pcm.AirtronicsSanwa
 
             //  9: Read the first 10 bits
             // 15: Read a channel data
-            shift = Sync ? 9 : 15;
+            var shift = Sync ? 9 : 15;
 
             BitStream = ((BitStream << 1) + 1) << (_pulse - 1);
             BitCount += _pulse;
@@ -121,11 +122,21 @@ namespace SharpPropoPlus.Decoder.Pcm.AirtronicsSanwa
         /// </summary>
         public sealed override void Reset()
         {
-            base.Reset();
+            if (!Monitor.TryEnter(MonitorLock))
+                return;
 
-            _chunk = -1;
+            try
+            {
+                base.Reset();
 
-            DataBuffer = new int[10];
+                _chunk = -1;
+
+                DataBuffer = new int[10];
+            }
+            finally
+            {
+                Monitor.Exit(MonitorLock);
+            }
         }
 
         #region Airtronics/Sanwa [1] PCM helper functions
