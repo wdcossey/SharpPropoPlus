@@ -1,36 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+﻿using System.Windows.Controls;
 using SharpPropoPlus.Interfaces;
 
 namespace SharpPropoPlus.Views
 {
-  /// <summary>
-  /// Interaction logic for InputConfig.xaml
-  /// </summary>
-  public partial class AudioConfig : UserControl
-  {
-
-      public AudioConfig()
-      {
-          
-
-      }
-    public AudioConfig(IAudioConfigViewModel viewModel)
+    /// <summary>
+    ///     Interaction logic for InputConfig.xaml
+    /// </summary>
+    public partial class AudioConfig : UserControl
     {
-        InitializeComponent();
-        this.DataContext = viewModel;
+        private AudioConfig()
+        {
+            InitializeComponent();
+        }
+
+        public AudioConfig(IAudioConfigViewModel viewModel)
+            : this()
+        {
+            DataContext = viewModel;
+        }
     }
-  }
 }

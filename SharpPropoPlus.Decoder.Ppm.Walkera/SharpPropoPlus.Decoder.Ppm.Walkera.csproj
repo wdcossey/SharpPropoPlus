@@ -29,22 +29,23 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\SharpPropoPlus.Contracts\SharpPropoPlus.Contracts.csproj">
+      <Project>{3FBEE597-4EF9-4DFB-B8F6-16E0D0739AC0}</Project>
+      <Name>SharpPropoPlus.Contracts</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SharpPropoPlus.Decoder.Ppm\SharpPropoPlus.Decoder.Ppm.csproj">
       <Project>{e1ebc83e-6b57-424f-a27c-22cab05a1e06}</Project>
       <Name>SharpPropoPlus.Decoder.Ppm</Name>
@@ -56,7 +57,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>xcopy /E /Y /I "$(TargetDir)*.*" "$(SolutionDir)Decoders\"</PostBuildEvent>
+    <PostBuildEvent>xcopy /E /Y /I "$(TargetDir)*.*" "$(SolutionDir)Decoders\$(ConfigurationName)\"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

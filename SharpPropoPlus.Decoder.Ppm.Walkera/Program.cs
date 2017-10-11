@@ -1,66 +1,52 @@
 ﻿using System;
-using System.ComponentModel.Composition;
+using SharpPropoPlus.Contracts.Types;
 using SharpPropoPlus.Decoder.Contracts;
-using SharpPropoPlus.Decoder.Enums;
 
 namespace SharpPropoPlus.Decoder.Ppm.Walkera
 {
     //[Export(typeof(IPropoPlusDecoder))]
     //[ExportMetadata("Type", TransmitterType.Ppm)]
     [ExportPropoPlusDecoder("Walkera", "Walkera WK-2401 (PPM) pulse processor", TransmitterType.Ppm)]
-    public class Program : PpmPulseProcessor
+    public class Program : PpmPulseProcessor<int>
     {
-
-        private static int[] _mPosition;
-
-        private static bool _sync;
+        /// <summary>
+        /// Polarity ('input') of the Sync pulse is the polarity of the following data pulses
+        /// </summary>
         private static bool _polarity;
-
-        /// <summary>
-        /// Array of pulse widthes in joystick values
-        /// </summary>
-        private static int[] _data;
-
-        /// <summary>
-        /// Pulse index (corresponds to channel index)
-        /// </summary>
-        private static int _datacount;
 
         //private static int _formerSync = 0;
 
         //static int i = 0;
 
-
         #region PPM Values (Walkera)
 
-        protected double PpmWalkeraMinPulseWidth => 78.4;
+        /// <summary>
+        /// 
+        /// </summary>
+        public override double PpmJitterDefault => 4.25;
 
-        protected double PpmWalkeraMaxPulseWidth => 304.8;
+        /// <summary>
+        /// 
+        /// </summary>
+        public override double PpmMinPulseWidthDefault => 78.4;
 
-        protected double PpmWalkeraSeparator => 65.3;
+        /// <summary>
+        /// 
+        /// </summary>
+        public override double PpmMaxPulseWidthDefault => 304.8;
 
-        protected double PpmWalkeraTrig => PpmTrig;
-
+        /// <summary>
+        /// 
+        /// </summary>
+        public override double PpmSeparatorDefault => 65.3;
 
         #endregion PPM Values (Walkera)
 
-
-        /// <summary>
-        /// Array of previous width values
-        /// </summary>
-        private static int[] _prevWidth = new int[14];
-
-        public override string[] Description
+        public override string[] Description => new[]
         {
-            get
-            {
-                return new[]
-                {
-                    "Pulse processor for Walkera WK-2401 PPM",
-                    "This is just a permiscuous PPM that does not follow the PPM standard"
-                };
-            }
-        }
+            "Pulse processor for Walkera WK-2401 PPM",
+            "This is just a permiscuous PPM that does not follow the PPM standard"
+        };
 
         public Program()
         {
@@ -88,39 +74,45 @@ namespace SharpPropoPlus.Decoder.Ppm.Walkera
             //  fprintf(gCtrlLogFile, "\n%s - ProcessPulseWk2401Ppm(width=%d, input=%d)", tbuffer, width, input);
 
             //_sync is detected at the end of a very long pulse (over  4.5mSec)
-            if (width > PpmWalkeraTrig)
+            if (width > PpmTrig)
             {
-                _sync = true;
-                if (!_datacount.Equals(0))
+                Sync = true;
+                if (!DataCount.Equals(0))
                 {
-                    //  m_PosUpdateCounter++;
+                    PosUpdateCounter++;
                 }
-
-                //m_nChannels = _datacount;
-                RawChannelCount = _datacount;
-
-                _datacount = 0;
+                RawChannelCount = DataCount;
+                DataCount = 0;
                 _polarity = input;
                 return;
             }
 
-            if (!_sync)
-                return; /* still waiting for _sync */
+            if (!Sync)
+            {
+                /* still waiting for _sync */
+                return;
+            }
 
             // If this pulse is a separator - read the next pulse
             if (_polarity != input)
+            {
                 return;
+            }
 
             // Cancel jitter /* Version 3.3.3 */
-            if (Math.Abs(_prevWidth[_datacount] - width) < PpmJitter)
-                width = _prevWidth[_datacount];
-            _prevWidth[_datacount] = width;
+            var jitterValue = Math.Abs(PrevWidth[DataCount] - width);
+            if (jitterValue < PpmJitter)
+            {
+                width = PrevWidth[DataCount];
+            }
 
+            PrevWidth[DataCount] = width;
 
             /* convert pulse width in samples to joystick Position values (newdata)
             joystick Position of 0 correspond to width over 100 samples (2.25mSec)
             joystick Position of 1023 correspond to width under 30 samples (0.68mSec)*/
-            var newdata = (int)((width - PpmWalkeraMinPulseWidth) / (PpmWalkeraMaxPulseWidth - PpmWalkeraMinPulseWidth) * 1024);
+            var newdata = (int) ((width - PpmMinPulseWidth) /
+                                 (PpmMaxPulseWidth - PpmMinPulseWidth) * 1024);
 
             /* Trim values into 0-1023 boundries */
             if (newdata < 0)
@@ -133,36 +125,36 @@ namespace SharpPropoPlus.Decoder.Ppm.Walkera
             }
 
             /* Update _data - do not allow abrupt change */
-            if (_data[_datacount] - newdata > 100)
+            if (DataBuffer[DataCount] - newdata > 100)
             {
-                _data[_datacount] -= 100;
+                DataBuffer[DataCount] -= 100;
             }
-            else if (newdata - _data[_datacount] > 100)
+            else if (newdata - DataBuffer[DataCount] > 100)
             {
-                _data[_datacount] += 100;
+                DataBuffer[DataCount] += 100;
             }
             else
             {
-                _data[_datacount] = (_data[_datacount] + newdata) / 2;
+                DataBuffer[DataCount] = (DataBuffer[DataCount] + newdata) / 2;
             }
 
 
             //Assign _data to joystick channels
-            _mPosition[_datacount] = _data[_datacount];
+            ChannelData[DataCount] = DataBuffer[DataCount];
 
             // Send Position and number of channels to the virtual joystick
             ////SendPPJoy(11, _mPosition);
-            JoystickInteraction.Instance.Send(11, ref _mPosition);
+            JoystickInteraction.Instance.Send(11, ChannelData);
 
             //if (gDebugLevel >= 3 && gCtrlLogFile /*&& !(i++%50)*/)
             //  fprintf(gCtrlLogFile, " _data[%d]=%d", _datacount, _data[_datacount]);
 
             //Debug.WriteLine($"_data[{_datacount}]={_data[_datacount]}");
 
-            if (_datacount == 11)
-                _sync = false; /* Reset _sync after channel 12 */
+            if (DataCount == 11)
+                Sync = false; /* Reset _sync after channel 12 */
 
-            _datacount++;
+            DataCount++;
         }
 
         /// <summary>
@@ -170,20 +162,10 @@ namespace SharpPropoPlus.Decoder.Ppm.Walkera
         /// </summary>
         public sealed override void Reset()
         {
-            _mPosition = new int[Constants.MAX_JS_CH];
+            base.Reset();
 
-            _sync = false;
             _polarity = false;
-            _data = new int[14]; /* Array of pulse widthes in joystick values */
-            _datacount = 0; /* pulse index (corresponds to channel index) */
-            //private static int _formerSync = 0;
-
-            //static int i = 0;
-            _prevWidth = new int[14]; /* array of previous width values */
         }
 
-        
     }
-
-
 }

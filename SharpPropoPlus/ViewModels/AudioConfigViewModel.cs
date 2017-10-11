@@ -1,17 +1,12 @@
 ﻿using System;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using SharpPropoPlus.Annotations;
 using SharpPropoPlus.Audio;
 using SharpPropoPlus.Audio.Enums;
 using SharpPropoPlus.Audio.EventArguments;
 using SharpPropoPlus.Audio.Models;
 using SharpPropoPlus.Events;
-using SharpPropoPlus.Events.Events;
 using SharpPropoPlus.Interfaces;
-using SharpPropoPlus.vJoyMonitor;
 
 namespace SharpPropoPlus.ViewModels
 {
@@ -45,11 +40,7 @@ namespace SharpPropoPlus.ViewModels
             SelectedAudioEndPoint =
                 AudioEndPointCollection.FirstOrDefault(fd => fd.DeviceId == AudioHelper.Instance.DeviceId);
 
-            GlobalEventAggregator.Instance.AddListener<PeakValueEventArgs>(PeakValueChangedListner);
-
-            //AudioHelper.Instance.StartRecording();
-
-            
+            GlobalEventAggregator.Instance.AddListener<PeakValueEventArgs>(PeakValueChangedListner);            
         }
 
         private void PeakValueChangedListner(PeakValueEventArgs args)
@@ -173,11 +164,16 @@ namespace SharpPropoPlus.ViewModels
 
                 if (_selectedAudioEndPoint != null)
                 {
-                    AudioHelper.Instance.StartRecording(_selectedAudioEndPoint.DeviceId);
+                    AudioHelper.Instance.StartRecording(_selectedAudioEndPoint);
                 }
                 else
                 {
                     AudioHelper.Instance.StopRecording();
+                }
+
+                if (_selectedAudioEndPoint == null || _selectedAudioEndPoint.Channels == 1)
+                {
+                    SelectedChannelItem = AudioChannel.Automatic;
                 }
 
                 OnPropertyChanged();

@@ -1,0 +1,106 @@
+﻿<UserControl
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+    xmlns:viewModels="clr-namespace:SharpPropoPlus.ViewModels"
+    xmlns:componentModel="clr-namespace:System.ComponentModel;assembly=WindowsBase"
+    x:Class="SharpPropoPlus.Views.FilterConfig"
+    mc:Ignorable="d" 
+    d:DesignHeight="400" 
+    d:DesignWidth="600"
+    d:DataContext="{d:DesignInstance viewModels:FilterConfigViewModel, d:IsDesignTimeCreatable=False}">
+
+
+    <UserControl.Resources>
+
+
+        <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource TextBlockLightStyleKey}">
+
+        </Style>
+
+
+        <CollectionViewSource 
+            x:Key="FilterCollection"
+            Source="{Binding FilterCollection}">
+
+            <!-- Grouping -->
+            <!--<CollectionViewSource.GroupDescriptions>
+                <PropertyGroupDescription PropertyName="Metadata."  />
+            </CollectionViewSource.GroupDescriptions>-->
+
+            <CollectionViewSource.SortDescriptions>
+                <componentModel:SortDescription Direction="Ascending" PropertyName="Metadata.Name"  />
+            </CollectionViewSource.SortDescriptions>
+
+        </CollectionViewSource>
+
+    </UserControl.Resources>
+
+    <StackPanel>
+
+        <Grid >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            
+            <TextBlock Grid.Column="0" Grid.Row="0" Margin="0 4 0 0" Style="{StaticResource TextBlockHeaderStyleKey}" Text="Toggle Signal Filter" />
+            <TextBlock Grid.Column="0" Grid.Row="1" Margin="0 2 0 0" Style="{StaticResource TextBlockLightStyleKey}" Text="Enable or disable signal filtering with the desired filter (below)." />
+
+            <ToggleButton Grid.Column="1" Grid.Row="0" Grid.RowSpan="2" HorizontalAlignment="Right" IsChecked="False" VerticalAlignment="Center" Height="20" Style="{StaticResource AnimatedSwitch}"></ToggleButton>
+        </Grid>
+
+        <Border Margin="0 8" Style="{StaticResource BorderSeparator}"/>
+
+        <Grid >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Grid.Column="0" Grid.Row="0" Margin="0" Style="{StaticResource TextBlockHeaderStyleKey}" Text="Signal Filter" />
+
+            <ComboBox Grid.Column="1" Grid.Row="0" Margin="0"  MinWidth="120" VerticalAlignment="Center" HorizontalAlignment="Right" DisplayMemberPath="Metadata.Name" MaxDropDownHeight="8" ItemsSource="{Binding Source={StaticResource FilterCollection}}" SelectedItem="{Binding SelectedFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" >
+
+                <ComboBox.GroupStyle>
+                    <GroupStyle>
+                        <GroupStyle.ContainerStyle>
+                            <Style TargetType="GroupItem">
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="GroupItem" >
+                                            <Grid>
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition/>
+                                                    <RowDefinition/>
+                                                </Grid.RowDefinitions>
+
+                                                <Grid Grid.Row="0" Margin="0" Background="#01000000" Opacity="0.75" >
+                                                    <Border VerticalAlignment="Stretch" SnapsToDevicePixels="True" BorderBrush="#f0f0f0" BorderThickness="0 0 0 1" HorizontalAlignment="Stretch" Margin="8 0" Padding="8 6 40 6">
+                                                        <ContentPresenter x:Name="ContentControl" Content="{Binding Name, Mode=OneWay, Converter={StaticResource DescriptionAttributeValueConverter}}" TextBlock.FontWeight="Light" TextBlock.FontSize="11" TextBlock.FontFamily="pack://application:,,,/Fonts/#Montserrat Light" />
+                                                    </Border>
+                                                </Grid>
+                                                <ItemsPresenter Grid.Row="1"/>
+                                            </Grid>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </GroupStyle.ContainerStyle>
+                    </GroupStyle>
+                </ComboBox.GroupStyle>
+            </ComboBox>
+            
+ 
+        </Grid>
+
+        <Border Margin="0 8" Style="{StaticResource BorderSeparator}"/>
+
+       
+    </StackPanel>
+</UserControl>

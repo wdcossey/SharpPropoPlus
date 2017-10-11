@@ -4,30 +4,67 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SharpPropoPlus"
-        xmlns:regions="http://prismlibrary.com/"
         xmlns:views="clr-namespace:SharpPropoPlus.Views"
         xmlns:controls="clr-namespace:SharpPropoPlus.Controls"
-        xmlns:viewModels="clr-namespace:SharpPropoPlus.ViewModels"
-        xmlns:attachedProperties="clr-namespace:SharpPropoPlus.AttachedProperties"
-        Background="#2d2d30"
+        ResizeMode="CanMinimize"
         mc:Ignorable="d"
+                       
         Style="{StaticResource MainWindow}"
         
         Title="#PropoPlus" 
                        Height="600" 
                        Width="800"
-                       InitialPage="{x:Type views:AudioConfig}">
+                       InitialPage="{x:Type views:AudioConfig}" WindowStartupLocation="CenterScreen">
 
-    <controls:CustomWindow.MenuItems>
-        <viewModels:ToolBarButton Content="Input" Type="{x:Type views:AudioConfig}"></viewModels:ToolBarButton>
-        <viewModels:ToolBarButton Content="Transmitter" Type="{x:Type views:TransmitterConfig}"></viewModels:ToolBarButton>
-        <viewModels:ToolBarButton Content="Filter"></viewModels:ToolBarButton>
-        <viewModels:ToolBarButton Content="Joystick" Type="{x:Type views:JoystickConfig}"></viewModels:ToolBarButton>
-        <viewModels:ToolBarButton Content="Advanced"></viewModels:ToolBarButton>
-    </controls:CustomWindow.MenuItems>
+    <controls:CustomWindow.SettingsMenu>
+        <ContextMenu>
+            <MenuItem Header="Something" />
+            <Separator />
+            <MenuItem Header="About" />
+        </ContextMenu>
+    </controls:CustomWindow.SettingsMenu>
+    
+    <controls:CustomWindow.ToolBarItems>
+        <controls:ToolBarButton Content="Input" Type="{x:Type views:AudioConfig}"/>
+        <controls:ToolBarButton Content="Transmitter" Type="{x:Type views:TransmitterConfig}"/>
+        <controls:ToolBarButton Content="Filter" Type="{x:Type views:FilterConfig}"/>
+        <controls:ToolBarButton Content="Joystick" Type="{x:Type views:JoystickConfig}"/>
+        <controls:ToolBarButton Content="Advanced" Type="{x:Type views:AdvancedConfig}"/>
+    </controls:CustomWindow.ToolBarItems>
     
     <controls:CustomWindow.Footer>
-        <views:Overview Grid.Row="1"></views:Overview>
+        <views:Overview Grid.Row="1"/>
     </controls:CustomWindow.Footer>
     
 </controls:CustomWindow>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

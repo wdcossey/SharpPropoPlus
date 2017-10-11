@@ -1,6 +1,5 @@
 ﻿using System.Collections.ObjectModel;
 using System.Linq;
-using System.Windows.Interop;
 using SharpPropoPlus.Decoder.EventArguments;
 using SharpPropoPlus.Events;
 using SharpPropoPlus.Interfaces;

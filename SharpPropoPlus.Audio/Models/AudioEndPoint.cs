@@ -4,25 +4,17 @@ namespace SharpPropoPlus.Audio.Models
 {
     public class AudioEndPoint : IAudioEndPoint
     {
-        private string _deviceName;
-        private string _deviceId;
+        public string DeviceName { get; }
 
-        public string DeviceName
-        {
-            get { return _deviceName; }
-            internal set { _deviceName = value; }
-        }
+        public string DeviceId { get; }
 
-        public string DeviceId
-        {
-            get { return _deviceId; }
-            internal set { _deviceId = value; }
-        }
+        public int Channels { get; }
 
-        public AudioEndPoint(string deviceName, string deviceId)
+        public AudioEndPoint(string deviceName, string deviceId, int channels)
         {
             DeviceName = deviceName;
             DeviceId = deviceId;
+            Channels = channels;
         }
     }
 }

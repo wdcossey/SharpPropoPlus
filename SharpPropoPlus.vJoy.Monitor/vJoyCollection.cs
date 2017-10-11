@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.ObjectModel;
-using vJoyInterfaceWrap;
 
 namespace SharpPropoPlus.vJoyMonitor
 {

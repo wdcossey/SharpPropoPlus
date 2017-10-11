@@ -3,9 +3,7 @@ using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Windows.Data;
 using System.Windows.Media;
-using SharpPropoPlus.Audio.Enums;
 using SharpPropoPlus.Enums;
-using SharpPropoPlus.ExtensionMethods;
 
 namespace SharpPropoPlus.ValueConverters
 {
