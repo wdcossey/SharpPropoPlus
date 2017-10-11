@@ -1,0 +1,18 @@
+﻿<UserControl x:Class="SharpPropoPlus.Views.AdvancedConfig"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:SharpPropoPlus.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="400" 
+             d:DesignWidth="600">
+
+    <UserControl.Resources>
+        <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource TextBlockLightStyleKey}"/>
+    </UserControl.Resources>
+    
+    <Grid>
+            
+    </Grid>
+</UserControl>

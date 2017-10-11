@@ -164,16 +164,22 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Application.cs" />
-    <Compile Include="AttachedProperties\WindowBehaviors.cs" />
+    <Compile Include="Behaviors\LeftClickContextMenuBehavior.cs" />
     <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="Controls\CustomWindow.cs" />
+    <Compile Include="Controls\JoystickMonitor.cs" />
     <Compile Include="Controls\StripIndicator.xaml.cs">
       <DependentUpon>StripIndicator.xaml</DependentUpon>
     </Compile>
     <Compile Include="Enums\ImmersiveColors.cs" />
+    <Compile Include="Enums\JoystickChannel.cs" />
     <Compile Include="ExtensionMethods\ObjectExtensionMethods.cs" />
     <Compile Include="ExtensionMethods\EnumExtensionMethods.cs" />
     <Compile Include="Helpers\DeviceNotification.cs" />
+    <Compile Include="Interfaces\IJoystickChannelData.cs" />
+    <Compile Include="Interfaces\IFilterConfigViewModel.cs" />
+    <Compile Include="ValueConverters\DecoderOfTypeValueConverter.cs" />
+    <Compile Include="ViewModels\JoystickChannelDataViewModel.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="ValueConverters\AudioChannelValueConverter.cs" />
     <Compile Include="ValueConverters\AudioBitrateValueConverter.cs" />
@@ -188,7 +194,14 @@
     <Compile Include="ViewModels\JoystickConfigViewModel.cs" />
     <Compile Include="ViewModels\OverviewViewModel.cs" />
     <Compile Include="Controls\ToolBarButton.cs" />
+    <Compile Include="ViewModels\FilterConfigViewModel.cs" />
     <Compile Include="ViewModels\TransmitterConfigViewModel.cs" />
+    <Compile Include="Views\AdvancedConfig.xaml.cs">
+      <DependentUpon>AdvancedConfig.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\FilterConfig.xaml.cs">
+      <DependentUpon>FilterConfig.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\TransmitterConfig.xaml.cs">
       <DependentUpon>TransmitterConfig.xaml</DependentUpon>
     </Compile>
@@ -209,6 +222,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Resources\JoystickMonitorStyle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Resources\Styles.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -226,6 +243,14 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Themes\MainWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\AdvancedConfig.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\FilterConfig.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -286,6 +311,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="AttachedProperties\" />
     <Folder Include="Contracts\" />
     <Folder Include="Models\" />
   </ItemGroup>
@@ -294,6 +320,10 @@
       <Project>{d713d76b-441b-46b4-94f2-e409048cc0c5}</Project>
       <Name>SharpPropoPlus.Audio</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SharpPropoPlus.Contracts\SharpPropoPlus.Contracts.csproj">
+      <Project>{3FBEE597-4EF9-4DFB-B8F6-16E0D0739AC0}</Project>
+      <Name>SharpPropoPlus.Contracts</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SharpPropoPlus.Decoder\SharpPropoPlus.Decoder.csproj">
       <Project>{a10f2ea1-0d67-4f27-b462-92088426395f}</Project>
       <Name>SharpPropoPlus.Decoder</Name>
@@ -301,6 +331,10 @@
     <ProjectReference Include="..\SharpPropoPlus.Events\SharpPropoPlus.Events.csproj">
       <Project>{1409edfb-e81d-4daa-b7e4-0ae893be4cac}</Project>
       <Name>SharpPropoPlus.Events</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SharpPropoPlus.Filter\SharpPropoPlus.Filter.csproj">
+      <Project>{4b83a5ee-5bf8-4daf-ba93-654bb86edf99}</Project>
+      <Name>SharpPropoPlus.Filter</Name>
     </ProjectReference>
     <ProjectReference Include="..\SharpPropoPlus.vJoy.Monitor\SharpPropoPlus.vJoyMonitor.csproj">
       <Project>{316bad6f-4ced-4d0c-b2bf-36755950afcc}</Project>
@@ -325,7 +359,8 @@
     </PreBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
-    <PostBuildEvent>xcopy /E /Y /I /EXCLUDE:$(ProjectDir)exclude.txt "$(SolutionDir)Decoders\$(ConfigurationName)\*.*" "$(TargetDir)"</PostBuildEvent>
+    <PostBuildEvent>xcopy /E /Y /I /EXCLUDE:$(ProjectDir)exclude.txt "$(SolutionDir)Decoders\$(ConfigurationName)\*.*" "$(TargetDir)"
+xcopy /E /Y /I /EXCLUDE:$(ProjectDir)exclude.txt "$(SolutionDir)Filters\$(ConfigurationName)\*.*" "$(TargetDir)"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

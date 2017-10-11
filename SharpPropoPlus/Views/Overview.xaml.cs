@@ -2,14 +2,14 @@
 
 namespace SharpPropoPlus.Views
 {
-  /// <summary>
-  /// Interaction logic for GeneralInformation.xaml
-  /// </summary>
-  public partial class Overview : UserControl
-  {
-    public Overview()
+    /// <summary>
+    ///     Interaction logic for GeneralInformation.xaml
+    /// </summary>
+    public partial class Overview : UserControl
     {
-      InitializeComponent();
+        public Overview()
+        {
+            InitializeComponent();
+        }
     }
-  }
 }

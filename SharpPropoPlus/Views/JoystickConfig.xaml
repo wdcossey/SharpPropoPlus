@@ -6,9 +6,9 @@
              xmlns:local="clr-namespace:SharpPropoPlus.Views"
              xmlns:viewModels="clr-namespace:SharpPropoPlus.ViewModels"
              mc:Ignorable="d" 
-             d:DataContext="null"
-             
-             d:DesignHeight="400" d:DesignWidth="600">
+             d:DesignHeight="400" 
+             d:DesignWidth="600"
+             d:DataContext="{d:DesignInstance viewModels:JoystickConfigViewModel, d:IsDesignTimeCreatable=False}">
 
     <!--<UserControl.DataContext>
         <viewModels:JoystickConfigViewModel></viewModels:JoystickConfigViewModel>
@@ -16,58 +16,26 @@
     
     <StackPanel >
 
-        <StackPanel Margin="0 0 0 8">
-            <TextBlock Style="{StaticResource TextBlockHeaderStyleKey}">
-                <Run Text="vJoy Device (v"/><Run Text="{Binding VJoyVersion, Mode=OneWay}"/><Run Text=")"/>
-            </TextBlock>
-            <ComboBox Margin="0 8" HorizontalAlignment="Left" Grid.Row="1" SelectedIndex="0" DisplayMemberPath="Name" ItemsSource="{Binding Devices, Mode=OneWay}" SelectedItem="{Binding SelectedDeviceItem, Mode=TwoWay}" >
-
-            </ComboBox>
-        </StackPanel>
-
-        <Border Style="{StaticResource BorderSeparator}"/>
-
-
-
-        <!--<Grid >
+        <Grid Margin="0 4 0 0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition></RowDefinition>
-                <RowDefinition></RowDefinition>
+                <RowDefinition/>
+                <RowDefinition/>
             </Grid.RowDefinitions>
 
-            <TextBlock Margin="0 4" Text="Source Channel:" TextAlignment="Left" VerticalAlignment="Center"></TextBlock>
-            <ComboBox MinWidth="200" HorizontalAlignment="Left" Grid.Row="1" SelectedIndex="0" ItemsSource="{Binding ChannelCollection, Mode=OneWay}" SelectedItem="{Binding SelectedChannelItem, Mode=TwoWay}" >
-                <ComboBox.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="{Binding Mode=OneWay}">
-                        </TextBlock>
-                    </DataTemplate>
-                </ComboBox.ItemTemplate>
+            <TextBlock Grid.Column="0" Grid.Row="0" Margin="0" Style="{StaticResource TextBlockHeaderStyleKey}" Text="{Binding VJoyVersion, Mode=OneWay, StringFormat='vJoy Device (v{0})'}" />
+            <TextBlock Grid.Column="0" Grid.Row="1" Margin="0 2 0 0" Style="{StaticResource TextBlockLightStyleKey}" Text="Select the vJoy device to output decoded signal data."  />
+
+            <ComboBox Grid.Column="1" Grid.Row="0" Grid.RowSpan="2" Margin="0" VerticalAlignment="Center" HorizontalAlignment="Right" DisplayMemberPath="Name" MaxDropDownHeight="8" ItemsSource="{Binding Devices, Mode=OneWay}" SelectedItem="{Binding SelectedDeviceItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" >
+
+
             </ComboBox>
-        </Grid>-->
+        </Grid>
+        
+        <Border Margin="0 8" Style="{StaticResource BorderSeparator}"/>
 
-        <!--<Grid >
-            <Grid.RowDefinitions>
-                <RowDefinition></RowDefinition>
-                <RowDefinition></RowDefinition>
-            </Grid.RowDefinitions>
-
-            <TextBlock Margin="0 4" Text="Audio Levels:" TextAlignment="Left" VerticalAlignment="Center"></TextBlock>
-
-            <StackPanel Grid.Row="1">
-                
-            </StackPanel>
-
-
-
-            --><!--<ComboBox MinWidth="200" HorizontalAlignment="Left" Grid.Row="1" SelectedIndex="0" ItemsSource="{Binding ChannelCollection, Mode=OneWay}" SelectedItem="{Binding SelectedChannelItem, Mode=TwoWay}" >
-                <ComboBox.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="{Binding Mode=OneWay}">
-                        </TextBlock>
-                    </DataTemplate>
-                </ComboBox.ItemTemplate>
-            </ComboBox>--><!--
-        </Grid>-->
     </StackPanel>
 </UserControl>

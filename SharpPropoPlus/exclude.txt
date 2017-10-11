@@ -1,5 +1,7 @@
 SharpPropoPlus.Audio.dll
 SharpPropoPlus.Audio.pdb
+SharpPropoPlus.Contracts.dll
+SharpPropoPlus.Contracts.pdb
 SharpPropoPlus.Decoder.dll
 SharpPropoPlus.Decoder.pdb
 SharpPropoPlus.Events.dll

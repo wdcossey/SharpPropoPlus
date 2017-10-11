@@ -14,11 +14,13 @@
                     <valueConverters:AudioBitrateValueConverter x:Key="AudioBitrateValueConverter" />
                     <valueConverters:AudioChannelValueConverter x:Key="AudioChannelValueConverter" />
                     <valueConverters:MathValueConverter x:Key="MathValueConverter" />
+                    <valueConverters:DecoderOfTypeValueConverter x:Key="DecoderOfTypeValueConverter" />
                 </ResourceDictionary>
 
-                <ResourceDictionary Source="Resources/Fonts.xaml" ></ResourceDictionary>
-                <ResourceDictionary Source="Resources/Styles.xaml" ></ResourceDictionary>
-                <ResourceDictionary Source="Themes/MainWindow.xaml" ></ResourceDictionary>
+                <ResourceDictionary Source="Resources/Fonts.xaml" />
+                <ResourceDictionary Source="Resources/Styles.xaml" />
+                <ResourceDictionary Source="Resources/JoystickMonitorStyle.xaml" />
+                <ResourceDictionary Source="Themes/MainWindow.xaml" />
                 
             </ResourceDictionary.MergedDictionaries>
             

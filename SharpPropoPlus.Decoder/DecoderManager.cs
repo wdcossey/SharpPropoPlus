@@ -5,6 +5,7 @@ using System.ComponentModel.Composition.Hosting;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using SharpPropoPlus.Contracts.Interfaces;
 using SharpPropoPlus.Decoder.Contracts;
 using SharpPropoPlus.Decoder.EventArguments;
 using SharpPropoPlus.Events;
@@ -16,7 +17,9 @@ namespace SharpPropoPlus.Decoder
     public class DecoderManager : IDecoderManager
     {
         [ImportMany]
+#pragma warning disable 649
         private IEnumerable<Lazy<IPropoPlusDecoder, IDecoderMetadata>> _decoders;
+#pragma warning restore 649
 
         private readonly AggregateCatalog _catalog;
         private readonly CompositionContainer _container;
@@ -26,8 +29,6 @@ namespace SharpPropoPlus.Decoder
 
         public DecoderManager()
         {
-            GlobalEventAggregator.Instance.AddListener<DecoderChangedEventArgs>(DecoderChangedListener);
-
             //An aggregate catalog that combines multiple catalogs
             _catalog = new AggregateCatalog();
 
@@ -46,24 +47,19 @@ namespace SharpPropoPlus.Decoder
             Decoder = GetDefaultDecoder();
         }
 
-        private void DecoderChangedListener(DecoderChangedEventArgs args)
-        {
-            ChangeDecoder(args.Decoder);
-        }
-
         private IPropoPlusDecoder GetDefaultDecoder()
         {
             return Decoders.First()?.Value;
         }
-        
+
         public void ChangeDecoder(IPropoPlusDecoder decoder)
         {
             Decoder = decoder;
         }
-        
+
         public void Notify()
         {
-            var decoder = Decoders.FirstOrDefault(fd => fd.Value == Decoder);
+            var decoder = GetDecoder();
 
             if (decoder != null)
             {
@@ -71,7 +67,7 @@ namespace SharpPropoPlus.Decoder
                     decoder.Metadata.Description, decoder.Metadata.TransmitterType, decoder.Value));
             }
         }
-        
+
         public IPropoPlusDecoder Decoder
         {
             get => _decoder;
@@ -83,7 +79,22 @@ namespace SharpPropoPlus.Decoder
                 }
 
                 _decoder = value;
+
+                var lazyDecoder = GetDecoder(_decoder);
+                var message = new DecoderChangedEventArgs(lazyDecoder.Metadata.Name, lazyDecoder.Metadata.Description, lazyDecoder.Metadata.TransmitterType, lazyDecoder.Value);
+                GlobalEventAggregator.Instance.SendMessage(message);
+
             }
+        }
+
+        private Lazy<IPropoPlusDecoder, IDecoderMetadata> GetDecoder(IPropoPlusDecoder decoder = null)
+        {
+            return Decoders.FirstOrDefault(fd => fd.Value == (decoder ?? Decoder));
+        }
+
+        public IDecoderMetadata GetDecoderMetadata(IPropoPlusDecoder decoder)
+        {
+            return GetDecoder()?.Metadata;
         }
 
         public void Dispose()

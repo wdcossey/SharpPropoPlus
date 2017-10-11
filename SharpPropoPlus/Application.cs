@@ -12,6 +12,7 @@ using SharpPropoPlus.Helpers;
 using SharpPropoPlus.Interfaces;
 using SharpPropoPlus.vJoyMonitor;
 using SharpPropoPlus.ViewModels;
+using SharpPropoPlus.Filter;
 
 namespace SharpPropoPlus
 {
@@ -26,6 +27,7 @@ namespace SharpPropoPlus
             //_decoderManager = new DecoderManager();
 
             DecoderManager = Container.Resolve<DecoderManager>();
+            FilterManager = Container.Resolve<FilterManager>();
 
             JoystickHelper.Initialize();
             JoystickInteraction.Initialize();
@@ -106,6 +108,8 @@ namespace SharpPropoPlus
 
         public DecoderManager DecoderManager { get; }
 
+        public FilterManager FilterManager { get; }
+
         public IUnityContainer Container
         {
             get
@@ -132,6 +136,7 @@ namespace SharpPropoPlus
             Container.RegisterInstance<IAudioConfigViewModel>(new AudioConfigViewModel());
             Container.RegisterInstance<IJoystickConfigViewModel>(new JoystickConfigViewModel());
             Container.RegisterInstance<ITransmitterConfigViewModel>(new TransmitterConfigViewModel());
+            Container.RegisterInstance<IFilterConfigViewModel>(new FilterConfigViewModel());
 
             var mainWindow = Container.Resolve<Shell>(); // Creating Main window
 

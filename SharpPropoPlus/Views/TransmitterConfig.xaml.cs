@@ -4,21 +4,19 @@ using SharpPropoPlus.Interfaces;
 namespace SharpPropoPlus.Views
 {
     /// <summary>
-    /// Interaction logic for TransmitterConfig.xaml
+    ///     Interaction logic for TransmitterConfig.xaml
     /// </summary>
     public partial class TransmitterConfig : UserControl
     {
-
-        public TransmitterConfig()
+        private TransmitterConfig()
         {
-
-
+            InitializeComponent();
         }
 
         public TransmitterConfig(ITransmitterConfigViewModel viewModel)
+            : this()
         {
-            InitializeComponent();
-            this.DataContext = viewModel;
+            DataContext = viewModel;
         }
     }
 }

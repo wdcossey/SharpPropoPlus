@@ -42,6 +42,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\SharpPropoPlus.Contracts\SharpPropoPlus.Contracts.csproj">
+      <Project>{3FBEE597-4EF9-4DFB-B8F6-16E0D0739AC0}</Project>
+      <Name>SharpPropoPlus.Contracts</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SharpPropoPlus.Decoder.Pcm\SharpPropoPlus.Decoder.Pcm.csproj">
       <Project>{fb3fa5af-4e27-46c2-8d26-f8266b06c0a3}</Project>
       <Name>SharpPropoPlus.Decoder.Pcm</Name>

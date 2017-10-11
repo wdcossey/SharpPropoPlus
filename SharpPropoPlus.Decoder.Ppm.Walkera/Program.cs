@@ -1,6 +1,6 @@
 ﻿using System;
+using SharpPropoPlus.Contracts.Types;
 using SharpPropoPlus.Decoder.Contracts;
-using SharpPropoPlus.Decoder.Enums;
 
 namespace SharpPropoPlus.Decoder.Ppm.Walkera
 {

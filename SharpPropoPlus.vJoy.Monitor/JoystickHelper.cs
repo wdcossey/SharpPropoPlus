@@ -1,7 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using SharpDX.DirectInput;
+using SharpPropoPlus.Events;
+using SharpPropoPlus.vJoyMonitor.EventArguments;
 
 namespace SharpPropoPlus.vJoyMonitor
 {
@@ -21,6 +25,8 @@ namespace SharpPropoPlus.vJoyMonitor
         private Guid _deviceGuid;
         //private Joystick _joystick;
 
+        public event EventHandler<JoystickUpdateEventArgs> JoystickUpdate;
+        
         public JoystickHelper()
         {
             _quitPolling = false;
@@ -146,7 +152,7 @@ namespace SharpPropoPlus.vJoyMonitor
                     {
                         BufferSize = 0,
                         AxisMode = DeviceAxisMode.Absolute,
-                        Range = new InputRange(0, Int32.MaxValue)
+                        Range = new InputRange(0, 1000)
                     }
 
                 };
@@ -162,17 +168,19 @@ namespace SharpPropoPlus.vJoyMonitor
                     {
                         joystick.Poll();
 
-                        //var range = joystick.Properties.Range;
-
                         var data = new JoystickState();
 
                         joystick.GetCurrentState(ref data);
+
+                        var args = new JoystickUpdateEventArgs(data.X, data.Y, data.Z, data.RotationX, data.RotationY, data.RotationZ, data.Sliders[0], data.Sliders[1]);
+                        JoystickUpdate?.Invoke(this, args);
+                        GlobalEventAggregator.Instance.SendMessage(args);
+
                         //Debug.WriteLine("X: {0}, Y: {1}, Z: {2}", data.X, data.Y, data.Z);
 
+                        //var data1 = joystick.GetBufferedData();
 
-                        //var data = joystick.GetBufferedData();
-
-                        //foreach (var state in data)
+                        //foreach (var state in data1)
                         //{
 
                         //  var lastUpdate = lastSate.FirstOrDefault(f => f.Offset == state.Offset);

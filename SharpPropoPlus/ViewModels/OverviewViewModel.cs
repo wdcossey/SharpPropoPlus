@@ -1,9 +1,16 @@
-﻿using SharpPropoPlus.Audio;
+﻿using System;
+using System.Collections.ObjectModel;
+using System.Linq;
+using SharpPropoPlus.Audio;
 using SharpPropoPlus.Audio.Enums;
 using SharpPropoPlus.Audio.EventArguments;
 using SharpPropoPlus.Decoder;
 using SharpPropoPlus.Events;
 using SharpPropoPlus.Decoder.EventArguments;
+using SharpPropoPlus.Enums;
+using SharpPropoPlus.Interfaces;
+using SharpPropoPlus.vJoyMonitor;
+using SharpPropoPlus.vJoyMonitor.EventArguments;
 
 namespace SharpPropoPlus.ViewModels
 {
@@ -15,6 +22,10 @@ namespace SharpPropoPlus.ViewModels
         private string _joystickName = string.Empty;
         private string _decoderName;
         private string _decoderDescription;
+        private int _joystickX;
+        private int _joystickZ;
+        private int _joystickY;
+        private ObservableCollection<IJoystickChannelData> _channelData;
 
         public OverviewViewModel()
         {
@@ -26,12 +37,44 @@ namespace SharpPropoPlus.ViewModels
             GlobalEventAggregator.Instance.AddListener<PollChannelsEventArgs>(PollChannelListner);
             GlobalEventAggregator.Instance.AddListener<JoystickChangedEventArgs>(JoystickChangedListener);
             GlobalEventAggregator.Instance.AddListener<DecoderChangedEventArgs>(DecoderChangedListener);
+            GlobalEventAggregator.Instance.AddListener<JoystickUpdateEventArgs>(JoystickUpdateListener);
 
-            Application.Instance.DecoderManager.Notify();
-            
+            var currentDecoder = Application.Instance.DecoderManager.GetDecoderMetadata(Application.Instance.DecoderManager.Decoder);
+
+            DecoderName = $"{currentDecoder.TransmitterType.ToString().ToUpperInvariant()} - {currentDecoder.Name}";
+            DecoderDescription = currentDecoder.Description;
+
             DeviceName = AudioHelper.Instance.DeviceName;
             JoystickName = JoystickInteraction.Instance.CurrentDevice.Name;
-            
+
+            ChannelData = new ObservableCollection<IJoystickChannelData>()
+            {
+                new JoystickChannelDataViewModel(JoystickChannel.JoystickAxisX) { Value = 0 },
+                new JoystickChannelDataViewModel(JoystickChannel.JoystickAxisY) { Value = 0 },
+                new JoystickChannelDataViewModel(JoystickChannel.JoystickAxisZ) { Value = 0 },
+                new JoystickChannelDataViewModel(JoystickChannel.JoystickRotationX) { Value = 0 },
+                new JoystickChannelDataViewModel(JoystickChannel.JoystickRotationY) { Value = 0 },
+                new JoystickChannelDataViewModel(JoystickChannel.JoystickRotationZ) { Value = 0 },
+                new JoystickChannelDataViewModel(JoystickChannel.JoystickSlider0) { Value = 0 },
+                new JoystickChannelDataViewModel(JoystickChannel.JoystickSlider1) { Value = 0 },
+            };
+
+        }
+
+        private void JoystickUpdateListener(JoystickUpdateEventArgs args)
+        {
+            if (args == null)
+                return;
+
+            ChannelData?.FirstOrDefault(fd => fd.Channel == JoystickChannel.JoystickAxisX)?.SetValue(args.AxisX);
+            ChannelData?.FirstOrDefault(fd => fd.Channel == JoystickChannel.JoystickAxisY)?.SetValue(args.AxisY);
+            ChannelData?.FirstOrDefault(fd => fd.Channel == JoystickChannel.JoystickAxisZ)?.SetValue(args.AxisZ);
+            ChannelData?.FirstOrDefault(fd => fd.Channel == JoystickChannel.JoystickRotationX)?.SetValue(args.RotationX);
+            ChannelData?.FirstOrDefault(fd => fd.Channel == JoystickChannel.JoystickRotationY)?.SetValue(args.RotationY);
+            ChannelData?.FirstOrDefault(fd => fd.Channel == JoystickChannel.JoystickRotationZ)?.SetValue(args.RotationZ);
+            ChannelData?.FirstOrDefault(fd => fd.Channel == JoystickChannel.JoystickSlider0)?.SetValue(args.Slider0);
+            ChannelData?.FirstOrDefault(fd => fd.Channel == JoystickChannel.JoystickSlider1)?.SetValue(args.Slider1);
+
         }
 
         private void DecoderChangedListener(DecoderChangedEventArgs args)
@@ -41,6 +84,20 @@ namespace SharpPropoPlus.ViewModels
 
             DecoderName = $"{args.TransmitterType.ToString().ToUpperInvariant()} - {args.Name}";
             DecoderDescription = args.Description;
+        }
+
+        public ObservableCollection<IJoystickChannelData> ChannelData
+        {
+            get => _channelData;
+
+            private set
+            {
+                if (_channelData == value)
+                    return;
+
+                _channelData = value;
+                OnPropertyChanged();
+            }
         }
 
         public string DecoderName
@@ -166,6 +223,7 @@ namespace SharpPropoPlus.ViewModels
             GlobalEventAggregator.Instance.RemoveListener<PollChannelsEventArgs>(PollChannelListner);
             GlobalEventAggregator.Instance.RemoveListener<JoystickChangedEventArgs>(JoystickChangedListener);
             GlobalEventAggregator.Instance.RemoveListener<DecoderChangedEventArgs>(DecoderChangedListener);
+            GlobalEventAggregator.Instance.RemoveListener<JoystickUpdateEventArgs>(JoystickUpdateListener);
 
             base.Dispose();
         }

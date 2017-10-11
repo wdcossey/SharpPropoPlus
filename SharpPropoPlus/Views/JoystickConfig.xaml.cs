@@ -8,9 +8,14 @@ namespace SharpPropoPlus.Views
     /// </summary>
     public partial class JoystickConfig : UserControl
     {
-        public JoystickConfig(IJoystickConfigViewModel viewModel)
+        private JoystickConfig()
         {
             InitializeComponent();
+        }
+
+        public JoystickConfig(IJoystickConfigViewModel viewModel)
+            : this()
+        {
             this.DataContext = viewModel;
         }
     }

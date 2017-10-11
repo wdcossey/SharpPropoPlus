@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace SharpPropoPlus.Decoder.Enums
+namespace SharpPropoPlus.Contracts.Types
 {
   public enum TransmitterType
   {

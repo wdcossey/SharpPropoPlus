@@ -58,7 +58,7 @@ namespace SharpPropoPlus.Decoder
 
         public const double PCMW_SYNC = 243.809;
 
-        public const int MAX_JS_CH = 12;
+        
 
         public const string MUTEX_STOP_START = "WaveIn Stopping and Starting are mutually exclusive";
 

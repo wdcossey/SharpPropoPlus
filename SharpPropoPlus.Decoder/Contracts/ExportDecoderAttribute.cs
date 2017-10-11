@@ -1,27 +1,27 @@
 ﻿using System;
 using System.ComponentModel.Composition;
-using SharpPropoPlus.Decoder.Enums;
-
+using SharpPropoPlus.Contracts.Interfaces;
+using SharpPropoPlus.Contracts.Types;
 namespace SharpPropoPlus.Decoder.Contracts
 {
-  [AttributeUsage(AttributeTargets.Class | AttributeTargets.Property), MetadataAttribute]
-  public class ExportPropoPlusDecoderAttribute : ExportAttribute, IDecoderMetadata
-  {
-    public ExportPropoPlusDecoderAttribute(string name, string description, TransmitterType type)
-      : base(typeof(IPropoPlusDecoder))
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Property), MetadataAttribute]
+    public class ExportPropoPlusDecoderAttribute : ExportAttribute, IDecoderMetadata
     {
-      if (string.IsNullOrEmpty(name))
-        throw new ArgumentException("Export requires a name", nameof(name));
+        public ExportPropoPlusDecoderAttribute(string name, string description, TransmitterType type)
+            : base(typeof(IPropoPlusDecoder))
+        {
+            if (string.IsNullOrEmpty(name))
+                throw new ArgumentException("Export requires a name", nameof(name));
 
-      Name = name;
-      TransmitterType = type;
-      Description = description;
+            Name = name;
+            TransmitterType = type;
+            Description = description;
+        }
+
+        public string Name { get; private set; }
+
+        public string Description { get; private set; }
+
+        public TransmitterType TransmitterType { get; private set; }
     }
-
-    public string Name { get; private set; }
-
-    public string Description { get; private set; }
-
-    public TransmitterType TransmitterType { get; private set; }
-  }
 }

@@ -3,21 +3,20 @@ using SharpPropoPlus.Interfaces;
 
 namespace SharpPropoPlus.Views
 {
-  /// <summary>
-  /// Interaction logic for InputConfig.xaml
-  /// </summary>
-  public partial class AudioConfig : UserControl
-  {
-
-      public AudioConfig()
-      {
-          
-
-      }
-    public AudioConfig(IAudioConfigViewModel viewModel)
+    /// <summary>
+    ///     Interaction logic for InputConfig.xaml
+    /// </summary>
+    public partial class AudioConfig : UserControl
     {
-        InitializeComponent();
-        this.DataContext = viewModel;
+        private AudioConfig()
+        {
+            InitializeComponent();
+        }
+
+        public AudioConfig(IAudioConfigViewModel viewModel)
+            : this()
+        {
+            DataContext = viewModel;
+        }
     }
-  }
 }
