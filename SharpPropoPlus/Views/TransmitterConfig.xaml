@@ -15,10 +15,7 @@
 
     <UserControl.Resources>
 
-
-        <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource TextBlockLightStyleKey}">
-
-        </Style>
+        <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource TextBlockLightStyleKey}"/>
 
 
         <CollectionViewSource 
@@ -37,26 +34,43 @@
         </CollectionViewSource>
 
     </UserControl.Resources>
-    <!--<UserControl.DataContext>
-        <viewModels:AudioConfigViewModel></viewModels:AudioConfigViewModel>
-    </UserControl.DataContext>-->
+
 
     <StackPanel>
 
-        <Grid Margin="0 4 0 0">
+        <Grid >
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
+            
             <Grid.RowDefinitions>
                 <RowDefinition/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
             
-            <TextBlock Grid.Column="0" Grid.Row="0" Margin="0" Style="{StaticResource TextBlockHeaderStyleKey}" Text="Signal Decoder" />
-            <TextBlock Grid.Column="0" Grid.Row="1" Margin="0 2 0 0" Style="{StaticResource TextBlockLightStyleKey}" Text="Select the signal decoder that matches your transmitter."  />
+            <TextBlock Grid.Column="0" 
+                       Grid.Row="0" 
+                       Margin="0" 
+                       Style="{StaticResource TextBlockHeaderStyleKey}" 
+                       Text="Signal Decoder" />
+            
+            <TextBlock Grid.Column="0" 
+                       Grid.Row="1" 
+                       Margin="0 2 0 0" 
+                       Style="{StaticResource TextBlockLightStyleKey}" 
+                       Text="Select the signal decoder that matches your transmitter."  />
 
-            <ComboBox Grid.Column="1" Grid.Row="0" Grid.RowSpan="2" Margin="0" VerticalAlignment="Center" HorizontalAlignment="Right" DisplayMemberPath="Metadata.Name" MaxDropDownHeight="8" ItemsSource="{Binding Source={StaticResource DecoderCollection}}" SelectedItem="{Binding SelectedDecoder, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" >
+            <ComboBox Grid.Column="1" 
+                      Grid.Row="0" 
+                      Grid.RowSpan="2" 
+                      Margin="0" 
+                      VerticalAlignment="Center" 
+                      HorizontalAlignment="Right" 
+                      DisplayMemberPath="Metadata.Name" 
+                      MaxDropDownHeight="8" 
+                      ItemsSource="{Binding Source={StaticResource DecoderCollection}}" 
+                      SelectedItem="{Binding SelectedDecoder, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" >
 
                 <ComboBox.GroupStyle>
                     <GroupStyle>
@@ -70,7 +84,6 @@
                                                     <RowDefinition/>
                                                     <RowDefinition/>
                                                 </Grid.RowDefinitions>
-
                                                 <Grid Grid.Row="0" Margin="0" Background="#01000000" Opacity="0.75" >
                                                     <Border VerticalAlignment="Stretch" SnapsToDevicePixels="True" BorderBrush="#f0f0f0" BorderThickness="0 0 0 1" HorizontalAlignment="Stretch" Margin="8 0" Padding="8 6 40 6">
                                                         <ContentPresenter x:Name="ContentControl" Content="{Binding Name, Mode=OneWay, Converter={StaticResource DescriptionAttributeValueConverter}}" TextBlock.FontWeight="Light" TextBlock.FontSize="11" TextBlock.FontFamily="pack://application:,,,/Fonts/#Montserrat Light" />
@@ -88,7 +101,7 @@
             </ComboBox>
         </Grid>
 
-        <Border Margin="0 8" Visibility="Collapsed">
+        <Border Visibility="Collapsed">
             <Border.Style>
                 <Style TargetType="{x:Type Border}" BasedOn="{StaticResource BorderSeparator}">
                     <Setter Property="Visibility" Value="Collapsed"/>
@@ -305,7 +318,7 @@
             
         </StackPanel>
 
-        <Border Margin="0 8" Style="{StaticResource BorderSeparator}"/>
+        <Border Style="{StaticResource BorderSeparator}"/>
 
         <Grid  >
             <Grid.ColumnDefinitions>
@@ -317,13 +330,20 @@
                 <RowDefinition/>
             </Grid.RowDefinitions>
 
-            <TextBlock Grid.Column="0" Grid.Row="0" Margin="0" Style="{StaticResource TextBlockHeaderStyleKey}" Text="{Binding RawChannels, StringFormat='R/C Channels ({0})', TargetNullValue=0}" />
-            <TextBlock Grid.Column="0" Grid.Row="1" Margin="0 2 0 0" Style="{StaticResource TextBlockLightStyleKey}" Text="" Visibility="Collapsed"  />
+            <TextBlock Grid.Column="0" 
+                       Grid.Row="0" 
+                       Margin="0" 
+                       Style="{StaticResource TextBlockHeaderStyleKey}" 
+                       Text="{Binding RawChannels, StringFormat='R/C Channels ({0})', TargetNullValue=0}" />
 
+            <TextBlock Grid.Column="0"
+                       Grid.Row="1" 
+                       Margin="0 2 0 0" 
+                       Style="{StaticResource TextBlockLightStyleKey}" 
+                       Text="" Visibility="Collapsed"  />
         </Grid>
 
-        <Border Margin="0 8" Style="{StaticResource BorderSeparator}"/>
-
+        <Border Style="{StaticResource BorderSeparator}"/>
 
     </StackPanel>
 </UserControl>

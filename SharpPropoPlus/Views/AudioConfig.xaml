@@ -16,36 +16,76 @@
         <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource TextBlockLightStyleKey}"/>
     </UserControl.Resources>
     
-    <!--<UserControl.DataContext>
-        <viewModels:AudioConfigViewModel></viewModels:AudioConfigViewModel>
-    </UserControl.DataContext>-->
-
     <StackPanel>
 
-        <StackPanel Orientation="Vertical"  Margin="0 0 0 8"  >
-            <!--<Border HorizontalAlignment="Stretch" SnapsToDevicePixels="True" BorderThickness="0 0 0 1" BorderBrush="#f0f0f0"/>-->
-            <TextBlock Style="{StaticResource TextBlockHeaderStyleKey}" Text="Input Device" />
-
-            <ComboBox Margin="0 8" HorizontalAlignment="Left" Grid.Row="1" DisplayMemberPath="DeviceName" ItemsSource="{Binding AudioEndPointCollection, Mode=OneWay}" SelectedItem="{Binding SelectedAudioEndPoint, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" >
-                <!--<ComboBox.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="{Binding DeviceName}"/>
-                    </DataTemplate>
-                </ComboBox.ItemTemplate>-->
-            </ComboBox>
-        </StackPanel>
-
-        <Border Style="{StaticResource BorderSeparator}"/>
-
-        <Grid Margin="0 8" >
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
+            
+            <TextBlock Grid.Column="0" 
+                       Grid.Row="0" 
+                       Margin="0" 
+                       Style="{StaticResource TextBlockHeaderStyleKey}" 
+                       Text="Input Device" />
 
-            <TextBlock Style="{StaticResource TextBlockHeaderStyleKey}" Text="Bitrate" />
+            <TextBlock Grid.Column="0" 
+                       Grid.Row="1" 
+                       Margin="0 2 0 0" 
+                       Style="{StaticResource TextBlockLightStyleKey}" 
+                       Text="Audio (input) device where the transmitter is connected." />
 
-            <ComboBox Margin="0 8" HorizontalAlignment="Left" Grid.Row="1" SelectedIndex="0" ItemsSource="{Binding BitrateCollection, Mode=OneWay}" SelectedItem="{Binding SelectedBitrateItem, Mode=TwoWay}" >
+            <ComboBox Grid.Column="1" 
+                      Grid.Row="0" 
+                      Grid.RowSpan="2"
+                      Margin="0" 
+                      VerticalAlignment="Center" 
+                      HorizontalAlignment="Right" 
+                      DisplayMemberPath="DeviceName" 
+                      MaxDropDownHeight="8" 
+                      ItemsSource="{Binding AudioEndPointCollection}" 
+                      SelectedItem="{Binding SelectedAudioEndPoint, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+        </Grid>
+
+        <Border Style="{StaticResource BorderSeparator}"/>
+
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            
+            <TextBlock Grid.Column="0" 
+                       Grid.Row="0" 
+                       Margin="0" 
+                       Style="{StaticResource TextBlockHeaderStyleKey}" 
+                       Text="Bitrate" />
+
+            <TextBlock Grid.Column="0" 
+                       Grid.Row="1" 
+                       Margin="0 2 0 0" 
+                       Style="{StaticResource TextBlockLightStyleKey}" 
+                       Text="Number of audio samples carried per second (higher is better)." />
+            
+            <ComboBox Grid.Column="1" 
+                      Grid.Row="0" 
+                      Grid.RowSpan="2"
+                      Margin="0" 
+                      VerticalAlignment="Center" 
+                      HorizontalAlignment="Right" 
+                      SelectedIndex="0"
+                      MaxDropDownHeight="8" 
+                      ItemsSource="{Binding BitrateCollection, Mode=OneWay}" 
+                      SelectedItem="{Binding SelectedBitrateItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" >
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
                         <TextBlock Text="{Binding Converter={StaticResource AudioBitrateValueConverter}, Mode=OneWay}"/>
@@ -56,39 +96,60 @@
 
         <Border Style="{StaticResource BorderSeparator}"/>
 
-        <Grid Margin="0 8" >
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
+            
+            <TextBlock Grid.Column="0" 
+                       Grid.Row="0" 
+                       Margin="0" 
+                       Style="{StaticResource TextBlockHeaderStyleKey}" 
+                       Text="Source Channel" />
 
-            <TextBlock Style="{StaticResource TextBlockHeaderStyleKey}" Text="Source Channel" />
+            <TextBlock Grid.Column="0" 
+                       Grid.Row="1" 
+                       Margin="0 2 0 0" 
+                       Style="{StaticResource TextBlockLightStyleKey}" 
+                       Text="Audio signal communications channel." />
 
-            <ComboBox Margin="0 8" HorizontalAlignment="Left" Grid.Row="1" SelectedIndex="0" ItemsSource="{Binding ChannelCollection, Mode=OneWay}" SelectedItem="{Binding SelectedChannelItem, Mode=TwoWay}" >
-                <ComboBox.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="{Binding Converter={StaticResource AudioChannelValueConverter}, Mode=OneWay}"/>
-                    </DataTemplate>
-                </ComboBox.ItemTemplate>
-                
+            <ComboBox Grid.Column="1" 
+                      Grid.Row="0" 
+                      Grid.RowSpan="2"
+                      Margin="0" 
+                      VerticalAlignment="Center" 
+                      HorizontalAlignment="Right" 
+                      SelectedIndex="0"
+                      MaxDropDownHeight="8" 
+                      ItemsSource="{Binding ChannelCollection, Mode=OneWay}" 
+                      SelectedItem="{Binding SelectedChannelItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" >
                 <ComboBox.Style>
                     <Style TargetType="{x:Type ComboBox}" BasedOn="{StaticResource {x:Type ComboBox}}">
-
                         <Setter Property="IsEnabled" Value="True"/>
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding SelectedAudioEndPoint.Channels}" Value="1">
                                 <Setter Property="IsEnabled" Value="False"/>
                             </DataTrigger>
-
                         </Style.Triggers>
                     </Style>
                 </ComboBox.Style>
+
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Converter={StaticResource AudioChannelValueConverter}, Mode=OneWay}"/>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
             </ComboBox>
         </Grid>
-
+        
         <Border Style="{StaticResource BorderSeparator}"/>
         
-        <Grid Margin="0 8" >
+        <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition/>
                 <RowDefinition/>
@@ -182,17 +243,10 @@
                 </Grid>
 
             </StackPanel>
-
-
-
-            <!--<ComboBox MinWidth="200" HorizontalAlignment="Left" Grid.Row="1" SelectedIndex="0" ItemsSource="{Binding ChannelCollection, Mode=OneWay}" SelectedItem="{Binding SelectedChannelItem, Mode=TwoWay}" >
-                <ComboBox.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="{Binding Mode=OneWay}">
-                        </TextBlock>
-                    </DataTemplate>
-                </ComboBox.ItemTemplate>
-            </ComboBox>-->
+            
         </Grid>
+
+        <Border Style="{StaticResource BorderSeparator}"/>
+
     </StackPanel>
 </UserControl>

@@ -13,12 +13,8 @@
 
 
     <UserControl.Resources>
-
-
-        <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource TextBlockLightStyleKey}">
-
-        </Style>
-
+        
+        <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource TextBlockLightStyleKey}"/>
 
         <CollectionViewSource 
             x:Key="FilterCollection"
@@ -44,18 +40,35 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
+            
             <Grid.RowDefinitions>
                 <RowDefinition/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
-            
-            <TextBlock Grid.Column="0" Grid.Row="0" Margin="0 4 0 0" Style="{StaticResource TextBlockHeaderStyleKey}" Text="Toggle Signal Filter" />
-            <TextBlock Grid.Column="0" Grid.Row="1" Margin="0 2 0 0" Style="{StaticResource TextBlockLightStyleKey}" Text="Enable or disable signal filtering with the desired filter (below)." />
 
-            <ToggleButton IsChecked="{Binding IsEnabled, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Grid.Row="0" Grid.RowSpan="2" HorizontalAlignment="Right" VerticalAlignment="Center" Height="20" Style="{StaticResource AnimatedSwitch}"/>
+            <TextBlock Grid.Column="0" 
+                       Grid.Row="0"
+                       Margin="0" 
+                       Style="{StaticResource TextBlockHeaderStyleKey}" 
+                       Text="Toggle Signal Filter" />
+            
+            <TextBlock Grid.Column="0" 
+                       Grid.Row="1" 
+                       Margin="0 2 0 0" 
+                       Style="{StaticResource TextBlockLightStyleKey}" 
+                       Text="Enable or disable signal filtering with the desired filter (below)." />
+
+            <ToggleButton IsChecked="{Binding IsEnabled, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                          Grid.Column="1" 
+                          Grid.Row="0" 
+                          Grid.RowSpan="2" 
+                          HorizontalAlignment="Right" 
+                          VerticalAlignment="Center" 
+                          Height="20" 
+                          Style="{StaticResource AnimatedSwitch}"/>
         </Grid>
 
-        <Border Margin="0 8" Style="{StaticResource BorderSeparator}"/>
+        <Border Style="{StaticResource BorderSeparator}"/>
 
         <Grid >
             <Grid.ColumnDefinitions>
@@ -63,9 +76,21 @@
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
 
-            <TextBlock Grid.Column="0" Grid.Row="0" Margin="0" Style="{StaticResource TextBlockHeaderStyleKey}" Text="Signal Filter" />
+            <TextBlock Grid.Column="0" 
+                       Grid.Row="0" 
+                       Margin="0" 
+                       Style="{StaticResource TextBlockHeaderStyleKey}" 
+                       Text="Signal Filter" />
 
-            <ComboBox Grid.Column="1" Grid.Row="0" Margin="0"  MinWidth="120" VerticalAlignment="Center" HorizontalAlignment="Right" DisplayMemberPath="Metadata.Name" MaxDropDownHeight="8" ItemsSource="{Binding Source={StaticResource FilterCollection}}" SelectedItem="{Binding SelectedFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" >
+            <ComboBox Grid.Column="1" 
+                      Grid.Row="0" 
+                      Margin="0" 
+                      VerticalAlignment="Center" 
+                      HorizontalAlignment="Right" 
+                      DisplayMemberPath="Metadata.Name" 
+                      MaxDropDownHeight="8" 
+                      ItemsSource="{Binding Source={StaticResource FilterCollection}}" 
+                      SelectedItem="{Binding SelectedFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" >
 
                 <ComboBox.GroupStyle>
                     <GroupStyle>
@@ -79,7 +104,6 @@
                                                     <RowDefinition/>
                                                     <RowDefinition/>
                                                 </Grid.RowDefinitions>
-
                                                 <Grid Grid.Row="0" Margin="0" Background="#01000000" Opacity="0.75" >
                                                     <Border VerticalAlignment="Stretch" SnapsToDevicePixels="True" BorderBrush="#f0f0f0" BorderThickness="0 0 0 1" HorizontalAlignment="Stretch" Margin="8 0" Padding="8 6 40 6">
                                                         <ContentPresenter x:Name="ContentControl" Content="{Binding Name, Mode=OneWay, Converter={StaticResource DescriptionAttributeValueConverter}}" TextBlock.FontWeight="Light" TextBlock.FontSize="11" TextBlock.FontFamily="pack://application:,,,/Fonts/#Montserrat Light" />
@@ -96,10 +120,9 @@
                 </ComboBox.GroupStyle>
             </ComboBox>
             
- 
         </Grid>
 
-        <Border Margin="0 8" Style="{StaticResource BorderSeparator}"/>
+        <Border Style="{StaticResource BorderSeparator}"/>
 
        
     </StackPanel>

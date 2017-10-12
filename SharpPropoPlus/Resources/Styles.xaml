@@ -631,6 +631,7 @@
         <Setter Property="SnapsToDevicePixels" Value="True"/>
         <Setter Property="BorderThickness" Value="0 0 0 1"/>
         <Setter Property="BorderBrush" Value="#f0f0f0"/>
+        <Setter Property="Margin" Value="0 8"/>
     </Style>
 
     <!--Scrollbar Thumbs-->
