@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SharpPropoPlus.Contracts;
+using SharpPropoPlus.Contracts.Interfaces;
 using SharpPropoPlus.Filter.Contracts;
 
 namespace SharpPropoPlus.Filter.Null
@@ -18,7 +20,7 @@ namespace SharpPropoPlus.Filter.Null
         /*
         NULL Filter
         */
-        protected override JoyStickChannels Process(JoyStickChannels channels, int max, int min)
+        protected override IJoystickData Process(IJoystickData channels, int max, int min)
         {
             var inData = new[] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
             var outData = new[] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
@@ -35,7 +37,7 @@ namespace SharpPropoPlus.Filter.Null
                 outData[i] = channels.Data[i];
             }
 
-            return new JoyStickChannels(outData, channels.Count);
+            return new JoystickData(channels.Count, outData);
         }
     }
 }

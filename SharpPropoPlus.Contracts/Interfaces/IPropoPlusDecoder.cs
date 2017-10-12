@@ -1,4 +1,4 @@
-﻿namespace SharpPropoPlus.Decoder.Contracts
+﻿namespace SharpPropoPlus.Contracts.Interfaces
 {
     public interface IPropoPlusDecoder
     {
@@ -7,7 +7,7 @@
         /// <summary>
         /// Processes the Pulse data.
         /// </summary>
-        void ProcessPulse(int sampleRate, int sample);
+        void ProcessPulse(int sampleRate, int sample, bool filterChannels, IPropoPlusFilter filter);
 
         /// <summary>
         /// Resets the static variables.

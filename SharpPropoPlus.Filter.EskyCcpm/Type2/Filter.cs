@@ -1,4 +1,6 @@
-﻿using SharpPropoPlus.Filter.Contracts;
+﻿using SharpPropoPlus.Contracts;
+using SharpPropoPlus.Contracts.Interfaces;
+using SharpPropoPlus.Filter.Contracts;
 
 namespace SharpPropoPlus.Filter.Esky.Type2
 {
@@ -51,7 +53,7 @@ namespace SharpPropoPlus.Filter.Esky.Type2
             Pointer to structure containing orthogonal channel data (4ch)
 
         */
-        protected override JoyStickChannels Process(JoyStickChannels channels, int max, int min)
+        protected override IJoystickData Process(IJoystickData channels, int max, int min)
         {
             var inData = new[] {0, 0, 0, 0, 0, 0};
             var outData = new[] {0, 0, 0, 0, 0, 0, 0, 0};
@@ -74,7 +76,7 @@ namespace SharpPropoPlus.Filter.Esky.Type2
             // Ailerons: Rear servo minus pitch effect (roll correction when power above mid-point)
             outData[3] = (int) (max / 2 + inData[0] + .5 * inData[1] - .53 * inData[2]);
 
-            return new JoyStickChannels(outData, 4);
+            return new JoystickData(4, outData);
         }
     }
 }

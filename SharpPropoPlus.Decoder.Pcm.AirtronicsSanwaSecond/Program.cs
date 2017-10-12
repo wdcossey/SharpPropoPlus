@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Threading;
+using SharpPropoPlus.Contracts;
+using SharpPropoPlus.Contracts.Interfaces;
 using SharpPropoPlus.Contracts.Types;
 using SharpPropoPlus.Decoder.Contracts;
 
@@ -41,7 +43,7 @@ namespace SharpPropoPlus.Decoder.Pcm.AirtronicsSanwaSecond
         /// </summary>
         /// <param name="width"></param>
         /// <param name="input"></param>
-        protected override void Process(int width, bool input)
+        protected override void Process(int width, bool input, bool filterChannels, IPropoPlusFilter filter)
         {
             if (Monitor.IsEntered(MonitorLock))
                 return;
@@ -78,7 +80,7 @@ namespace SharpPropoPlus.Decoder.Pcm.AirtronicsSanwaSecond
                     ChannelData[5] = Smooth(ChannelData[5], Convert20bits(DataBuffer[5])); // Flaps		(Ch6)
 
                     RawChannelCount = 6;
-                    JoystickInteraction.Instance.Send(RawChannelCount, ChannelData);
+                    JoystickInteraction.Instance.Send(RawChannelCount, ChannelData, filterChannels, filter);
 
                     if (width < 420 && width > 390)
                     {

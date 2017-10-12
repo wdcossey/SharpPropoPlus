@@ -1,4 +1,6 @@
-﻿namespace SharpPropoPlus.Decoder.Contracts
+﻿using SharpPropoPlus.Contracts.Interfaces;
+
+namespace SharpPropoPlus.Decoder.Contracts
 {
     public interface IPropoPlusPpmDecoder : IPropoPlusDecoder
     {

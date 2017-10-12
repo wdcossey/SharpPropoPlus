@@ -7,7 +7,9 @@
              xmlns:viewModels="clr-namespace:SharpPropoPlus.ViewModels"
              xmlns:controls="clr-namespace:SharpPropoPlus.Controls"
              mc:Ignorable="d" 
-             d:DesignHeight="600" d:DesignWidth="800">
+             d:DesignHeight="600" 
+             d:DesignWidth="800"
+             Padding="24 0">
 
     <UserControl.Resources>
 
@@ -100,11 +102,35 @@
 
             
         </Grid>
-        
+
         <TextBlock Grid.Column="0" Grid.Row="3" Margin="2 4" Padding="0" Text="Filter :" FontFamily="pack://application:,,,/Fonts/#Montserrat"></TextBlock>
-        <Border Grid.Column="1" Grid.Row="3" Margin="2 4" BorderThickness="1" SnapsToDevicePixels="True" BorderBrush="#f0f0f0">
-            <TextBlock TextAlignment="Left" Text="--- No Filter ---"></TextBlock>
-        </Border>
+        <Grid Grid.Column="1" Grid.Row="3" Margin="0 4" HorizontalAlignment="Stretch" >
+            <Border Margin="2 0" BorderThickness="1" SnapsToDevicePixels="True" BorderBrush="#f0f0f0">
+                <Border.Style>
+                    <Style TargetType="{x:Type Border}">
+                        <Setter Property="ToolTip" Value="{x:Null}"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsFilterEnabled}" Value="True">
+                                <Setter Property="ToolTip" Value="{Binding FilterDescription}"></Setter>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Border.Style>
+                <TextBlock TextAlignment="Left">
+                    <TextBlock.Style>
+                        <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource {x:Type TextBlock}}">
+                            <Setter Property="Text" Value="--- No Filter ---"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsFilterEnabled}" Value="True">
+                                    <Setter Property="Text" Value="{Binding FilterName}"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+            </Border>
+        </Grid>
+        <!-- No Filter -->
 
         <TextBlock Grid.Column="0" Grid.Row="4" Margin="2 4" Padding="0" Text="vJoy Monitor :" FontFamily="pack://application:,,,/Fonts/#Montserrat"></TextBlock>
         <Border Grid.Column="1" Grid.Row="4" Margin="2 4" BorderThickness="1" SnapsToDevicePixels="True" BorderBrush="#f0f0f0">

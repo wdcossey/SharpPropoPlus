@@ -8,6 +8,7 @@ using SharpPropoPlus.Decoder;
 using SharpPropoPlus.Events;
 using SharpPropoPlus.Decoder.EventArguments;
 using SharpPropoPlus.Enums;
+using SharpPropoPlus.Filter.EventArguments;
 using SharpPropoPlus.Interfaces;
 using SharpPropoPlus.vJoyMonitor;
 using SharpPropoPlus.vJoyMonitor.EventArguments;
@@ -22,11 +23,11 @@ namespace SharpPropoPlus.ViewModels
         private string _joystickName = string.Empty;
         private string _decoderName;
         private string _decoderDescription;
-        private int _joystickX;
-        private int _joystickZ;
-        private int _joystickY;
+        private string _filterName;
+        private string _filterDescription;
+        private bool _isFilterEnabled;
         private ObservableCollection<IJoystickChannelData> _channelData;
-
+        
         public OverviewViewModel()
         {
 
@@ -38,11 +39,18 @@ namespace SharpPropoPlus.ViewModels
             GlobalEventAggregator.Instance.AddListener<JoystickChangedEventArgs>(JoystickChangedListener);
             GlobalEventAggregator.Instance.AddListener<DecoderChangedEventArgs>(DecoderChangedListener);
             GlobalEventAggregator.Instance.AddListener<JoystickUpdateEventArgs>(JoystickUpdateListener);
+            GlobalEventAggregator.Instance.AddListener<FilterChangedEventArgs>(FilterChangedListener);
 
             var currentDecoder = Application.Instance.DecoderManager.GetDecoderMetadata(Application.Instance.DecoderManager.Decoder);
 
             DecoderName = $"{currentDecoder.TransmitterType.ToString().ToUpperInvariant()} - {currentDecoder.Name}";
             DecoderDescription = currentDecoder.Description;
+
+            var currentFilter = Application.Instance.FilterManager.GetFilterMetadata(Application.Instance.FilterManager.Filter);
+
+            FilterName = $"{currentFilter.Name}";
+            FilterDescription = currentFilter.Description;
+            IsFilterEnabled = Application.Instance.FilterManager.IsEnabled;
 
             DeviceName = AudioHelper.Instance.DeviceName;
             JoystickName = JoystickInteraction.Instance.CurrentDevice.Name;
@@ -59,6 +67,16 @@ namespace SharpPropoPlus.ViewModels
                 new JoystickChannelDataViewModel(JoystickChannel.JoystickSlider1) { Value = 0 },
             };
 
+        }
+
+        private void FilterChangedListener(FilterChangedEventArgs args)
+        {
+            if (args == null)
+                return;
+
+            IsFilterEnabled = args.IsEnabled;
+            FilterName = $"{args.Name}";
+            FilterDescription = args.Description;
         }
 
         private void JoystickUpdateListener(JoystickUpdateEventArgs args)
@@ -124,6 +142,48 @@ namespace SharpPropoPlus.ViewModels
                     return;
 
                 _decoderDescription = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string FilterName
+        {
+            get => _filterName;
+
+            private set
+            {
+                if (_filterName == value)
+                    return;
+
+                _filterName = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string FilterDescription
+        {
+            get => _filterDescription;
+
+            private set
+            {
+                if (_filterDescription == value)
+                    return;
+
+                _filterDescription = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public bool IsFilterEnabled
+        {
+            get => _isFilterEnabled;
+
+            private set
+            {
+                if (_isFilterEnabled == value)
+                    return;
+
+                _isFilterEnabled = value;
                 OnPropertyChanged();
             }
         }
@@ -224,6 +284,7 @@ namespace SharpPropoPlus.ViewModels
             GlobalEventAggregator.Instance.RemoveListener<JoystickChangedEventArgs>(JoystickChangedListener);
             GlobalEventAggregator.Instance.RemoveListener<DecoderChangedEventArgs>(DecoderChangedListener);
             GlobalEventAggregator.Instance.RemoveListener<JoystickUpdateEventArgs>(JoystickUpdateListener);
+            GlobalEventAggregator.Instance.RemoveListener<FilterChangedEventArgs>(FilterChangedListener);
 
             base.Dispose();
         }

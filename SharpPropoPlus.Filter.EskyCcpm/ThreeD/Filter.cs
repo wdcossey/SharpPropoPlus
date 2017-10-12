@@ -1,4 +1,6 @@
-﻿using SharpPropoPlus.Filter.Contracts;
+﻿using SharpPropoPlus.Contracts;
+using SharpPropoPlus.Contracts.Interfaces;
+using SharpPropoPlus.Filter.Contracts;
 
 namespace SharpPropoPlus.Filter.Esky.ThreeD
 {
@@ -47,7 +49,7 @@ namespace SharpPropoPlus.Filter.Esky.ThreeD
             Pointer to structure containing orthogonal channel data (5ch)
 
         */
-        protected override JoyStickChannels Process(JoyStickChannels channels, int max, int min)
+        protected override IJoystickData Process(IJoystickData channels, int max, int min)
         {
             var inData = new[] {0, 0, 0, 0, 0, 0};
             var outData = new[] {0, 0, 0, 0, 0, 0, 0, 0};
@@ -75,7 +77,7 @@ namespace SharpPropoPlus.Filter.Esky.ThreeD
             // Elevator: the difference between the front servo and the mean of the rear servos
             outData[2] = max / 2 + (inData[1] - (servo0 + inData[5]) / 2) / 2;
 
-            return new JoyStickChannels(outData, 5);
+            return new JoystickData(5, outData);
         }
     }
 }

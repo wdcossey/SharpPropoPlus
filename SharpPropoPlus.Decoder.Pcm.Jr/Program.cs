@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Threading;
+using SharpPropoPlus.Contracts;
+using SharpPropoPlus.Contracts.Interfaces;
 using SharpPropoPlus.Contracts.Types;
 using SharpPropoPlus.Decoder.Contracts;
 
@@ -61,7 +63,7 @@ namespace SharpPropoPlus.Decoder.Pcm.JrGraupner
         /// </summary>
         /// <param name="width"></param>
         /// <param name="input"></param>
-        protected override void Process(int width, bool input)
+        protected override void Process(int width, bool input, bool filterChannels, IPropoPlusFilter filter)
         {
             if (Monitor.IsEntered(MonitorLock))
                 return;
@@ -139,7 +141,7 @@ namespace SharpPropoPlus.Decoder.Pcm.JrGraupner
 
                     RawChannelCount = BufferLength; // Fixed number of channels
 
-                    JoystickInteraction.Instance.Send(RawChannelCount, ChannelData);
+                    JoystickInteraction.Instance.Send(RawChannelCount, ChannelData, filterChannels, filter);
                     break;
             }
             ;

@@ -22,14 +22,12 @@ namespace SharpPropoPlus.Filter
         private readonly AggregateCatalog _catalog;
         private readonly CompositionContainer _container;
         private IPropoPlusFilter _filter;
+        private bool _isEnabled = false;
 
         public IEnumerable<Lazy<IPropoPlusFilter, IFilterMetadata>> Filters => _filters;
 
         public FilterManager()
         {
-            GlobalEventAggregator.Instance.AddListener<FilterChangedEventArgs>(FilterChangedListener);
-            GlobalEventAggregator.Instance.AddListener<FilterStateEventArgs>(FilterStateListener);
-
             //An aggregate catalog that combines multiple catalogs
             _catalog = new AggregateCatalog();
 
@@ -45,30 +43,9 @@ namespace SharpPropoPlus.Filter
             //Fill the imports of this object
             _container.ComposeParts(this);
 
-            Filter = null;//GetDefaultFilter();
-        }
+            _filters = _filters.OrderBy(ob => ob.Metadata.Name);
 
-        private void FilterStateListener(FilterStateEventArgs args)
-        {
-            if (args == null)
-            {
-                return;
-            }
-
-            if (args.IsEnabled)
-            {
-                if (Filter == null)
-                {
-                    Filter = GetDefaultFilter();
-                }
-            }
-
-            Notify();
-        }
-
-        private void FilterChangedListener(FilterChangedEventArgs args)
-        {
-            ChangeDecoder(args.Filter);
+            Filter = GetDefaultFilter();
         }
 
         private IPropoPlusFilter GetDefaultFilter()
@@ -76,22 +53,45 @@ namespace SharpPropoPlus.Filter
             return Filters.First()?.Value;
         }
 
-        public void ChangeDecoder(IPropoPlusFilter filter)
+        public void ChangeFilter(IPropoPlusFilter filter)
         {
             Filter = filter;
         }
 
+        public bool IsEnabled
+        {
+            get => _isEnabled;
+
+            private set
+            {
+                if (_isEnabled == value)
+                {
+                    return;
+                }
+
+                _isEnabled = value;
+
+                Notify();
+            }
+        }
+
+        public bool SetEnabled(bool enabled)
+        {
+            return IsEnabled = enabled;
+        }
+
         public void Notify()
         {
-            var filter = Filters.FirstOrDefault(fd => fd.Value == Filter);
+            var filter = GetFilter();
 
-            GlobalEventAggregator.Instance.SendMessage(new FilterChangedEventArgs(filter?.Metadata?.Name,
+            GlobalEventAggregator.Instance.SendMessage(new FilterChangedEventArgs(IsEnabled, filter?.Metadata?.Name,
                 filter?.Metadata?.Description, filter?.Value));
         }
 
         public IPropoPlusFilter Filter
         {
             get => _filter;
+
             private set
             {
                 if (value == null || _filter == value)
@@ -100,7 +100,22 @@ namespace SharpPropoPlus.Filter
                 }
 
                 _filter = value;
+
+                var lazyFilter = GetFilter(_filter);
+
+                var message = new FilterChangedEventArgs(IsEnabled, lazyFilter.Metadata.Name, lazyFilter.Metadata.Description, lazyFilter.Value);
+                GlobalEventAggregator.Instance.SendMessage(message);
             }
+        }
+
+        private Lazy<IPropoPlusFilter, IFilterMetadata> GetFilter(IPropoPlusFilter filter = null)
+        {
+            return Filters.FirstOrDefault(fd => fd.Value == (filter ?? Filter));
+        }
+
+        public IFilterMetadata GetFilterMetadata(IPropoPlusFilter decoder)
+        {
+            return GetFilter()?.Metadata;
         }
 
         public void Dispose()

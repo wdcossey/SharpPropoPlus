@@ -1,4 +1,5 @@
 ﻿using System;
+using SharpPropoPlus.Contracts.Interfaces;
 using SharpPropoPlus.Filter.Contracts;
 
 namespace SharpPropoPlus.Filter.EventArguments
@@ -10,13 +11,13 @@ namespace SharpPropoPlus.Filter.EventArguments
             IsEnabled = false;
         }
 
-        public FilterChangedEventArgs(string name = null, string description = null, IPropoPlusFilter filter = null)
+        public FilterChangedEventArgs(bool isEnabled, string name = null, string description = null, IPropoPlusFilter filter = null)
             : this()
         {
             Filter = filter;
             Name = name;
             Description = description;
-            IsEnabled = filter != null;
+            IsEnabled = isEnabled && filter != null;
         }
 
         public bool IsEnabled { get; }

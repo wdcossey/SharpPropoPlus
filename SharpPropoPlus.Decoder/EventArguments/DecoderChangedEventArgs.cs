@@ -1,4 +1,5 @@
 ﻿using System;
+using SharpPropoPlus.Contracts.Interfaces;
 using SharpPropoPlus.Contracts.Types;
 using SharpPropoPlus.Decoder.Contracts;
 

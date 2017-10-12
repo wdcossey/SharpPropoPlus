@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Threading;
+using SharpPropoPlus.Contracts;
+using SharpPropoPlus.Contracts.Interfaces;
 using SharpPropoPlus.Contracts.Types;
 using SharpPropoPlus.Decoder.Contracts;
 
@@ -38,7 +40,7 @@ namespace SharpPropoPlus.Decoder.Ppm.Positive
         /// </summary>
         /// <param name="width"></param>
         /// <param name="input"></param>
-        protected override void Process(int width, bool input)
+        protected override void Process(int width, bool input, bool filterChannels, IPropoPlusFilter filter)
         {
             if (Monitor.IsEntered(MonitorLock))
                 return;
@@ -145,7 +147,7 @@ namespace SharpPropoPlus.Decoder.Ppm.Positive
 
 
             // Send Position and number of channels to the virtual joystick
-            JoystickInteraction.Instance.Send(11, ChannelData);
+            JoystickInteraction.Instance.Send(11, ChannelData, filterChannels, filter);
 
             if (DataCount == 11)
                 Sync = false; /* Reset _sync after channel 12 */

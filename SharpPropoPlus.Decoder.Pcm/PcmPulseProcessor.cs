@@ -1,4 +1,7 @@
-﻿using SharpPropoPlus.Decoder.Contracts;
+﻿using System;
+using SharpPropoPlus.Contracts;
+using SharpPropoPlus.Contracts.Interfaces;
+using SharpPropoPlus.Decoder.Contracts;
 
 namespace SharpPropoPlus.Decoder.Pcm
 {
@@ -15,7 +18,7 @@ namespace SharpPropoPlus.Decoder.Pcm
 
         private int _bitStream;
 
-        protected abstract override void Process(int width, bool input);
+        protected abstract override void Process(int width, bool input, bool filterChannels, IPropoPlusFilter filter);
 
         public override string[] Description { get; }
 

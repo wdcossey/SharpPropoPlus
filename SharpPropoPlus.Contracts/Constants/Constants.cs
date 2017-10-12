@@ -1,4 +1,4 @@
-﻿namespace SharpPropoPlus.Contracts
+﻿namespace SharpPropoPlus.Contracts.Constants
 {
     public static class Constants
     {

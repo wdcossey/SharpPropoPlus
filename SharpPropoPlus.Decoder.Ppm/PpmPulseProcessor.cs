@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Linq;
+using SharpPropoPlus.Contracts;
+using SharpPropoPlus.Contracts.Interfaces;
 using SharpPropoPlus.Decoder.Contracts;
 
 namespace SharpPropoPlus.Decoder.Ppm
@@ -95,7 +97,7 @@ namespace SharpPropoPlus.Decoder.Ppm
 
 
 
-        protected abstract override void Process(int width, bool input);
+        protected abstract override void Process(int width, bool input, bool filterChannels, IPropoPlusFilter filter);
 
         public abstract override string[] Description { get; }
 

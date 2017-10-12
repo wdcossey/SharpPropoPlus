@@ -41,12 +41,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Constants.cs" />
+    <Compile Include="Constants\Constants.cs" />
     <Compile Include="Interfaces\IDecoderMetadata.cs" />
     <Compile Include="Interfaces\IFilterMetadata.cs" />
+    <Compile Include="Interfaces\IJoystickData.cs" />
+    <Compile Include="Interfaces\IPropoPlusDecoder.cs" />
+    <Compile Include="Interfaces\IPropoPlusFilter.cs" />
+    <Compile Include="JoystickData.cs" />
     <Compile Include="Types\TransmitterType.cs" />
     <Compile Include="Interfaces\IPropoMetadata.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="EventArguments\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

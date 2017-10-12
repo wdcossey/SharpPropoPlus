@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SharpPropoPlus.Contracts;
+using SharpPropoPlus.Contracts.Interfaces;
 using SharpPropoPlus.Filter.Contracts;
 
 namespace SharpPropoPlus.Filter.VTail
@@ -22,7 +24,7 @@ namespace SharpPropoPlus.Filter.VTail
         It is assumed that the mixed channels are ch1 and ch4
         All other channels do not change
         */
-        protected override JoyStickChannels Process(JoyStickChannels channels, int max, int min)
+        protected override IJoystickData Process(IJoystickData channels, int max, int min)
         {
             var inData = new[] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
             var outData = new[] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
@@ -52,7 +54,7 @@ namespace SharpPropoPlus.Filter.VTail
                 outData[11] = inData[11];
             }
 
-            return new JoyStickChannels(outData, channels.Count);
+            return new JoystickData(channels.Count, outData);
         }
     }
 }

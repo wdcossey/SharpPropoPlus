@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
+using SharpPropoPlus.Contracts;
+using SharpPropoPlus.Contracts.Interfaces;
 using SharpPropoPlus.Decoder.Contracts;
 using SharpPropoPlus.Decoder.EventArguments;
 using SharpPropoPlus.Decoder.Structs;
@@ -263,8 +265,6 @@ namespace SharpPropoPlus.Decoder
                 negative = true;
                 _low = 0;
             }
-            ;
-
 
             pulseLength.Normalized = NormalizePulse(sampleRate, pulseLength.Raw);
 
@@ -350,7 +350,7 @@ namespace SharpPropoPlus.Decoder
 
         public object MonitorLock { get; } = new object();
 
-        public virtual void ProcessPulse(int sampleRate, int sample)
+        public virtual void ProcessPulse(int sampleRate, int sample, bool filterChannels, IPropoPlusFilter filter)
         {
             try
             {
@@ -358,19 +358,17 @@ namespace SharpPropoPlus.Decoder
 
                 var pulseLength = CalculatePulseLength(sampleRate, sample, ref negative);
 
-                Process(pulseLength.Normalized, negative);
+                Process(pulseLength.Normalized, negative, filterChannels, filter);
             }
             catch (Exception e)
             {
                 Debug.WriteLine(e);
-                //throw;
             }
-            
         }
 
         public abstract void Reset();
 
-        protected abstract void Process(int width, bool input);
+        protected abstract void Process(int width, bool input, bool filterChannels, IPropoPlusFilter filter);
 
     }
 }

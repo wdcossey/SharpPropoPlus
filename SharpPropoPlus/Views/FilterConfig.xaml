@@ -52,7 +52,7 @@
             <TextBlock Grid.Column="0" Grid.Row="0" Margin="0 4 0 0" Style="{StaticResource TextBlockHeaderStyleKey}" Text="Toggle Signal Filter" />
             <TextBlock Grid.Column="0" Grid.Row="1" Margin="0 2 0 0" Style="{StaticResource TextBlockLightStyleKey}" Text="Enable or disable signal filtering with the desired filter (below)." />
 
-            <ToggleButton Grid.Column="1" Grid.Row="0" Grid.RowSpan="2" HorizontalAlignment="Right" IsChecked="False" VerticalAlignment="Center" Height="20" Style="{StaticResource AnimatedSwitch}"></ToggleButton>
+            <ToggleButton IsChecked="{Binding IsEnabled, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Grid.Row="0" Grid.RowSpan="2" HorizontalAlignment="Right" VerticalAlignment="Center" Height="20" Style="{StaticResource AnimatedSwitch}"/>
         </Grid>
 
         <Border Margin="0 8" Style="{StaticResource BorderSeparator}"/>

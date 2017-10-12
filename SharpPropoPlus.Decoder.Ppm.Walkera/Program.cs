@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Threading;
+using SharpPropoPlus.Contracts;
+using SharpPropoPlus.Contracts.Interfaces;
 using SharpPropoPlus.Contracts.Types;
 using SharpPropoPlus.Decoder.Contracts;
 
@@ -64,7 +66,7 @@ namespace SharpPropoPlus.Decoder.Ppm.Walkera
         /// </summary>
         /// <param name="width"></param>
         /// <param name="input"></param>
-        protected override void Process(int width, bool input)
+        protected override void Process(int width, bool input, bool filterChannels, IPropoPlusFilter filter)
         {
             if (Monitor.IsEntered(MonitorLock))
                 return;
@@ -148,7 +150,7 @@ namespace SharpPropoPlus.Decoder.Ppm.Walkera
 
             // Send Position and number of channels to the virtual joystick
             ////SendPPJoy(11, _mPosition);
-            JoystickInteraction.Instance.Send(11, ChannelData);
+            JoystickInteraction.Instance.Send(11, ChannelData, filterChannels, filter);
 
             //if (gDebugLevel >= 3 && gCtrlLogFile /*&& !(i++%50)*/)
             //  fprintf(gCtrlLogFile, " _data[%d]=%d", _datacount, _data[_datacount]);

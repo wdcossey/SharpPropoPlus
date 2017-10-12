@@ -6,6 +6,8 @@ SharpPropoPlus.Decoder.dll
 SharpPropoPlus.Decoder.pdb
 SharpPropoPlus.Events.dll
 SharpPropoPlus.Events.pdb
+SharpPropoPlus.Filter.dll
+SharpPropoPlus.Filter.pdb
 SharpPropoPlus.vJoyMonitor.dll
 SharpPropoPlus.vJoyMonitor.pdb
 vJoyInterface.dll

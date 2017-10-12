@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SharpPropoPlus.Contracts;
+using SharpPropoPlus.Contracts.Interfaces;
 using SharpPropoPlus.Filter.Contracts;
 
 namespace SharpPropoPlus.Filter.DeltaWing
@@ -10,11 +12,13 @@ namespace SharpPropoPlus.Filter.DeltaWing
     [ExportPropoPlusFilter("Delta Wing (Ch1+Ch2)", "Delta wing un-mixing (mixed channels 1 and 2)")]
     public class Filter : FilterProcessor
     {
+        private static readonly int[] InData = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+        private static readonly int[] OutData = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+
         public override string[] Description => new[]
         {
             "Filter for Delta wing mixed channels 1 and 2"
         };
-
 
         /*
 	    Delta wing un-mixing
@@ -23,37 +27,34 @@ namespace SharpPropoPlus.Filter.DeltaWing
 	    It is assumed that the mixed channels are ch1 and ch2
 	    All other channels do not change
         */
-        protected override JoyStickChannels Process(JoyStickChannels channels, int max, int min)
+        protected override IJoystickData Process(IJoystickData channels, int max, int min)
         {
-            var inData = new[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-            var outData = new[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-
             // Copy input data to input buffer
             for (var i = 0; i < 6; i++)
             {
-                inData[i] = channels.Data[i];
+                InData[i] = channels.Data[i];
             }
 
             if (channels.Count >= 2)
             {
-                var ailerons = (max - min) / 2 + (inData[0] - inData[1]) / 4;
-                var elevator = (inData[0] + inData[1]) / 2;
+                var ailerons = (max - min) / 2 + (InData[0] - InData[1]) / 4;
+                var elevator = (InData[0] + InData[1]) / 2;
 
-                outData[0] = elevator;
-                outData[1] = ailerons;
-                outData[2] = inData[2];
-                outData[3] = inData[3];
-                outData[4] = inData[4];
-                outData[5] = inData[5];
-                outData[6] = inData[6];
-                outData[7] = inData[7];
-                outData[8] = inData[8];
-                outData[9] = inData[9];
-                outData[10] = inData[10];
-                outData[11] = inData[11];
+                OutData[0] = elevator;
+                OutData[1] = ailerons;
+                OutData[2] = InData[2];
+                OutData[3] = InData[3];
+                OutData[4] = InData[4];
+                OutData[5] = InData[5];
+                OutData[6] = InData[6];
+                OutData[7] = InData[7];
+                OutData[8] = InData[8];
+                OutData[9] = InData[9];
+                OutData[10] = InData[10];
+                OutData[11] = InData[11];
             }
 
-            return new JoyStickChannels(outData, channels.Count);
+            return new JoystickData(channels.Count, OutData);
         }
     }
 }

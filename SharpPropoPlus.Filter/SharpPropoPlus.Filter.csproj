@@ -43,8 +43,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Contracts\ExportDecoderAttribute.cs" />
-    <Compile Include="Contracts\IPropoPlusFilter.cs" />
-    <Compile Include="Contracts\JoyStickChannels.cs" />
     <Compile Include="EventArguments\FilterChangedEventArgs.cs" />
     <Compile Include="EventArguments\FilterStateEventArgs.cs" />
     <Compile Include="FilterManager.cs" />

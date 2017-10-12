@@ -11,9 +11,12 @@ namespace SharpPropoPlus.ViewModels
     {
         private ReadOnlyObservableCollection<Lazy<IPropoPlusFilter, IFilterMetadata>> _filterCollection;
         private Lazy<IPropoPlusFilter, IFilterMetadata> _selectedFilter;
+        private bool _isEnabled;
 
         public FilterConfigViewModel()
         {
+            IsEnabled = Application.Instance.FilterManager.IsEnabled;
+
             FilterCollection =
                 new ReadOnlyObservableCollection<Lazy<IPropoPlusFilter, IFilterMetadata>>(
                     new ObservableCollection<Lazy<IPropoPlusFilter, IFilterMetadata>>(Application.Instance
@@ -26,6 +29,7 @@ namespace SharpPropoPlus.ViewModels
         public ReadOnlyObservableCollection<Lazy<IPropoPlusFilter, IFilterMetadata>> FilterCollection
         {
             get => _filterCollection;
+
             private set
             {
                 _filterCollection = value;
@@ -36,6 +40,7 @@ namespace SharpPropoPlus.ViewModels
         public Lazy<IPropoPlusFilter, IFilterMetadata> SelectedFilter
         {
             get => _selectedFilter;
+
             set
             {
                 if (_selectedFilter == value)
@@ -45,7 +50,24 @@ namespace SharpPropoPlus.ViewModels
 
                 _selectedFilter = value;
 
-                //Application.Instance.FilterManager.ChangeFilter(value);
+                Application.Instance.FilterManager.ChangeFilter(_selectedFilter.Value);
+
+                OnPropertyChanged();
+            }
+        }
+
+        public bool IsEnabled
+        {
+            get => _isEnabled;
+
+            set
+            {
+                if (_isEnabled == value)
+                {
+                    return;
+                }
+
+                _isEnabled = Application.Instance.FilterManager.SetEnabled(value);
 
                 OnPropertyChanged();
             }

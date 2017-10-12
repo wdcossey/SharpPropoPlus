@@ -58,7 +58,24 @@ namespace SharpPropoPlus
                 right[sample] = BitConverter.ToInt16(args.Buffer, index);
                 index += 2;
 
-                DecoderManager.Decoder.ProcessPulse(args.SampleRate, right[sample]);
+                DecoderManager.Decoder.ProcessPulse(args.SampleRate, right[sample], FilterManager.IsEnabled, FilterManager.Filter); /*data =>
+                {
+                    var filterData = data.Data;
+                    var channelCount = data.Count;
+
+                    if (FilterManager.IsEnabled)
+                    {
+                        channelCount = (FilterManager.Filter?.RunFilter(ref filterData, channelCount + 1)).GetValueOrDefault(0);
+                    }
+
+                    if (channelCount > 0)
+                    {
+                        JoystickInteraction.Instance.Send(channelCount, filterData);
+                    }
+
+                });*/
+
+                //
             }
         }
 
@@ -106,9 +123,9 @@ namespace SharpPropoPlus
             }
         }
 
-        public DecoderManager DecoderManager { get; }
+        public IDecoderManager DecoderManager { get; }
 
-        public FilterManager FilterManager { get; }
+        public IFilterManager FilterManager { get; }
 
         public IUnityContainer Container
         {

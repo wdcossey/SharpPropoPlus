@@ -48,6 +48,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\SharpPropoPlus.Contracts\SharpPropoPlus.Contracts.csproj">
+      <Project>{3FBEE597-4EF9-4DFB-B8F6-16E0D0739AC0}</Project>
+      <Name>SharpPropoPlus.Contracts</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SharpPropoPlus.Filter\SharpPropoPlus.Filter.csproj">
       <Project>{4B83A5EE-5BF8-4DAF-BA93-654BB86EDF99}</Project>
       <Name>SharpPropoPlus.Filter</Name>
