@@ -13,6 +13,7 @@ The R/C controller is connected by cable to the PC. One end of the cable is conn
 
 ![Input](https://github.com/wdcossey/SharpPropoPlus/blob/master/Images/Input.png)
 
+![Filter](https://github.com/wdcossey/SharpPropoPlus/blob/master/Images/Filter.png)
 
 SmartPropoPlus homepage: http://www.smartpropoplus.com/
 
