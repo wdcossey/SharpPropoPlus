@@ -1,6 +1,9 @@
-﻿namespace SharpPropoPlus.Interfaces
+﻿using System;
+using System.ComponentModel;
+
+namespace SharpPropoPlus.Interfaces
 {
-    public interface IFilterConfigViewModel
+    public interface IFilterConfigViewModel : INotifyPropertyChanged, IDisposable
     {
     }
 }

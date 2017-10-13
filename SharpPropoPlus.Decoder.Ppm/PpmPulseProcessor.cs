@@ -1,15 +1,11 @@
-﻿using System;
-using System.Linq;
-using SharpPropoPlus.Contracts;
-using SharpPropoPlus.Contracts.Interfaces;
+﻿using SharpPropoPlus.Contracts.Interfaces;
 using SharpPropoPlus.Decoder.Contracts;
 
 namespace SharpPropoPlus.Decoder.Ppm
 {
-    public abstract class PpmPulseProcessor<TDataType> : PulseProcessor<TDataType>, IPropoPlusPpmDecoder
+    public abstract class PpmPulseProcessor<TJitterFilter> : PulseProcessor<TJitterFilter>, IPropoPlusPpmDecoder
+        where TJitterFilter : IJitterFilter
     {
-
-
 
         #region PPM Values (General)
 
@@ -122,7 +118,7 @@ namespace SharpPropoPlus.Decoder.Ppm
             PosUpdateCounter = 0;
 
             //static int i = 0;
-            PrevWidth = new TDataType[BufferLength]; /* array of previous width values */
+            PrevWidth = new TJitterFilter[BufferLength]; /* array of previous width values */
         }
 
     }

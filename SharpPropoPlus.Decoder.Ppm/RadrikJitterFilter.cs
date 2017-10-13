@@ -1,20 +1,44 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using SharpPropoPlus.Decoder.Contracts;
 
 namespace SharpPropoPlus.Decoder.Ppm
 {
-    public struct JitterFilter
+    public struct RadrikJitterFilter : IJitterFilter
     {
         private static double _jitterAverage = 0d;
 
         private static int _jitterPrevValue = 0;
 
+        private int _value;
+
+        public int PreviousValue { get; private set; }
+
+        public int Value
+        {
+            get => _value;
+
+            private set
+            {
+                if (_value == value)
+                {
+                    return;
+                }
+
+                PreviousValue = _value;
+                _value = value;
+            }
+        }
+
         /// <summary>
         /// Advanced jitter filter by: https://github.com/Radrik5
         /// </summary>
         /// <param name="width"></param>
-        /// <param name="alpha"></param>
+        /// <param name="jitterCeiling"></param>
+        /// <param name="alpha"></param> 
         /// <returns></returns>
-        public int Filter(int width, double[] alpha)
+        public int Filter(int width, double jitterCeiling, double[] alpha = null)
         {
             // Modified Moving Average with differnet ALPHAs
             //
@@ -27,8 +51,8 @@ namespace SharpPropoPlus.Decoder.Ppm
             // static const double ALPHA[] = { 8, 6, 4, 3, 2 }; // good but with small jitter
             //double[] alpha = { 16, 12, 6, 3, 2 };
 
-            int diff = Math.Abs(_jitterPrevValue - width);
-            int index = Math.Min(Math.Max(diff - 1, 0), alpha.Length - 1);
+            var diff = Math.Abs(_jitterPrevValue - width);
+            var index = Math.Min(Math.Max(diff - 1, 0), alpha.Length - 1);
 
             _jitterAverage = ((alpha[index] - 1) * _jitterAverage + width) / alpha[index];
 
@@ -36,12 +60,12 @@ namespace SharpPropoPlus.Decoder.Ppm
             // This is done to remove jitter between 10 and 11 when average is around 10.5
             // The average needs to go above 10.75 to switch from 10 to 11
             // and it needs to go below 10.25 to switch from 11 to 10
-            double avgDiff = _jitterAverage - _jitterPrevValue;
+            var avgDiff = _jitterAverage - _jitterPrevValue;
 
-            int sign = avgDiff < 0 ? -1 : 1;
+            var sign = avgDiff < 0 ? -1 : 1;
             _jitterPrevValue += sign * Convert.ToInt32(Math.Abs(avgDiff) + 0.25);
 
-            return _jitterPrevValue;
+            return Value = _jitterPrevValue;
         }
     }
 }

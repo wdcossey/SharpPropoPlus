@@ -9,7 +9,8 @@ using SharpPropoPlus.Events;
 
 namespace SharpPropoPlus.Decoder
 {
-    public abstract class PulseProcessor<TDataType> : IPropoPlusDecoder
+    public abstract class PulseProcessor<TJitterFilter> : IPropoPlusDecoder 
+        where TJitterFilter : IJitterFilter
     {
         /// <summary>
         /// m_Position
@@ -33,7 +34,7 @@ namespace SharpPropoPlus.Decoder
         /// <summary>
         /// Array of previous width values
         /// </summary>
-        private static TDataType[] _prevWidth;
+        private static TJitterFilter[] _prevWidth;
 
 
         private static int _rawChannelCount;
@@ -98,7 +99,7 @@ namespace SharpPropoPlus.Decoder
         /// <summary>
         /// Array of previous width values
         /// </summary>
-        protected static TDataType[] PrevWidth
+        protected static TJitterFilter[] PrevWidth
         {
             get => _prevWidth;
             set

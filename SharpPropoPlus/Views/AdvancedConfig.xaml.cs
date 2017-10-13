@@ -1,4 +1,5 @@
 ﻿using System.Windows.Controls;
+using SharpPropoPlus.Interfaces;
 
 namespace SharpPropoPlus.Views
 {
@@ -7,9 +8,15 @@ namespace SharpPropoPlus.Views
     /// </summary>
     public partial class AdvancedConfig : UserControl
     {
-        public AdvancedConfig()
+        private AdvancedConfig()
         {
             InitializeComponent();
+        }
+
+        public AdvancedConfig(IAdvancedConfigViewModel viewModel)
+            : this()
+        { 
+            DataContext = viewModel;
         }
     }
 }

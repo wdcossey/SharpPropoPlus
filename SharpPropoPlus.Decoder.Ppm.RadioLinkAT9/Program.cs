@@ -1,4 +1,6 @@
 ﻿using System;
+using System.ComponentModel;
+using System.Linq;
 using System.Threading;
 using SharpPropoPlus.Contracts;
 using SharpPropoPlus.Contracts.Interfaces;
@@ -10,7 +12,7 @@ namespace SharpPropoPlus.Decoder.Ppm.RadioLinkAT9
     //[Export(typeof(IPropoPlusDecoder))]
     //[ExportMetadata("Type", TransmitterType.Ppm)]
     [ExportPropoPlusDecoder("RadioLink AT9 (Radrik5)", "RadioLink AT9 (PPM) pulse processor", TransmitterType.Ppm)]
-    public class Program : PpmPulseProcessor<JitterFilter>
+    public class Program : PpmPulseProcessor<RadrikJitterFilter>
     {
 
         //TODO : inform that a filter has been selected or diselected
@@ -87,7 +89,7 @@ namespace SharpPropoPlus.Decoder.Ppm.RadioLinkAT9
             }
 
             // Cancel jitter
-            width = PrevWidth[DataCount].Filter(width, PpmJitterAlpha);
+            width = PrevWidth[DataCount].Filter(width, PpmJitter, PpmJitterAlpha);
 
             int newdata;
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Windows.Controls;
 using System.Windows.Interop;
 using Microsoft.Practices.Unity;
 using SharpPropoPlus.Audio;
@@ -13,6 +14,7 @@ using SharpPropoPlus.Interfaces;
 using SharpPropoPlus.vJoyMonitor;
 using SharpPropoPlus.ViewModels;
 using SharpPropoPlus.Filter;
+using SharpPropoPlus.Views;
 
 namespace SharpPropoPlus
 {
@@ -26,14 +28,15 @@ namespace SharpPropoPlus
         {
             //_decoderManager = new DecoderManager();
 
+            Container.RegisterType<IDecoderManager, DecoderManager>(new ContainerControlledLifetimeManager());
+            Container.RegisterType<IFilterManager, FilterManager>(new ContainerControlledLifetimeManager());
+
             DecoderManager = Container.Resolve<DecoderManager>();
             FilterManager = Container.Resolve<FilterManager>();
 
             JoystickHelper.Initialize();
             JoystickInteraction.Initialize();
 
-            //TODO: Remove, this is only for testing...
-            //GlobalEventAggregator.Instance.AddListener<AudioDataEventArgs>(AudioDataAction);
             //TODO: Remove, this is only for testing...
             AudioHelper.Instance.DataAvailable += AudioDataAvailable;
         }
@@ -146,15 +149,19 @@ namespace SharpPropoPlus
 
         public void ShowMainWindow()
         {
-
-            Container.RegisterType<IDecoderManager, DecoderManager>(new ContainerControlledLifetimeManager());
-            //Container.RegisterInstance<IDecoderManager>(new DecoderManager());
-
+            
             Container.RegisterInstance<IAudioConfigViewModel>(new AudioConfigViewModel());
             Container.RegisterInstance<IJoystickConfigViewModel>(new JoystickConfigViewModel());
             Container.RegisterInstance<ITransmitterConfigViewModel>(new TransmitterConfigViewModel());
             Container.RegisterInstance<IFilterConfigViewModel>(new FilterConfigViewModel());
+            Container.RegisterInstance<IAdvancedConfigViewModel>(new AdvancedConfigViewModel());
 
+            Container.RegisterType(typeof(UserControl), typeof(AudioConfig), new ContainerControlledLifetimeManager());
+            Container.RegisterType(typeof(UserControl), typeof(FilterConfig), new ContainerControlledLifetimeManager());
+            Container.RegisterType(typeof(UserControl), typeof(JoystickConfig), new ContainerControlledLifetimeManager());
+            Container.RegisterType(typeof(UserControl), typeof(TransmitterConfig), new ContainerControlledLifetimeManager());
+            Container.RegisterType(typeof(UserControl), typeof(AdvancedConfig), new ContainerControlledLifetimeManager());
+            
             var mainWindow = Container.Resolve<Shell>(); // Creating Main window
 
             mainWindow.Loaded += (sender, args) =>

@@ -176,9 +176,11 @@
     <Compile Include="ExtensionMethods\ObjectExtensionMethods.cs" />
     <Compile Include="ExtensionMethods\EnumExtensionMethods.cs" />
     <Compile Include="Helpers\DeviceNotification.cs" />
+    <Compile Include="Interfaces\IAdvancedConfigViewModel.cs" />
     <Compile Include="Interfaces\IJoystickChannelData.cs" />
     <Compile Include="Interfaces\IFilterConfigViewModel.cs" />
     <Compile Include="ValueConverters\DecoderOfTypeValueConverter.cs" />
+    <Compile Include="ViewModels\AdvancedConfigViewModel.cs" />
     <Compile Include="ViewModels\JoystickChannelDataViewModel.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="ValueConverters\AudioChannelValueConverter.cs" />
@@ -196,11 +198,17 @@
     <Compile Include="Controls\ToolBarButton.cs" />
     <Compile Include="ViewModels\FilterConfigViewModel.cs" />
     <Compile Include="ViewModels\TransmitterConfigViewModel.cs" />
+    <Compile Include="Views\AboutTab.xaml.cs">
+      <DependentUpon>AboutTab.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\AdvancedConfig.xaml.cs">
       <DependentUpon>AdvancedConfig.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\FilterConfig.xaml.cs">
       <DependentUpon>FilterConfig.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\LoggingTab.xaml.cs">
+      <DependentUpon>LoggingTab.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\TransmitterConfig.xaml.cs">
       <DependentUpon>TransmitterConfig.xaml</DependentUpon>
@@ -246,11 +254,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\AboutTab.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\AdvancedConfig.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\FilterConfig.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\LoggingTab.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -355,12 +371,12 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PreBuildEvent>
-    </PreBuildEvent>
+    <PreBuildEvent>xcopy /E /Y /I /EXCLUDE:$(ProjectDir)exclude.txt "$(SolutionDir)Decoders\$(ConfigurationName)\*.*" "$(TargetDir)"
+xcopy /E /Y /I /EXCLUDE:$(ProjectDir)exclude.txt "$(SolutionDir)Filters\$(ConfigurationName)\*.*" "$(TargetDir)"</PreBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
-    <PostBuildEvent>xcopy /E /Y /I /EXCLUDE:$(ProjectDir)exclude.txt "$(SolutionDir)Decoders\$(ConfigurationName)\*.*" "$(TargetDir)"
-xcopy /E /Y /I /EXCLUDE:$(ProjectDir)exclude.txt "$(SolutionDir)Filters\$(ConfigurationName)\*.*" "$(TargetDir)"</PostBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

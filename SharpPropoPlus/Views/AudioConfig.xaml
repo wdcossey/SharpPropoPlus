@@ -15,7 +15,7 @@
     <UserControl.Resources>
         <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource TextBlockLightStyleKey}"/>
     </UserControl.Resources>
-    
+
     <StackPanel>
 
         <Grid>

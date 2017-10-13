@@ -198,8 +198,8 @@
                                         <RowDefinition/>
                                         <RowDefinition Height="Auto"/>
                                     </Grid.RowDefinitions>
-                                    <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
-                                        <Frame NavigationUIVisibility="Hidden" x:Name="PART_FAME" Margin="32 12 32 0">
+                                    <ScrollViewer Focusable="False" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+                                        <Frame Focusable="False" NavigationUIVisibility="Hidden" x:Name="PART_FAME" Margin="32 12 32 0">
 
                                         </Frame>
                                     </ScrollViewer>

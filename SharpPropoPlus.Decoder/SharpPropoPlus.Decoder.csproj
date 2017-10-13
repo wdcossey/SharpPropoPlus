@@ -41,6 +41,7 @@
     <Compile Include="Constants.cs" />
     <Compile Include="Contracts\ExportDecoderAttribute.cs" />
     <Compile Include="Contracts\IPropoPlusPpmDecoder.cs" />
+    <Compile Include="Contracts\IJitterFilter.cs" />
     <Compile Include="DecoderManager.cs" />
     <Compile Include="Enums\HidUsageFlags.cs" />
     <Compile Include="EventArguments\DecoderChangedEventArgs.cs" />
@@ -51,6 +52,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PulseProcessor.cs" />
     <Compile Include="Models\JoystickInformation.cs" />
+    <Compile Include="Structs\JitterFilter.cs" />
     <Compile Include="Structs\PulseLength.cs" />
     <Compile Include="Structs\PulseResult.cs" />
   </ItemGroup>

@@ -12,6 +12,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
+using Microsoft.Practices.Unity;
 using SharpPropoPlus.Annotations;
 using SharpPropoPlus.Commands;
 
@@ -74,7 +75,7 @@ namespace SharpPropoPlus.Controls
                     if (type == null)
                         return;
 
-                    var root = Application.Instance.Container.Resolve(type, type.FullName);
+                    var root = Application.Instance.Container.Resolve(type/*, type.FullName*/);
                     FrameContent.NavigationService.Navigate(root);
                 });
             }

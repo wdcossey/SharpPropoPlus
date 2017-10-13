@@ -11,8 +11,19 @@
     <UserControl.Resources>
         <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource TextBlockLightStyleKey}"/>
     </UserControl.Resources>
-    
+
     <Grid>
-            
+        <TabControl MinWidth="180" TabStripPlacement="Left" >
+            <TabItem Header="Logging" >
+                <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+                    <local:LoggingTab/>
+                </ScrollViewer>
+            </TabItem>
+            <TabItem Header="About" >
+                <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+                    <local:AboutTab/>
+                </ScrollViewer>
+            </TabItem>
+        </TabControl>
     </Grid>
 </UserControl>

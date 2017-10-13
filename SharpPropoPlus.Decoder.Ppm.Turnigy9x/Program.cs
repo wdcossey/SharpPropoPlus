@@ -4,13 +4,14 @@ using SharpPropoPlus.Contracts;
 using SharpPropoPlus.Contracts.Interfaces;
 using SharpPropoPlus.Contracts.Types;
 using SharpPropoPlus.Decoder.Contracts;
+using SharpPropoPlus.Decoder.Structs;
 
 namespace SharpPropoPlus.Decoder.Ppm.Turnigy9x
 {
     //[Export(typeof(IPropoPlusDecoder))]
     //[ExportMetadata("Type", TransmitterType.Ppm)]
     [ExportPropoPlusDecoder("Turnigy 9X", "Turnigy 9X (PPM) pulse processor", TransmitterType.Ppm)]
-    public class Program : PpmPulseProcessor<int>
+    public class Program : PpmPulseProcessor<JitterFilter>
     {
         static bool _prevSep = false;
 
@@ -126,17 +127,9 @@ namespace SharpPropoPlus.Decoder.Ppm.Turnigy9x
                     _prevSep = false;
                 }
             }
-            ;
-
-
 
             // Cancel jitter
-            if (Math.Abs(PrevWidth[DataCount] - width) < PpmJitter)
-            {
-                width = PrevWidth[DataCount];
-            }
-
-            PrevWidth[DataCount] = width;
+            width = PrevWidth[DataCount].Filter(width, PpmJitter);
 
             int newdata;
 

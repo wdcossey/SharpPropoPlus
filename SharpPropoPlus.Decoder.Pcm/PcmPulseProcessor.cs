@@ -1,11 +1,9 @@
-﻿using System;
-using SharpPropoPlus.Contracts;
-using SharpPropoPlus.Contracts.Interfaces;
-using SharpPropoPlus.Decoder.Contracts;
+﻿using SharpPropoPlus.Contracts.Interfaces;
+using SharpPropoPlus.Decoder.Structs;
 
 namespace SharpPropoPlus.Decoder.Pcm
 {
-    public abstract class PcmPulseProcessor : PulseProcessor<int>
+    public abstract class PcmPulseProcessor : PulseProcessor<JitterFilter>
     {
         #region PCM Values (General)
 
@@ -58,7 +56,9 @@ namespace SharpPropoPlus.Decoder.Pcm
             PosUpdateCounter = 0;
 
             //static int i = 0;
-            PrevWidth = new int[BufferLength]; /* array of previous width values */
+
+            //PrevWidth not required for PCM
+            //PrevWidth = new JitterFilter[BufferLength]; /* array of previous width values */
         }
 
         /// <summary>

@@ -4,13 +4,14 @@ using SharpPropoPlus.Contracts;
 using SharpPropoPlus.Contracts.Interfaces;
 using SharpPropoPlus.Contracts.Types;
 using SharpPropoPlus.Decoder.Contracts;
+using SharpPropoPlus.Decoder.Structs;
 
 namespace SharpPropoPlus.Decoder.Ppm.Positive
 {
     //[Export(typeof(IPropoPlusDecoder))]
     //[ExportMetadata("Type", TransmitterType.Ppm)]
     [ExportPropoPlusDecoder("Positive", "Positive (PPM) pulse processor", TransmitterType.Ppm)]
-    public class Program : PpmPulseProcessor<int>
+    public class Program : PpmPulseProcessor<JitterFilter>
     {
 
         //TODO : inform that a filter has been selected or diselected
@@ -81,14 +82,7 @@ namespace SharpPropoPlus.Decoder.Ppm.Positive
             }
 
             // Cancel jitter /* Version 3.3.3 */
-            var jitterValue = Math.Abs(PrevWidth[DataCount] - width);
-
-            if (jitterValue < PpmJitter)
-            {
-                width = PrevWidth[DataCount];
-            }
-
-            PrevWidth[DataCount] = width;
+            width = PrevWidth[DataCount].Filter(width, PpmJitter);
 
             int newdata;
 

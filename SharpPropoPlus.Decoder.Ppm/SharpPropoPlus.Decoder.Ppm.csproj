@@ -35,7 +35,7 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="JitterFilter.cs" />
+    <Compile Include="RadrikJitterFilter.cs" />
     <Compile Include="PpmPulseProcessor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
