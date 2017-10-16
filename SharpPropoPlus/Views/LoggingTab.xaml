@@ -4,8 +4,13 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SharpPropoPlus.Views"
+             xmlns:viewModels="clr-namespace:SharpPropoPlus.ViewModels"
+             xmlns:md="https://github.com/fantasticfiasco/mvvm-dialogs"
+             md:DialogServiceViews.IsRegistered="True"
              mc:Ignorable="d" 
-             d:DesignHeight="480" d:DesignWidth="640">
+             d:DesignHeight="480" 
+             d:DesignWidth="640"
+             d:DataContext="{d:DesignInstance viewModels:LoggingTabViewModel, d:IsDesignTimeCreatable=False}">
 
     <UserControl.Resources>
         <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource TextBlockLightStyleKey}"/>
@@ -109,8 +114,7 @@
                            Style="{StaticResource TextBlockLightStyleKey}" 
                            Text="Enable to log the pulse data to a file." />
 
-                <ToggleButton IsChecked="{Binding IsEnabled, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
-                              IsEnabled="False"
+                <ToggleButton IsChecked="{Binding IsPulseRecordingEnabled, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
                               Grid.Column="1" 
                               Grid.Row="0" 
                               Grid.RowSpan="2" 

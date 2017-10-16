@@ -44,6 +44,7 @@
     <Compile Include="Contracts\IJitterFilter.cs" />
     <Compile Include="DecoderManager.cs" />
     <Compile Include="Enums\HidUsageFlags.cs" />
+    <Compile Include="EventArguments\DebugPulseEventArgs.cs" />
     <Compile Include="EventArguments\DecoderChangedEventArgs.cs" />
     <Compile Include="EventArguments\JoystickChangedEventArgs.cs" />
     <Compile Include="EventArguments\PeakValueEventArgs.cs" />

@@ -4,9 +4,11 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SharpPropoPlus.Views"
+             xmlns:viewModels="clr-namespace:SharpPropoPlus.ViewModels"
              mc:Ignorable="d" 
              d:DesignHeight="400" 
-             d:DesignWidth="600">
+             d:DesignWidth="600"
+             d:DataContext="{d:DesignInstance viewModels:AdvancedConfigViewModel, d:IsDesignTimeCreatable=False}">
 
     <UserControl.Resources>
         <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource TextBlockLightStyleKey}"/>
@@ -16,7 +18,7 @@
         <TabControl MinWidth="180" TabStripPlacement="Left" >
             <TabItem Header="Logging" >
                 <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
-                    <local:LoggingTab/>
+                    <local:LoggingTab DataContext="{Binding LoggingViewModel}"/>
                 </ScrollViewer>
             </TabItem>
             <TabItem Header="About" >

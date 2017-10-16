@@ -19,7 +19,7 @@
                         <Border 
                             Name="PART_Indicator" 
                             CornerRadius="0" 
-                            Background="ForestGreen" 
+                            Background="{StaticResource SecondaryColorBrush}" 
                             BorderBrush="Transparent" 
                             BorderThickness="1" 
                             HorizontalAlignment="Left"

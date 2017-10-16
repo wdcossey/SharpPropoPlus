@@ -612,8 +612,8 @@
     </Style>
 
     <Style TargetType="{x:Type controls:StripIndicator}">
-        <Setter Property="Fill" Value="{DynamicResource AccentBrush}"></Setter>
-        <Setter Property="BorderBrush" Value="{x:Static SystemColors.DesktopBrush}"></Setter>
+        <Setter Property="Fill" Value="{StaticResource SecondaryColorBrush}"></Setter>
+        <Setter Property="BorderBrush" Value="{StaticResource AccentColorBrush}"></Setter>
         <Setter Property="SnapsToDevicePixels" Value="True"></Setter>
         <!--<Setter Property="Template">
             <Setter.Value>
@@ -721,6 +721,7 @@
         <Setter Property="Foreground" Value="{StaticResource AccentColorBrush}" />
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="BorderBrush" Value="#EAEAEB" />
+        <Setter Property="Cursor" Value="Hand" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ToggleButton">

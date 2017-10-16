@@ -30,6 +30,7 @@ namespace SharpPropoPlus.Audio
         private static volatile AudioHelper _instance;
 
         private AudioChannel _audioChannel = AudioChannel.Automatic;
+        private AudioBitrate _audioBitrate = AudioBitrate.Automatic;
 
         private WasapiCapture _soundIn = null;
         private IList<AudioEndPoint> _devices;
@@ -115,8 +116,14 @@ namespace SharpPropoPlus.Audio
 
         public AudioChannel Channel
         {
-            get { return _audioChannel; }
+            get => _audioChannel;
             set { _audioChannel = value; }
+        }
+
+        public AudioBitrate Bitrate
+        {
+            get => _audioBitrate;
+            set { _audioBitrate = value; }
         }
 
         public void StartRecording()

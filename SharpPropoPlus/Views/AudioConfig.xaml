@@ -170,7 +170,7 @@
 
             <StackPanel Grid.Row="1">
                 <Grid Margin="0 2">
-                    <controls:StripIndicator Height="16" Value="{Binding LeftChannelPeak, Mode=OneWay}" Maximum="100" Minimum="0" BorderThickness="1" >
+                    <controls:StripIndicator Height="21" Value="{Binding LeftChannelPeak, Mode=OneWay}" Maximum="100" Minimum="0" BorderThickness="1" >
                         <controls:StripIndicator.Resources>
                             <Style TargetType="{x:Type controls:StripIndicator}" BasedOn="{StaticResource {x:Type controls:StripIndicator}}">
                                 <!--<Style.Triggers>
@@ -216,7 +216,7 @@
                             </Style.Triggers>
                         </Style>
                     </Grid.Style>
-                    <controls:StripIndicator Height="16" Value="{Binding RightChannelPeak, Mode=OneWay, TargetNullValue=0}" Maximum="100" Minimum="0" BorderThickness="1" >
+                    <controls:StripIndicator Height="21" Value="{Binding RightChannelPeak, Mode=OneWay, TargetNullValue=0}" Maximum="100" Minimum="0" BorderThickness="1" >
                         <controls:StripIndicator.Resources>
                             <Style TargetType="{x:Type controls:StripIndicator}" BasedOn="{StaticResource {x:Type controls:StripIndicator}}">
                                 <!--<Style.Triggers>

@@ -4,6 +4,7 @@ using System.Runtime.InteropServices;
 using System.Windows.Controls;
 using System.Windows.Interop;
 using Microsoft.Practices.Unity;
+using MvvmDialogs;
 using SharpPropoPlus.Audio;
 using SharpPropoPlus.Audio.EventArguments;
 using SharpPropoPlus.Decoder;
@@ -149,18 +150,21 @@ namespace SharpPropoPlus
 
         public void ShowMainWindow()
         {
-            
-            Container.RegisterInstance<IAudioConfigViewModel>(new AudioConfigViewModel());
-            Container.RegisterInstance<IJoystickConfigViewModel>(new JoystickConfigViewModel());
-            Container.RegisterInstance<ITransmitterConfigViewModel>(new TransmitterConfigViewModel());
-            Container.RegisterInstance<IFilterConfigViewModel>(new FilterConfigViewModel());
-            Container.RegisterInstance<IAdvancedConfigViewModel>(new AdvancedConfigViewModel());
+            Container.RegisterInstance<IDialogService>(new DialogService(), new ContainerControlledLifetimeManager());
 
+            Container.RegisterType<IAudioConfigViewModel, AudioConfigViewModel>();
+            Container.RegisterType<IJoystickConfigViewModel, JoystickConfigViewModel>();
+            Container.RegisterType<ITransmitterConfigViewModel, TransmitterConfigViewModel>();
+            Container.RegisterType<IFilterConfigViewModel, FilterConfigViewModel>();
+            Container.RegisterType<IAdvancedConfigViewModel, AdvancedConfigViewModel>();
+            Container.RegisterType<ILoggingTabViewModel, LoggingTabViewModel>();
+            
             Container.RegisterType(typeof(UserControl), typeof(AudioConfig), new ContainerControlledLifetimeManager());
             Container.RegisterType(typeof(UserControl), typeof(FilterConfig), new ContainerControlledLifetimeManager());
             Container.RegisterType(typeof(UserControl), typeof(JoystickConfig), new ContainerControlledLifetimeManager());
             Container.RegisterType(typeof(UserControl), typeof(TransmitterConfig), new ContainerControlledLifetimeManager());
             Container.RegisterType(typeof(UserControl), typeof(AdvancedConfig), new ContainerControlledLifetimeManager());
+            Container.RegisterType(typeof(UserControl), typeof(LoggingTab), new ContainerControlledLifetimeManager());
             
             var mainWindow = Container.Resolve<Shell>(); // Creating Main window
 

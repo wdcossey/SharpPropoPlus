@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Threading;
 using SharpPropoPlus.Contracts;
 using SharpPropoPlus.Contracts.Interfaces;
@@ -159,7 +160,7 @@ namespace SharpPropoPlus.Decoder.Ppm.Walkera
             //if (gDebugLevel >= 3 && gCtrlLogFile /*&& !(i++%50)*/)
             //  fprintf(gCtrlLogFile, " _data[%d]=%d", _datacount, _data[_datacount]);
 
-            //Debug.WriteLine($"_data[{_datacount}]={_data[_datacount]}");
+            //Debug.WriteLine($"data[{DataCount}]={DataBuffer[DataCount]}");
 
             if (DataCount == 11)
                 Sync = false; /* Reset _sync after channel 12 */

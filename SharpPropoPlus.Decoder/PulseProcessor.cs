@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Linq;
 using SharpPropoPlus.Contracts;
 using SharpPropoPlus.Contracts.Interfaces;
 using SharpPropoPlus.Decoder.Contracts;
@@ -359,12 +360,44 @@ namespace SharpPropoPlus.Decoder
 
                 var pulseLength = CalculatePulseLength(sampleRate, sample, ref negative);
 
+                SendDbgPulse(sample, negative, pulseLength.Raw, pulseLength.Normalized);
+
                 Process(pulseLength.Normalized, negative, filterChannels, filter);
             }
             catch (Exception e)
             {
                 Debug.WriteLine(e);
             }
+        }
+
+        const int ARRAY_SIZE = 4000;
+        private static int[][] _samples = { new int[ARRAY_SIZE], new int[ARRAY_SIZE] };
+        private static int _iSample = 0;
+        private static int _iArray = 0;
+
+        private void SendDbgPulse(int sample, bool negative, int rawPulseLength, int pulseLength)
+        {
+            // Send message if new pulse or if the array is going to overrun
+            if ((_iSample >= ARRAY_SIZE) || rawPulseLength > 0)
+            {
+                // Prepare data
+                var message = new DebugPulseEventArgs(
+                    _samples[_iArray].Take(_iSample).ToArray(),
+                    rawPulseLength,
+                    pulseLength,
+                    negative
+                );
+
+                // Post data 
+                GlobalEventAggregator.Instance.SendMessage(message);
+
+                // Prepare to continue
+                _iArray = _iArray > 0 ? 0 : 1;
+                _iSample = 0;
+            }
+
+            // Put a new sample in current array (Make sure array not overrun)
+            _samples[_iArray][_iSample++] = sample;
         }
 
         public abstract void Reset();

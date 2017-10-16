@@ -70,7 +70,8 @@ namespace SharpPropoPlus.ViewModels
                     return;
                 }
 
-                _selectedBitrateItem = value;
+                AudioHelper.Instance.Bitrate = _selectedBitrateItem = value;
+
                 OnPropertyChanged();
             }
         }
