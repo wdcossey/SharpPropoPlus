@@ -70,7 +70,7 @@ namespace SharpPropoPlus.ViewModels
                     return;
                 }
 
-                AudioHelper.Instance.Bitrate = _selectedBitrateItem = value;
+                AudioHelper.Instance.SetBitrate(_selectedBitrateItem = value);
 
                 OnPropertyChanged();
             }
@@ -145,7 +145,7 @@ namespace SharpPropoPlus.ViewModels
                     return;
                 }
 
-                AudioHelper.Instance.Channel = _selectedChannelItem = value;
+                AudioHelper.Instance.SetChannel(_selectedChannelItem = value);
 
                 OnPropertyChanged();
             }

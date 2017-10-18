@@ -6,6 +6,7 @@ using System.Windows.Interop;
 using Microsoft.Practices.Unity;
 using MvvmDialogs;
 using SharpPropoPlus.Audio;
+using SharpPropoPlus.Audio.Enums;
 using SharpPropoPlus.Audio.EventArguments;
 using SharpPropoPlus.Decoder;
 using SharpPropoPlus.Decoder.EventArguments;
@@ -54,61 +55,28 @@ namespace SharpPropoPlus
             var right = new int[samplesDesired];
             var index = 0;
 
-            for (var sample = 0; sample < args.BytesRecorded / 4; sample++)
+            for (var sample = 0; sample < args.BytesRecorded / (2 * channels); sample++)
             {
-
-                left[sample] = BitConverter.ToInt16(args.Buffer, index);
-                index += 2;
-                right[sample] = BitConverter.ToInt16(args.Buffer, index);
-                index += 2;
-
-                DecoderManager.Decoder.ProcessPulse(args.SampleRate, right[sample], FilterManager.IsEnabled, FilterManager.Filter); /*data =>
+                switch (channels)
                 {
-                    var filterData = data.Data;
-                    var channelCount = data.Count;
+                    case 1:
+                        right[sample] = BitConverter.ToInt16(args.Buffer, index);
+                        index += 2;
+                        break;
+                    case 2:
+                    default:
+                        left[sample] = BitConverter.ToInt16(args.Buffer, index);
+                        index += 2;
+                        right[sample] = BitConverter.ToInt16(args.Buffer, index);
+                        index += 2;
+                        break;
+                }
 
-                    if (FilterManager.IsEnabled)
-                    {
-                        channelCount = (FilterManager.Filter?.RunFilter(ref filterData, channelCount + 1)).GetValueOrDefault(0);
-                    }
+                var data = args.PreferedChannel == AudioChannel.Left ? left[sample] : right[sample];
 
-                    if (channelCount > 0)
-                    {
-                        JoystickInteraction.Instance.Send(channelCount, filterData);
-                    }
-
-                });*/
-
-                //
+                DecoderManager.Decoder.ProcessPulse(sampleRate, data, FilterManager.IsEnabled, FilterManager.Filter);
             }
         }
-
-        //TODO: Remove, this is only for testing...
-        //private void AudioDataAction(AudioDataEventArgs args)
-        //{
-        //    //var bitsPerSample = source.WaveFormat.BitsPerSample;
-        //    //var sampleRate = source.WaveFormat.SampleRate;
-        //    //var channels = source.WaveFormat.Channels;
-
-        //    var samplesDesired = args.BytesRecorded / args.Channels;
-
-        //    var left = new int[samplesDesired];
-        //    var right = new int[samplesDesired];
-        //    var index = 0;
-
-        //    for (var sample = 0; sample < args.BytesRecorded / 4; sample++)
-        //    {
-
-        //        //left[sample] = BitConverter.ToInt16(args.Buffer, index);
-        //        index += 2;
-        //        right[sample] = BitConverter.ToInt16(args.Buffer, index);
-        //        index += 2;
-
-        //        _decoder.Value.ProcessPulse(args.SampleRate, right[sample]);
-        //    }
-
-        //}
-
 
         public static Application Instance
         {
@@ -152,10 +120,11 @@ namespace SharpPropoPlus
         {
             Container.RegisterInstance<IDialogService>(new DialogService(), new ContainerControlledLifetimeManager());
 
-            Container.RegisterType<IAudioConfigViewModel, AudioConfigViewModel>();
-            Container.RegisterType<IJoystickConfigViewModel, JoystickConfigViewModel>();
-            Container.RegisterType<ITransmitterConfigViewModel, TransmitterConfigViewModel>();
-            Container.RegisterType<IFilterConfigViewModel, FilterConfigViewModel>();
+            Container.RegisterInstance<IAudioConfigViewModel>(new AudioConfigViewModel(), new ContainerControlledLifetimeManager());
+            Container.RegisterInstance<IJoystickConfigViewModel>(new JoystickConfigViewModel(), new ContainerControlledLifetimeManager());
+            Container.RegisterInstance<ITransmitterConfigViewModel>(new TransmitterConfigViewModel(), new ContainerControlledLifetimeManager());
+            Container.RegisterInstance<IFilterConfigViewModel>(new FilterConfigViewModel(), new ContainerControlledLifetimeManager());
+
             Container.RegisterType<IAdvancedConfigViewModel, AdvancedConfigViewModel>();
             Container.RegisterType<ILoggingTabViewModel, LoggingTabViewModel>();
             

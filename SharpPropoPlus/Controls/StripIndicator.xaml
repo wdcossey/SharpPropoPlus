@@ -7,7 +7,7 @@
              BorderThickness="0"
              Background="Transparent"
              mc:Ignorable="d" 
-             MinHeight="8"
+             MinHeight="2"
              d:DesignHeight="300" d:DesignWidth="300">
 
     <Border 

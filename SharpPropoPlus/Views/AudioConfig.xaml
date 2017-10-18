@@ -170,7 +170,7 @@
 
             <StackPanel Grid.Row="1">
                 <Grid Margin="0 2">
-                    <controls:StripIndicator Height="21" Value="{Binding LeftChannelPeak, Mode=OneWay}" Maximum="100" Minimum="0" BorderThickness="1" >
+                    <controls:StripIndicator ToolTip="Left" Height="10" Value="{Binding LeftChannelPeak, Mode=OneWay}" Maximum="100" Minimum="0" BorderThickness="1" >
                         <controls:StripIndicator.Resources>
                             <Style TargetType="{x:Type controls:StripIndicator}" BasedOn="{StaticResource {x:Type controls:StripIndicator}}">
                                 <!--<Style.Triggers>
@@ -181,7 +181,7 @@
                             </Style>
                         </controls:StripIndicator.Resources>
                     </controls:StripIndicator>
-                    <TextBlock Panel.ZIndex="0" Margin="8 0 0 0" VerticalAlignment="Center" HorizontalAlignment="Left">
+                    <TextBlock Panel.ZIndex="0" Visibility="Collapsed" Margin="8 0 0 0" VerticalAlignment="Center" HorizontalAlignment="Left">
                         <TextBlock.Resources>
                             <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource {x:Type TextBlock}}">
                                 <Setter Property="Text" Value="Left"/>
@@ -201,7 +201,7 @@
                         </TextBlock.Resources>
                     </TextBlock>
 
-                    <TextBlock Panel.ZIndex="0" Margin="0 0 8 0" Text="{Binding LeftChannelPeak, Mode=OneWay, StringFormat=\{0\}%}" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+                    <TextBlock Panel.ZIndex="0" Visibility="Collapsed" Margin="0 0 8 0" Text="{Binding LeftChannelPeak, Mode=OneWay, StringFormat=\{0\}%}" VerticalAlignment="Center" HorizontalAlignment="Right"/>
                 </Grid>
 
                 <Grid Margin="0 2">
@@ -216,7 +216,7 @@
                             </Style.Triggers>
                         </Style>
                     </Grid.Style>
-                    <controls:StripIndicator Height="21" Value="{Binding RightChannelPeak, Mode=OneWay, TargetNullValue=0}" Maximum="100" Minimum="0" BorderThickness="1" >
+                    <controls:StripIndicator ToolTip="Right" Height="10" Value="{Binding RightChannelPeak, Mode=OneWay, TargetNullValue=0}" Maximum="100" Minimum="0" BorderThickness="1" >
                         <controls:StripIndicator.Resources>
                             <Style TargetType="{x:Type controls:StripIndicator}" BasedOn="{StaticResource {x:Type controls:StripIndicator}}">
                                 <!--<Style.Triggers>
@@ -227,7 +227,7 @@
                             </Style>
                         </controls:StripIndicator.Resources>
                     </controls:StripIndicator>
-                    <TextBlock Panel.ZIndex="0" Margin="8 0 0 0" VerticalAlignment="Center" HorizontalAlignment="Left">
+                    <TextBlock Panel.ZIndex="0" Visibility="Collapsed" Margin="8 0 0 0" VerticalAlignment="Center" HorizontalAlignment="Left">
                         <TextBlock.Resources>
                             <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource {x:Type TextBlock}}" >
                                 <Setter Property="Text" Value="Right"/>
@@ -239,7 +239,7 @@
                             </Style>
                         </TextBlock.Resources>
                     </TextBlock>
-                    <TextBlock Panel.ZIndex="0" Margin="0 0 8 0" Text="{Binding RightChannelPeak, TargetNullValue='0%', Mode=OneWay, StringFormat=\{0\}%}" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+                    <TextBlock Panel.ZIndex="0" Visibility="Collapsed" Margin="0 0 8 0" Text="{Binding RightChannelPeak, TargetNullValue='0%', Mode=OneWay, StringFormat=\{0\}%}" VerticalAlignment="Center" HorizontalAlignment="Right"/>
                 </Grid>
 
             </StackPanel>

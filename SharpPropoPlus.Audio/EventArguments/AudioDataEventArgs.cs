@@ -1,14 +1,24 @@
 ﻿using System;
+using SharpPropoPlus.Audio.Enums;
 
 namespace SharpPropoPlus.Audio.EventArguments
 {
     public class AudioDataEventArgs : EventArgs
     {
-        private readonly int _sampleRate;
-        private readonly int _bitsPerSample;
-        private readonly int _channels;
-        private readonly int _bytesRecorded;
-        private readonly byte[] _buffer;
+
+        public int SampleRate { get; }
+
+        public int Channels { get; }
+
+        public int BytesRecorded { get; }
+
+        public byte[] Buffer { get; }
+
+        public int BitsPerSample { get; }
+
+        public AudioChannel PreferedChannel { get; }
+
+        public AudioBitrate PreferedBitrate { get; }
 
 
         private AudioDataEventArgs()
@@ -16,39 +26,24 @@ namespace SharpPropoPlus.Audio.EventArguments
 
         }
 
-        public AudioDataEventArgs(int sampleRate, int bitsPerSample, int channels, int bytesRecorded, byte[] buffer)
+        public AudioDataEventArgs(
+            int sampleRate, 
+            int bitsPerSample, 
+            int channels, 
+            int bytesRecorded, 
+            byte[] buffer,
+            AudioChannel audioChannel,
+            AudioBitrate audioBitrate)
             : this()
         {
-            _sampleRate = sampleRate;
-            _bitsPerSample = bitsPerSample;
-            _channels = channels;
-            _bytesRecorded = bytesRecorded;
-            _buffer = buffer;
+            SampleRate = sampleRate;
+            BitsPerSample = bitsPerSample;
+            Channels = channels;
+            BytesRecorded = bytesRecorded;
+            Buffer = buffer;
+            PreferedChannel = audioChannel;
+            PreferedBitrate = audioBitrate;
         }
 
-        public int SampleRate
-        {
-            get { return _sampleRate; }
-        }
-
-        public int Channels
-        {
-            get { return _channels; }
-        }
-
-        public int BytesRecorded
-        {
-            get { return _bytesRecorded; }
-        }
-
-        public byte[] Buffer
-        {
-            get { return _buffer; }
-        }
-
-        public int BitsPerSample
-        {
-            get { return _bitsPerSample; }
-        }
     }
 }

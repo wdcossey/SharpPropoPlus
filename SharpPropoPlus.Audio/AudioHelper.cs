@@ -39,16 +39,18 @@ namespace SharpPropoPlus.Audio
         public event EventHandler<AudioDataEventArgs> DataAvailable;
         public event EventHandler<AudioEndPointEventArgs> AudioEndPointChanged;
 
+        private MMDevice _currentDevice = null;
+
         private AudioHelper()
         {
             //_quitPolling = false;
             _deviceEnumerator = new MMDeviceEnumerator();
             _lastPeakValues = new PeakValues();
 
-            var device = GetDefaultDevice();
+            _currentDevice = GetDefaultDevice();
 
-            DeviceId = device.DeviceID;
-            DeviceName = device.FriendlyName;
+            DeviceId = _currentDevice.DeviceID;
+            DeviceName = _currentDevice.FriendlyName;
         }
 
         private MMDevice GetDefaultDevice()
@@ -105,39 +107,71 @@ namespace SharpPropoPlus.Audio
         public string DeviceName
         {
             get { return _deviceName; }
-            internal set { _deviceName = value; }
+            private set { _deviceName = value; }
         }
 
         public string DeviceId
         {
             get { return _deviceId; }
-            internal set { _deviceId = value; }
+            private set { _deviceId = value; }
         }
 
         public AudioChannel Channel
         {
             get => _audioChannel;
-            set { _audioChannel = value; }
+            private set
+            {
+                if (_audioChannel == value)
+                {
+                    return;
+                }
+
+                _audioChannel = value;
+            }
+        }
+
+        private AudioChannel PreferredChannel { get; set; }
+
+        public AudioHelper SetChannel(AudioChannel audioChannel)
+        {
+            Channel = audioChannel;
+            return this;
         }
 
         public AudioBitrate Bitrate
         {
             get => _audioBitrate;
-            set { _audioBitrate = value; }
+            private set
+            {
+                if (_audioBitrate == value)
+                {
+                    return;
+                }
+
+                _audioBitrate = value;
+
+                StartRecording(_currentDevice);
+            }
+        }
+
+        public AudioHelper SetBitrate(AudioBitrate audioBitrate)
+        {
+            Bitrate = audioBitrate;
+            return this;
         }
 
         public void StartRecording()
         {
-            var device = GetDefaultDevice();
+            _currentDevice = GetDefaultDevice();
 
-            StartRecording(device);
+            StartRecording(_currentDevice);
         }
 
         public void StartRecording(AudioEndPoint audioEndPoint)
         {
-            var device = _deviceEnumerator.GetDevice(audioEndPoint.DeviceId);
+            _currentDevice = _deviceEnumerator.GetDevice(audioEndPoint.DeviceId);
 
-            StartRecording(device);
+            StartRecording(_currentDevice);
         }
 
         private WaveFormat GetDeviceFormat(MMDevice device)
@@ -207,8 +241,8 @@ namespace SharpPropoPlus.Audio
             GlobalEventAggregator.Instance.SendMessage(audioEndPointArgs);
 
             _soundIn =
-                new WasapiCapture(false, AudioClientShareMode.Exclusive, 0, deviceFormat,
-                    ThreadPriority.Highest)
+                new WasapiCapture(false, AudioClientShareMode.Shared, 0, deviceFormat,
+                    ThreadPriority.Normal)
                 {
                     Device = device
                 };
@@ -224,7 +258,7 @@ namespace SharpPropoPlus.Audio
             _convertedSource = soundInSource
                 .ChangeSampleRate(192000) // sample rate
                 .ToSampleSource()
-                .ToWaveSource(16); //bits per sample
+                .ToWaveSource(/*_audioBitrate == AudioBitrate.Eightbit ? 8 :*/ 16); //bits per sample
 
             //var singleBlockNotificationStream = new SingleBlockNotificationStream(soundInSource.ToSampleSource());
             //_finalSource = singleBlockNotificationStream.ToWaveSource();
@@ -255,7 +289,7 @@ namespace SharpPropoPlus.Audio
             var elementsRead = _convertedSource.Read(buffer, 0, buffer.Length);
             
             var eventArgs = new AudioDataEventArgs(_convertedSource.WaveFormat.SampleRate, _convertedSource.WaveFormat.BitsPerSample,
-                _convertedSource.WaveFormat.Channels, elementsRead, buffer.Take(elementsRead).ToArray());
+                _convertedSource.WaveFormat.Channels, elementsRead, buffer.Take(elementsRead).ToArray(), PreferredChannel, _audioBitrate);
              
             //Raise the event handler
             DataAvailable?.Invoke(this, eventArgs);
@@ -290,47 +324,54 @@ namespace SharpPropoPlus.Audio
 
             //_quitPolling = false;
 
+            
+
             _pollingTask = Task.Factory.StartNew(() =>
             {
 
-                var device = _deviceEnumerator.GetDevice(DeviceId);
+                var audioEndpointVolume = AudioEndpointVolume.FromDevice(_currentDevice);
+                var audioMeterInformation = AudioMeterInformation.FromDevice(_currentDevice);
+
 
                 while (!_pollingCancellationTokenSource.IsCancellationRequested)
                 {
+                    var channelPeaks = audioMeterInformation.GetChannelsPeakValues();
 
+                    var peakValues = new PeakValues(audioEndpointVolume.IsMuted,
+                        audioEndpointVolume.MasterVolumeLevel,
+                        channelPeaks[0],
+                        audioMeterInformation.MeteringChannelCount == 1 ? (float?)null : channelPeaks[1]);
 
-                    //var peakValues = new PeakValues(device.AudioEndpointVolume.Mute,
-                    //    device.AudioMeterInformation.MasterPeakValue,
-                    //    device.AudioMeterInformation.PeakValues[0],
-                    //    device.AudioMeterInformation.PeakValues.Count == 1 ? (float?)null : device.AudioMeterInformation.PeakValues[1]);
+                    if (!_lastPeakValues.Muted.Equals(peakValues.Muted) ||
+                        !_lastPeakValues.Master.Equals(peakValues.Master) ||
+                        !_lastPeakValues.Left.Equals(peakValues.Left) ||
+                        !_lastPeakValues.Right.Equals(peakValues.Right))
+                    {
+                        var args = new PeakValueEventArgs(peakValues);
+                        GlobalEventAggregator.Instance.SendMessage(args);
 
-                    //if (!_lastPeakValues.Muted.Equals(peakValues.Muted) ||
-                    //    !_lastPeakValues.Master.Equals(peakValues.Master) ||
-                    //    !_lastPeakValues.Left.Equals(peakValues.Left) ||
-                    //    !_lastPeakValues.Right.Equals(peakValues.Right))
-                    //{
-                    //    var args = new PeakValueEventArgs(peakValues);
-                    //    //OnPeakValuesChanged(args);
-                    //    GlobalEventAggregator.Instance.SendMessage(args);
+                        _lastPeakValues.Update(peakValues);
+                    }
 
-                    //    _lastPeakValues.Update(peakValues);
-                    //}
+                    var preferredChannel = Channel == AudioChannel.Automatic
+                        ? new PreferredChannelEventArgs(peakValues.Left, peakValues.Right)
+                        : new PreferredChannelEventArgs(Channel);
 
-                    //var preferredChannel = Channel == AudioChannel.Automatic
-                    //    ? new PreferredChannelEventArgs(peakValues.Left, peakValues.Right)
-                    //    : new PreferredChannelEventArgs(Channel);
+                    PreferredChannel = preferredChannel.Channel;
 
-                    //GlobalEventAggregator.Instance.SendMessage(preferredChannel);
-
-                    ////var deviceInfo = new DeviceInfoEventArgs(device);
-                    ////GlobalEventAggregator.Instance.SendMessage(deviceInfo);
+                    GlobalEventAggregator.Instance.SendMessage(preferredChannel);
 
                     //Task.Delay(200, _pollingCancellationTokenSource.Token);
                 }
 
                 //_quitPolling = false;
 
+                audioEndpointVolume?.Dispose();
+                audioMeterInformation?.Dispose();
+
             }, _pollingCancellationTokenSource.Token);
+
+           
 
         }
 
