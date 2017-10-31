@@ -15,6 +15,8 @@ using System.Windows.Input;
 using Microsoft.Practices.Unity;
 using SharpPropoPlus.Annotations;
 using SharpPropoPlus.Commands;
+using SharpPropoPlus.Contracts.EventArguments;
+using SharpPropoPlus.Events;
 
 namespace SharpPropoPlus.Controls
 {
@@ -32,6 +34,7 @@ namespace SharpPropoPlus.Controls
     [TemplatePart(Name = "PART_BOTTOM_BORDER", Type = typeof(UIElement))]
     [TemplatePart(Name = "PART_FAME", Type = typeof(Frame))]
     [TemplatePart(Name = "PART_NAVIGATION", Type = typeof(Button))]
+    [TemplatePart(Name = "PART_TOGGLE_BUTTON", Type = typeof(ToggleButton))]
     public partial class CustomWindow : Window, INotifyPropertyChanged
     {
         /// <summary>
@@ -107,6 +110,24 @@ namespace SharpPropoPlus.Controls
             get { return (ContextMenu)this.GetValue(SettingsMenuProperty); }
             set { this.SetValue(SettingsMenuProperty, value); }
         }
+
+        public static readonly DependencyProperty ToggleButtonCommandProperty = DependencyProperty.Register(
+            "ToggleButtonCommand", typeof(ICommand), typeof(CustomWindow), new PropertyMetadata());
+
+        public ICommand ToggleButtonCommand
+        {
+            get { return (ICommand)this.GetValue(ToggleButtonCommandProperty); }
+            set { this.SetValue(ToggleButtonCommandProperty, value); }
+        }
+
+        public static readonly DependencyProperty IsToggleCheckedProperty = DependencyProperty.Register(
+            "IsToggleChecked", typeof(bool), typeof(CustomWindow), new PropertyMetadata(false));
+
+        public bool IsToggleChecked
+        {
+            get { return (bool)this.GetValue(IsToggleCheckedProperty); }
+            set { this.SetValue(IsToggleCheckedProperty, value); }
+        }
         
         /// <summary>
         /// When overridden in a derived class, is invoked whenever application code 
@@ -163,6 +184,7 @@ namespace SharpPropoPlus.Controls
             AttachMaximizeRestoreButton();
             AttachNavigaionButton();
             AttachSettingsButton();
+            AttachToggleButton();
         }
 
         /// <summary>
@@ -241,7 +263,7 @@ namespace SharpPropoPlus.Controls
         {
             if (NavigationButton != null)
             {
-                NavigationButton.ContextMenu = null;
+                NavigationButton.Command = null;
             }
 
             Button navigationButton = GetChildControl<Button>("PART_NAVIGATION");
@@ -249,6 +271,26 @@ namespace SharpPropoPlus.Controls
             {
                 navigationButton.Command = _navigationCommand;
                 NavigationButton = navigationButton;
+            }
+        }
+
+        private void AttachToggleButton()
+        {
+            if (ToggleButton != null)
+            {
+                ToggleButton.Command = null;
+                ToggleButton.IsChecked = null;
+            }
+
+            ToggleButton toggleButton = GetChildControl<ToggleButton>("PART_TOGGLE_BUTTON");
+            if (toggleButton != null)
+            {
+                toggleButton.Command = new RelayCommand(o =>
+                {
+                    GlobalEventAggregator.Instance.SendMessage(new SleepStateEventArgs(IsToggleChecked));
+                });
+                toggleButton.IsChecked = IsToggleChecked;
+                ToggleButton = toggleButton;
             }
         }
 
@@ -315,6 +357,8 @@ namespace SharpPropoPlus.Controls
         private Button SettingsButton { get; set; }
 
         private Button NavigationButton { get; set; }
+
+        private ToggleButton ToggleButton { get; set; }
 
         private Frame FrameContent { get; set; }
 

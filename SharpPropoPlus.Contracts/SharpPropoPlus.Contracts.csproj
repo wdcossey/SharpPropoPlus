@@ -42,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants\Constants.cs" />
+    <Compile Include="EventArguments\SleepStateEventArgs.cs" />
     <Compile Include="Interfaces\IDecoderMetadata.cs" />
     <Compile Include="Interfaces\IFilterMetadata.cs" />
     <Compile Include="Interfaces\IJoystickData.cs" />
@@ -52,8 +53,6 @@
     <Compile Include="Interfaces\IPropoMetadata.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="EventArguments\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

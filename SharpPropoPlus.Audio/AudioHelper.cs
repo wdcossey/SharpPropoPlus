@@ -12,6 +12,7 @@ using CSCore.Win32;
 using SharpPropoPlus.Audio.Enums;
 using SharpPropoPlus.Audio.EventArguments;
 using SharpPropoPlus.Audio.Models;
+using SharpPropoPlus.Contracts.EventArguments;
 using SharpPropoPlus.Events;
 
 namespace SharpPropoPlus.Audio
@@ -40,9 +41,13 @@ namespace SharpPropoPlus.Audio
         public event EventHandler<AudioEndPointEventArgs> AudioEndPointChanged;
 
         private MMDevice _currentDevice = null;
+        private bool _isRecording;
 
         private AudioHelper()
         {
+
+            GlobalEventAggregator.Instance.AddListener<SleepStateEventArgs>(SleepStateListner);
+
             //_quitPolling = false;
             _deviceEnumerator = new MMDeviceEnumerator();
             _lastPeakValues = new PeakValues();
@@ -51,6 +56,21 @@ namespace SharpPropoPlus.Audio
 
             DeviceId = _currentDevice.DeviceID;
             DeviceName = _currentDevice.FriendlyName;
+        }
+
+        private void SleepStateListner(SleepStateEventArgs args)
+        {
+            if (args == null || args.State == _isRecording)
+                return;
+
+            if (args.State)
+            {
+                StartRecording();
+            }
+            else
+            {
+                StopRecording();
+            }
         }
 
         private MMDevice GetDefaultDevice()
@@ -242,7 +262,7 @@ namespace SharpPropoPlus.Audio
 
             _soundIn =
                 new WasapiCapture(false, AudioClientShareMode.Shared, 0, deviceFormat,
-                    ThreadPriority.Normal)
+                    ThreadPriority.Highest)
                 {
                     Device = device
                 };
@@ -272,6 +292,8 @@ namespace SharpPropoPlus.Audio
             _soundIn.Start();
 
             PollAudioLevels();
+
+            _isRecording = true;
         }
 
         private void SoundInSourceOnDataAvailable(object sender, DataAvailableEventArgs args)
@@ -314,7 +336,9 @@ namespace SharpPropoPlus.Audio
             _soundIn?.Stop();
             _soundIn?.Dispose();
             _soundIn = null;
-            
+
+            _isRecording = false;
+
             _pollingCancellationTokenSource = new CancellationTokenSource();
 
         }

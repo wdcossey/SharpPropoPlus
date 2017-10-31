@@ -8,7 +8,7 @@
         xmlns:controls="clr-namespace:SharpPropoPlus.Controls"
         ResizeMode="CanMinimize"
         mc:Ignorable="d"
-                       
+        IsToggleChecked="True"
         Style="{StaticResource MainWindow}"
         
         Title="#PropoPlus" 
