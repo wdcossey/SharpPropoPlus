@@ -7,7 +7,7 @@ using SharpPropoPlus.Decoder.Contracts;
 
 namespace SharpPropoPlus.Decoder.Pcm.JrGraupner
 {
-    [ExportPropoPlusDecoder("JR/Graupner", "JR/Graupner (PCM) pulse processor", TransmitterType.Pcm)]
+    [ExportPropoPlusDecoder("{3206CABB-2FBD-4C24-922E-23B5ECD997DB}", "JR/Graupner", "JR/Graupner (PCM) pulse processor", TransmitterType.Pcm)]
     public class Program : PcmPulseProcessor
     {
         /// <summary>

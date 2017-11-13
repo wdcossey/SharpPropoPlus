@@ -9,7 +9,7 @@ using SharpPropoPlus.Filter.Contracts;
 
 namespace SharpPropoPlus.Filter.VTail
 {
-    [ExportPropoPlusFilter("V-Tail (Ch1+Ch4)", "V-Tail un-mixing (mixed channels 1 and 4)")]
+    [ExportPropoPlusFilter("{90CC5B6D-63BE-4359-9E41-EFF3DC24149C}", "V-Tail (Ch1+Ch4)", "V-Tail un-mixing (mixed channels 1 and 4)")]
     public class Filter : FilterProcessor
     {
         public override string[] Description => new[]

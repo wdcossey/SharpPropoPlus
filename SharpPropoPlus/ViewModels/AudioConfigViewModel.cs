@@ -40,6 +40,9 @@ namespace SharpPropoPlus.ViewModels
             SelectedAudioEndPoint =
                 AudioEndPointCollection.FirstOrDefault(fd => fd.DeviceId == AudioHelper.Instance.DeviceId);
 
+            _selectedBitrateItem = AudioHelper.Instance.Bitrate;
+            _selectedChannelItem = AudioHelper.Instance.Channel;
+
             GlobalEventAggregator.Instance.AddListener<PeakValueEventArgs>(PeakValueChangedListner);            
         }
 

@@ -4,7 +4,7 @@ using SharpPropoPlus.Filter.Contracts;
 
 namespace SharpPropoPlus.Filter.Esky.Type1
 {
-    [ExportPropoPlusFilter("CCPM: E-sky (6ch) Type 1", "E-Sky CCPM 6 channel signal into 4 orthogonal channels")]
+    [ExportPropoPlusFilter("{C2B2125A-7B26-4C68-824E-D508E5DCA0FD}", "CCPM: E-sky (6ch) Type 1", "E-Sky CCPM 6 channel signal into 4 orthogonal channels")]
     public class Filter : FilterProcessor
     {
         public override string[] Description => new[]

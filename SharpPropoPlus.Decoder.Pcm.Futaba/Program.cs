@@ -7,7 +7,7 @@ using SharpPropoPlus.Decoder.Contracts;
 
 namespace SharpPropoPlus.Decoder.Pcm.Futaba
 {
-    [ExportPropoPlusDecoder("Futaba", "Futaba (PCM) pulse processor", TransmitterType.Pcm)]
+    [ExportPropoPlusDecoder("{9D66DB4A-8B76-4CB5-AC26-715D233806A4}", "Futaba", "Futaba (PCM) pulse processor", TransmitterType.Pcm)]
     public class Program : PcmPulseProcessor
     {
         /// <summary>

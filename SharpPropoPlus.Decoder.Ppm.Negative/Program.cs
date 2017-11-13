@@ -8,7 +8,7 @@ using SharpPropoPlus.Decoder.Structs;
 
 namespace SharpPropoPlus.Decoder.Ppm.Negative
 {
-    [ExportPropoPlusDecoder("Negative", "Negative (PPM) pulse processor", TransmitterType.Ppm)]
+    [ExportPropoPlusDecoder("{19F880E1-E127-420D-B672-A365ECA944A2}", "Negative", "Negative (PPM) pulse processor", TransmitterType.Ppm)]
     public class Program : PpmPulseProcessor<JitterFilter>
     {
 

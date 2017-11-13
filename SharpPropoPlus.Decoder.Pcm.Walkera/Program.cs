@@ -7,7 +7,7 @@ using SharpPropoPlus.Decoder.Contracts;
 
 namespace SharpPropoPlus.Decoder.Pcm.Walkera
 {
-    [ExportPropoPlusDecoder("Walkera", "Walkera (PCM) pulse processor", TransmitterType.Pcm)]
+    [ExportPropoPlusDecoder("{E3E67508-4DB0-4412-BC0F-8A814C5A18F2}", "Walkera", "Walkera (PCM) pulse processor", TransmitterType.Pcm)]
     public class Program : PcmPulseProcessor
     {
 

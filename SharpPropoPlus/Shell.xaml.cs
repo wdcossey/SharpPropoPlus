@@ -1,4 +1,5 @@
 ﻿using SharpPropoPlus.Controls;
+using SharpPropoPlus.Interfaces;
 
 namespace SharpPropoPlus
 {
@@ -7,12 +8,15 @@ namespace SharpPropoPlus
     /// </summary>
     public partial class Shell : CustomWindow
     {
-        public Shell()
+        private Shell()
         {
             InitializeComponent();
-            
         }
 
-        
+        public Shell(IShellViewModel viewModel)
+            : this()
+        {
+            DataContext = viewModel;
+        }
     }
 }

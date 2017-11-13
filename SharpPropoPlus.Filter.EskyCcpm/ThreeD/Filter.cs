@@ -4,7 +4,7 @@ using SharpPropoPlus.Filter.Contracts;
 
 namespace SharpPropoPlus.Filter.Esky.ThreeD
 {
-    [ExportPropoPlusFilter("CCPM: E-sky (6ch) 3D",
+    [ExportPropoPlusFilter("{769389FD-5125-44BD-9D75-1FD83B8F5419}", "CCPM: E-sky (6ch) 3D",
         "E-Sky CCPM 6 channel signal into 4 orthogonal channels and a 5th for blade pitch")]
     public class Filter : FilterProcessor
     {

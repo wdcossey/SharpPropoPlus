@@ -179,10 +179,16 @@
     <Compile Include="ExtensionMethods\ObjectExtensionMethods.cs" />
     <Compile Include="ExtensionMethods\EnumExtensionMethods.cs" />
     <Compile Include="Helpers\DeviceNotification.cs" />
+    <Compile Include="Interfaces\IShellViewModel.cs" />
     <Compile Include="Interfaces\IAdvancedConfigViewModel.cs" />
     <Compile Include="Interfaces\IJoystickChannelData.cs" />
     <Compile Include="Interfaces\IFilterConfigViewModel.cs" />
     <Compile Include="Interfaces\ILoggingTabViewModel.cs" />
+    <Compile Include="Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
     <Compile Include="ValueConverters\DecoderOfTypeValueConverter.cs" />
     <Compile Include="ViewModels\AdvancedConfigViewModel.cs" />
     <Compile Include="ViewModels\JoystickChannelDataViewModel.cs" />
@@ -202,6 +208,7 @@
     <Compile Include="ViewModels\OverviewViewModel.cs" />
     <Compile Include="Controls\ToolBarButton.cs" />
     <Compile Include="ViewModels\FilterConfigViewModel.cs" />
+    <Compile Include="ViewModels\ShellViewModel.cs" />
     <Compile Include="ViewModels\TransmitterConfigViewModel.cs" />
     <Compile Include="Views\AboutTab.xaml.cs">
       <DependentUpon>AboutTab.xaml</DependentUpon>
@@ -326,6 +333,10 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
+    <None Include="Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
     <None Include="SharpPropoPlus_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>

@@ -5,9 +5,7 @@
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -15,8 +13,6 @@ using System.Windows.Input;
 using Microsoft.Practices.Unity;
 using SharpPropoPlus.Annotations;
 using SharpPropoPlus.Commands;
-using SharpPropoPlus.Contracts.EventArguments;
-using SharpPropoPlus.Events;
 
 namespace SharpPropoPlus.Controls
 {
@@ -71,10 +67,8 @@ namespace SharpPropoPlus.Controls
         {
             get
             {
-                return new RelayCommand((o) =>
+                return new RelayCommand<Type>(type =>
                 {
-                    var type = o as Type;
-
                     if (type == null)
                         return;
 
@@ -285,10 +279,6 @@ namespace SharpPropoPlus.Controls
             ToggleButton toggleButton = GetChildControl<ToggleButton>("PART_TOGGLE_BUTTON");
             if (toggleButton != null)
             {
-                toggleButton.Command = new RelayCommand(o =>
-                {
-                    GlobalEventAggregator.Instance.SendMessage(new SleepStateEventArgs(IsToggleChecked));
-                });
                 toggleButton.IsChecked = IsToggleChecked;
                 ToggleButton = toggleButton;
             }

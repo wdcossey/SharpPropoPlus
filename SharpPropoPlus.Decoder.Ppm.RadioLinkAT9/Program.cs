@@ -11,7 +11,7 @@ namespace SharpPropoPlus.Decoder.Ppm.RadioLinkAT9
 {
     //[Export(typeof(IPropoPlusDecoder))]
     //[ExportMetadata("Type", TransmitterType.Ppm)]
-    [ExportPropoPlusDecoder("RadioLink AT9 (Radrik5)", "RadioLink AT9 (PPM) pulse processor", TransmitterType.Ppm)]
+    [ExportPropoPlusDecoder("{3FEB6B2C-817C-4CD2-8398-41A4A043F207}", "RadioLink AT9 (Radrik5)", "RadioLink AT9 (PPM) pulse processor", TransmitterType.Ppm)]
     public class Program : PpmPulseProcessor<RadrikJitterFilter>
     {
 

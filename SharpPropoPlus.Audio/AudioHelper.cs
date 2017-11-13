@@ -42,9 +42,11 @@ namespace SharpPropoPlus.Audio
 
         private MMDevice _currentDevice = null;
         private bool _isRecording;
+        private readonly bool _isStartUp;
 
         private AudioHelper()
         {
+            _isStartUp = true;
 
             GlobalEventAggregator.Instance.AddListener<SleepStateEventArgs>(SleepStateListner);
 
@@ -52,10 +54,15 @@ namespace SharpPropoPlus.Audio
             _deviceEnumerator = new MMDeviceEnumerator();
             _lastPeakValues = new PeakValues();
 
+            SetBitrate((AudioBitrate)Settings.Default.Bitrate);
+            SetChannel((AudioChannel)Settings.Default.Channel);
+
             _currentDevice = GetDefaultDevice();
 
             DeviceId = _currentDevice.DeviceID;
             DeviceName = _currentDevice.FriendlyName;
+
+            _isStartUp = false;
         }
 
         private void SleepStateListner(SleepStateEventArgs args)
@@ -75,6 +82,14 @@ namespace SharpPropoPlus.Audio
 
         private MMDevice GetDefaultDevice()
         {
+            if (!string.IsNullOrWhiteSpace(Settings.Default.InputDevice))
+            {
+                var device = _deviceEnumerator.GetDevice(Settings.Default.InputDevice);
+
+                if (device != null)
+                    return device;
+            }
+
             return _deviceEnumerator.GetDefaultAudioEndpoint(DataFlow.Capture, Role.Console);
         }
 
@@ -147,6 +162,11 @@ namespace SharpPropoPlus.Audio
                 }
 
                 _audioChannel = value;
+
+                if (!_isStartUp)
+                {
+                    
+                }
             }
         }
 
@@ -155,6 +175,10 @@ namespace SharpPropoPlus.Audio
         public AudioHelper SetChannel(AudioChannel audioChannel)
         {
             Channel = audioChannel;
+
+            Settings.Default.Channel = (int)audioChannel;
+            Settings.Default.Save();
+
             return this;
         }
 
@@ -170,13 +194,20 @@ namespace SharpPropoPlus.Audio
 
                 _audioBitrate = value;
 
-                StartRecording(_currentDevice);
+                if (!_isStartUp)
+                {
+                    StartRecording(_currentDevice);
+                }
             }
         }
 
         public AudioHelper SetBitrate(AudioBitrate audioBitrate)
         {
             Bitrate = audioBitrate;
+
+            Settings.Default.Bitrate = (int)audioBitrate;
+            Settings.Default.Save();
+
             return this;
         }
 
@@ -192,6 +223,9 @@ namespace SharpPropoPlus.Audio
             _currentDevice = _deviceEnumerator.GetDevice(audioEndPoint.DeviceId);
 
             StartRecording(_currentDevice);
+
+            Settings.Default.InputDevice = audioEndPoint.DeviceId;
+            Settings.Default.Save();
         }
 
         private WaveFormat GetDeviceFormat(MMDevice device)

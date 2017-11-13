@@ -120,6 +120,7 @@ namespace SharpPropoPlus
         {
             Container.RegisterInstance<IDialogService>(new DialogService(), new ContainerControlledLifetimeManager());
 
+            Container.RegisterInstance<IShellViewModel>(new ShellViewModel(), new ContainerControlledLifetimeManager());
             Container.RegisterInstance<IAudioConfigViewModel>(new AudioConfigViewModel(), new ContainerControlledLifetimeManager());
             Container.RegisterInstance<IJoystickConfigViewModel>(new JoystickConfigViewModel(), new ContainerControlledLifetimeManager());
             Container.RegisterInstance<ITransmitterConfigViewModel>(new TransmitterConfigViewModel(), new ContainerControlledLifetimeManager());

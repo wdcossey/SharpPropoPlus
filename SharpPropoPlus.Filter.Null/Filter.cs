@@ -9,7 +9,7 @@ using SharpPropoPlus.Filter.Contracts;
 
 namespace SharpPropoPlus.Filter.Null
 {
-    [ExportPropoPlusFilter("NULL Filter (does nothing)", "NULL Filter, 12 channel limit")]
+    [ExportPropoPlusFilter("{20E5C6FC-C948-4E21-B14B-DDE2D03632A9}", "NULL Filter (does nothing)", "NULL Filter, 12 channel limit")]
     public class Filter : FilterProcessor
     {
         public override string[] Description => new[]

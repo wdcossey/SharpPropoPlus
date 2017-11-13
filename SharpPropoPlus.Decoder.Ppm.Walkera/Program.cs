@@ -11,7 +11,7 @@ namespace SharpPropoPlus.Decoder.Ppm.Walkera
 {
     //[Export(typeof(IPropoPlusDecoder))]
     //[ExportMetadata("Type", TransmitterType.Ppm)]
-    [ExportPropoPlusDecoder("Walkera", "Walkera WK-2401 (PPM) pulse processor", TransmitterType.Ppm)]
+    [ExportPropoPlusDecoder("{E4268AA2-9CB3-4E42-84DD-35CB47CFFB6E}", "Walkera", "Walkera WK-2401 (PPM) pulse processor", TransmitterType.Ppm)]
     public class Program : PpmPulseProcessor<JitterFilter>
     {
         /// <summary>

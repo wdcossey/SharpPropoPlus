@@ -49,12 +49,23 @@ namespace SharpPropoPlus.Decoder
 
         private IPropoPlusDecoder GetDefaultDecoder()
         {
+            if (!string.IsNullOrWhiteSpace(Settings.Default.Decoder))
+            {
+                var decoder = GetDecoder(Settings.Default.Decoder);
+
+                if (decoder != null)
+                    return decoder.Value;
+            }
+
             return Decoders.First()?.Value;
         }
 
         public void ChangeDecoder(IPropoPlusDecoder decoder)
         {
             Decoder = decoder;
+
+            Settings.Default.Decoder = Decoders.First(f => f.Value == decoder)?.Metadata?.UniqueIdentifier;
+            Settings.Default.Save();
         }
 
         public void Notify()
@@ -92,6 +103,11 @@ namespace SharpPropoPlus.Decoder
         private Lazy<IPropoPlusDecoder, IDecoderMetadata> GetDecoder(IPropoPlusDecoder decoder = null)
         {
             return Decoders.FirstOrDefault(fd => fd.Value == (decoder ?? Decoder));
+        }
+
+        private Lazy<IPropoPlusDecoder, IDecoderMetadata> GetDecoder(string uniqueIdentifier)
+        {
+            return Decoders.Single(s => s.Metadata.UniqueIdentifier == uniqueIdentifier);
         }
 
         public IDecoderMetadata GetDecoderMetadata(IPropoPlusDecoder decoder)

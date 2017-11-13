@@ -1,20 +1,23 @@
-﻿<controls:CustomWindow x:Class="SharpPropoPlus.Shell"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:SharpPropoPlus"
-        xmlns:views="clr-namespace:SharpPropoPlus.Views"
-        xmlns:controls="clr-namespace:SharpPropoPlus.Controls"
-        ResizeMode="CanMinimize"
-        mc:Ignorable="d"
-        IsToggleChecked="True"
-        Style="{StaticResource MainWindow}"
-        
-        Title="#PropoPlus" 
-                       Height="600" 
-                       Width="800"
-                       InitialPage="{x:Type views:AudioConfig}" WindowStartupLocation="CenterScreen">
+﻿<controls:CustomWindow 
+    x:Class="SharpPropoPlus.Shell"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:local="clr-namespace:SharpPropoPlus"
+    xmlns:views="clr-namespace:SharpPropoPlus.Views"
+    xmlns:controls="clr-namespace:SharpPropoPlus.Controls"
+    xmlns:viewModels="clr-namespace:SharpPropoPlus.ViewModels"
+    ResizeMode="CanMinimize"
+    mc:Ignorable="d"
+    IsToggleChecked="{Binding IsShellStateChecked, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+    Style="{StaticResource MainWindow}"
+    Title="#PropoPlus" 
+    Height="600" 
+    Width="800"
+    InitialPage="{x:Type views:AudioConfig}" WindowStartupLocation="CenterScreen"
+    d:DataContext="{d:DesignInstance viewModels:ShellViewModel, d:IsDesignTimeCreatable=False}"
+    ToggleButtonCommand="{Binding ShellStateCommand}">
 
     <controls:CustomWindow.SettingsMenu>
         <ContextMenu>

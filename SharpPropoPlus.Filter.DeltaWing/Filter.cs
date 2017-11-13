@@ -9,7 +9,7 @@ using SharpPropoPlus.Filter.Contracts;
 
 namespace SharpPropoPlus.Filter.DeltaWing
 {
-    [ExportPropoPlusFilter("Delta Wing (Ch1+Ch2)", "Delta wing un-mixing (mixed channels 1 and 2)")]
+    [ExportPropoPlusFilter("{7409790E-4BC6-42CA-B390-20F24DF672DF}", "Delta Wing (Ch1+Ch2)", "Delta wing un-mixing (mixed channels 1 and 2)")]
     public class Filter : FilterProcessor
     {
         private static readonly int[] InData = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };

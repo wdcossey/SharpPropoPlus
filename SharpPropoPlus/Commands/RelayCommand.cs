@@ -5,13 +5,13 @@ namespace SharpPropoPlus.Commands
 {
     public class RelayCommand : ICommand
     {
-        private Action<object> command;
-        private Func<bool> canExecute;
+        private readonly Action _command;
+        private readonly Func<bool> _canExecute;
 
-        public RelayCommand(Action<object> commandAction, Func<bool> canExecute = null)
+        public RelayCommand(Action commandAction, Func<bool> canExecute = null)
         {
-            this.command = commandAction;
-            this.canExecute = canExecute;
+            this._command = commandAction;
+            this._canExecute = canExecute;
         }
 
         /// <summary>
@@ -20,7 +20,7 @@ namespace SharpPropoPlus.Commands
         /// </summary>
         public bool CanExecute(object parameter)
         {
-            return this.canExecute == null ? true : this.canExecute();
+            return _canExecute?.Invoke() ?? true;
         }
 
         /// <summary>
@@ -31,9 +31,41 @@ namespace SharpPropoPlus.Commands
 
         public void Execute(object parameter)
         {
-            if (this.command != null)
+            _command?.Invoke();
+        }
+    }
+
+    public class RelayCommand<T> : ICommand
+    {
+        private readonly Action<T> _command;
+        private readonly Func<bool> _canExecute;
+
+        public RelayCommand(Action<T> commandAction, Func<bool> canExecute = null)
+        {
+            this._command = commandAction;
+            this._canExecute = canExecute;
+        }
+
+        /// <summary>
+        /// Returns default true. 
+        /// Customize to implement can execute logic.
+        /// </summary>
+        public bool CanExecute(object parameter)
+        {
+            return _canExecute?.Invoke() ?? true;
+        }
+
+        /// <summary>
+        /// Implement changed logic if needed
+        /// </summary>
+        public event EventHandler CanExecuteChanged;
+
+
+        public void Execute(object parameter)
+        {
+            if (parameter != null)
             {
-                this.command(parameter);
+                _command?.Invoke((T) parameter);
             }
         }
     }

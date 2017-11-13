@@ -10,7 +10,7 @@ namespace SharpPropoPlus.Decoder.Ppm.Standard
 {
     //[Export(typeof(IPropoPlusDecoder))]
     //[ExportMetadata("Type", TransmitterType.Ppm)]
-    [ExportPropoPlusDecoder("Standard", "Standard (PPM) pulse processor", TransmitterType.Ppm)]
+    [ExportPropoPlusDecoder("{B9FCA15F-4D82-41E9-909C-AEDA61DC1E00}", "Standard", "Standard (PPM) pulse processor", TransmitterType.Ppm)]
     public class Program : PpmPulseProcessor<JitterFilter>
     {
         /// <summary>

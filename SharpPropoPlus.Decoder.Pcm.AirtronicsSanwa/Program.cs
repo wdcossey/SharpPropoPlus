@@ -7,7 +7,7 @@ using SharpPropoPlus.Decoder.Contracts;
 
 namespace SharpPropoPlus.Decoder.Pcm.AirtronicsSanwa
 {
-    [ExportPropoPlusDecoder("Airtronics/Sanwa [1]", "Airtronics/Sanwa [1] (PCM) pulse processor", TransmitterType.Pcm)]
+    [ExportPropoPlusDecoder("{99766BB2-CA24-4397-9B6B-27FA2CD4E69E}",  "Airtronics/Sanwa [1]", "Airtronics/Sanwa [1] (PCM) pulse processor", TransmitterType.Pcm)]
     public class Program : PcmPulseProcessor
     {
         private int _chunk;

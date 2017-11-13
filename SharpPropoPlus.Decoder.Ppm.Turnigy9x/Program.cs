@@ -10,7 +10,7 @@ namespace SharpPropoPlus.Decoder.Ppm.Turnigy9x
 {
     //[Export(typeof(IPropoPlusDecoder))]
     //[ExportMetadata("Type", TransmitterType.Ppm)]
-    [ExportPropoPlusDecoder("Turnigy 9X", "Turnigy 9X (PPM) pulse processor", TransmitterType.Ppm)]
+    [ExportPropoPlusDecoder("{4C656D50-65F2-4640-869B-5D4AFB848247}", "Turnigy 9X", "Turnigy 9X (PPM) pulse processor", TransmitterType.Ppm)]
     public class Program : PpmPulseProcessor<JitterFilter>
     {
         static bool _prevSep = false;
