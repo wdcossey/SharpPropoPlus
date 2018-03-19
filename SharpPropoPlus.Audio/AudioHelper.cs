@@ -14,6 +14,7 @@ using SharpPropoPlus.Audio.EventArguments;
 using SharpPropoPlus.Audio.Models;
 using SharpPropoPlus.Contracts.EventArguments;
 using SharpPropoPlus.Events;
+using RecordingState = SharpPropoPlus.Contracts.Enums.RecordingState;
 
 namespace SharpPropoPlus.Audio
 {
@@ -84,10 +85,22 @@ namespace SharpPropoPlus.Audio
         {
             if (!string.IsNullOrWhiteSpace(Settings.Default.InputDevice))
             {
-                var device = _deviceEnumerator.GetDevice(Settings.Default.InputDevice);
+                try
+                {
+                    var device = _deviceEnumerator.GetDevice(Settings.Default.InputDevice);
 
-                if (device != null)
-                    return device;
+                    if (device != null)
+                        return device;
+                }
+                catch (CoreAudioAPIException ex)
+                {
+
+                }
+                catch (Exception ex)
+                {
+
+                }
+
             }
 
             return _deviceEnumerator.GetDefaultAudioEndpoint(DataFlow.Capture, Role.Console);
@@ -112,7 +125,7 @@ namespace SharpPropoPlus.Audio
 
         public void RefreshDevices()
         {
-            Devices = _deviceEnumerator.EnumAudioEndpoints(DataFlow.Capture, DeviceState.Active).Select(s => new AudioEndPoint(s.FriendlyName, s.DeviceID, GetDeviceFormat(s).Channels)).ToList();
+            Devices = _deviceEnumerator.EnumAudioEndpoints(DataFlow.Capture, DeviceState.Active | DeviceState.UnPlugged).Select(s => new AudioEndPoint(s.FriendlyName, s.DeviceID, GetDeviceFormat(s).Channels, s.DeviceState != DeviceState.Active)).OrderBy(ob => ob.Disabled).ThenBy(tb => tb.DeviceName).ToList();
         }
 
         private static WaveFormat WaveFormatFromBlob(Blob blob)
@@ -230,8 +243,14 @@ namespace SharpPropoPlus.Audio
 
         private WaveFormat GetDeviceFormat(MMDevice device)
         {
-            return WaveFormatFromBlob(device.PropertyStore[
-                new PropertyKey(new Guid(0xf19f064d, 0x82c, 0x4e27, 0xbc, 0x73, 0x68, 0x82, 0xa1, 0xbb, 0x8e, 0x4c), 0)].BlobValue);
+            if (device.DeviceState == DeviceState.Active)
+            {
+                return WaveFormatFromBlob(device.PropertyStore[
+                    new PropertyKey(new Guid(0xf19f064d, 0x82c, 0x4e27, 0xbc, 0x73, 0x68, 0x82, 0xa1, 0xbb, 0x8e, 0x4c),
+                        0)].BlobValue);
+            }
+
+            return new WaveFormat();
         }
 
         private void StartRecording(MMDevice device)
@@ -290,7 +309,7 @@ namespace SharpPropoPlus.Audio
 
             //var channels = deviceFormat.Channels;
 
-            var audioEndPointArgs = new AudioEndPointEventArgs(device.FriendlyName, device.DeviceID, deviceFormat.Channels);
+            var audioEndPointArgs = new AudioEndPointEventArgs(device.FriendlyName, device.DeviceID, deviceFormat.Channels, device.DeviceState != DeviceState.Active);
             AudioEndPointChanged?.Invoke(this, audioEndPointArgs);
             GlobalEventAggregator.Instance.SendMessage(audioEndPointArgs);
 
@@ -328,24 +347,23 @@ namespace SharpPropoPlus.Audio
             PollAudioLevels();
 
             _isRecording = true;
+
+            GlobalEventAggregator.Instance.SendMessage(new RecordingStateEventArgs(RecordingState.Started));
         }
 
         private void SoundInSourceOnDataAvailable(object sender, DataAvailableEventArgs args)
         {
-            var source = sender as IWaveSource;
-
-            if (source == null)
+            if (!(sender is IWaveSource source))
                 return;
-
-
-            byte[] buffer = new byte[_convertedSource.WaveFormat.BytesPerSecond / 2];
+            
+            var bufferArray = new byte[_convertedSource.WaveFormat.BytesPerSecond / 2];
 
             //keep reading as long as we still get some data
             //if you're using such a loop, make sure that soundInSource.FillWithZeros is set to false
-            var elementsRead = _convertedSource.Read(buffer, 0, buffer.Length);
+            var elementsRead = _convertedSource.Read(bufferArray, 0, bufferArray.Length);
             
             var eventArgs = new AudioDataEventArgs(_convertedSource.WaveFormat.SampleRate, _convertedSource.WaveFormat.BitsPerSample,
-                _convertedSource.WaveFormat.Channels, elementsRead, buffer.Take(elementsRead).ToArray(), PreferredChannel, _audioBitrate);
+                _convertedSource.WaveFormat.Channels, elementsRead, bufferArray.Take(elementsRead).ToArray(), PreferredChannel, _audioBitrate);
              
             //Raise the event handler
             DataAvailable?.Invoke(this, eventArgs);
@@ -375,6 +393,7 @@ namespace SharpPropoPlus.Audio
 
             _pollingCancellationTokenSource = new CancellationTokenSource();
 
+            GlobalEventAggregator.Instance.SendMessage(new RecordingStateEventArgs(RecordingState.Stopped));
         }
 
         private void PollAudioLevels()

@@ -15,17 +15,18 @@
     Title="#PropoPlus" 
     Height="600" 
     Width="800"
-    InitialPage="{x:Type views:AudioConfig}" WindowStartupLocation="CenterScreen"
+    InitialPage="{x:Type views:AudioConfig}"
+    WindowStartupLocation="CenterScreen"
     d:DataContext="{d:DesignInstance viewModels:ShellViewModel, d:IsDesignTimeCreatable=False}"
     ToggleButtonCommand="{Binding ShellStateCommand}">
 
-    <controls:CustomWindow.SettingsMenu>
+    <!--<controls:CustomWindow.SettingsMenu>
         <ContextMenu>
             <MenuItem Header="Something" />
             <Separator />
             <MenuItem Header="About" />
         </ContextMenu>
-    </controls:CustomWindow.SettingsMenu>
+    </controls:CustomWindow.SettingsMenu>-->
     
     <controls:CustomWindow.ToolBarItems>
         <controls:ToolBarButton Content="Input" Type="{x:Type views:AudioConfig}"/>

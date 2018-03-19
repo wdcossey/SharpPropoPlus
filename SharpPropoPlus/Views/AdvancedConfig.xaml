@@ -15,15 +15,15 @@
     </UserControl.Resources>
 
     <Grid>
-        <TabControl MinWidth="180" TabStripPlacement="Left" >
-            <TabItem Header="Logging" >
+        <TabControl TabStripPlacement="Left" >
+            <TabItem Header="Logging" Width="120" >
                 <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
                     <local:LoggingTab DataContext="{Binding LoggingViewModel}"/>
                 </ScrollViewer>
             </TabItem>
-            <TabItem Header="About" >
+            <TabItem Header="About" Width="120"  >
                 <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
-                    <local:AboutTab/>
+                    <local:AboutTab  DataContext="{Binding AboutViewModel}"/>
                 </ScrollViewer>
             </TabItem>
         </TabControl>

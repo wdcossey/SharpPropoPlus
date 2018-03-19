@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:viewModels="clr-namespace:SharpPropoPlus.ViewModels"
+             xmlns:controls="clr-namespace:SharpPropoPlus.Controls"
              mc:Ignorable="d" 
              d:DesignHeight="400" 
              d:DesignWidth="600"
@@ -15,42 +16,15 @@
     
     <StackPanel>
 
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
-            </Grid.ColumnDefinitions>
-            
-            <Grid.RowDefinitions>
-                <RowDefinition/>
-                <RowDefinition/>
-            </Grid.RowDefinitions>
-
-            <TextBlock Grid.Column="0" 
-                       Grid.Row="0" 
-                       Margin="0" 
-                       Style="{StaticResource TextBlockHeaderStyleKey}" 
-                       Text="{Binding VJoyVersion, Mode=OneWay, StringFormat='vJoy Device (v{0})'}" />
-            
-            <TextBlock Grid.Column="0" 
-                       Grid.Row="1"
-                       Margin="0 2 0 0"
-                       Style="{StaticResource TextBlockLightStyleKey}" 
-                       Text="vJoy device to output decoded signal data."  />
-
-            <ComboBox Grid.Column="1" 
-                      Grid.Row="0" 
-                      Grid.RowSpan="2" 
-                      Margin="0" 
+        <controls:ControlContainer Title="{Binding VJoyVersion, Mode=OneWay}" TitleStringFormat="vJoy Device (v{0})" Description="vJoy device to output decoded signal data.">
+            <ComboBox Margin="0" 
                       VerticalAlignment="Center" 
                       HorizontalAlignment="Right" 
                       DisplayMemberPath="Name" 
                       MaxDropDownHeight="8" 
                       ItemsSource="{Binding Devices, Mode=OneWay}" 
                       SelectedItem="{Binding SelectedDeviceItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-        </Grid>
-        
-        <Border Style="{StaticResource BorderSeparator}"/>
+        </controls:ControlContainer>
 
     </StackPanel>
 </UserControl>

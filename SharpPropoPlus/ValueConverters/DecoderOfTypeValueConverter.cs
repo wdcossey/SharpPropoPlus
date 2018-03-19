@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Globalization;
 using System.Windows.Data;
+using SharpPropoPlus.Contracts.Enums;
 using SharpPropoPlus.Contracts.Interfaces;
-using SharpPropoPlus.Contracts.Types;
 
 namespace SharpPropoPlus.ValueConverters
 {

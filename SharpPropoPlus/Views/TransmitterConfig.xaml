@@ -5,7 +5,8 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
     xmlns:viewModels="clr-namespace:SharpPropoPlus.ViewModels"
     xmlns:componentModel="clr-namespace:System.ComponentModel;assembly=WindowsBase"
-    xmlns:types="clr-namespace:SharpPropoPlus.Contracts.Types;assembly=SharpPropoPlus.Contracts"
+    xmlns:controls="clr-namespace:SharpPropoPlus.Controls"
+    xmlns:types="clr-namespace:SharpPropoPlus.Contracts.Enums;assembly=SharpPropoPlus.Contracts"
     x:Class="SharpPropoPlus.Views.TransmitterConfig"
     mc:Ignorable="d" 
     d:DesignHeight="400" 
@@ -37,6 +38,7 @@
 
 
     <StackPanel>
+
 
         <Grid >
             <Grid.ColumnDefinitions>
@@ -145,7 +147,19 @@
                 </Grid.RowDefinitions>
 
                 <TextBlock Grid.Column="0" Grid.Row="0" HorizontalAlignment="Right" VerticalAlignment="Center" Style="{StaticResource TextBlockDefaultStyleKey}" Text="Pulse Width (Min) :" />
-                <TextBox Grid.Column="1" Grid.Row="0" Margin="8 2 4 2" IsReadOnly="True" Width="60">
+                <controls:NumericSpinner Grid.Column="1" Grid.Row="0" Margin="8 2 4 2" MinValue="0.0" Decimals="1" Step="0.1" MinWidth="80">
+                    <controls:NumericSpinner.Style>
+                        <Style TargetType="{x:Type controls:NumericSpinner}" >
+                            <!--<Setter Property="Value" Value="{x:Null}" />-->
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding SelectedDecoder.Metadata, Converter={StaticResource DecoderOfTypeValueConverter}, ConverterParameter={x:Static types:TransmitterType.Ppm}}" Value="True">
+                                    <Setter Property="Value" Value="{Binding SelectedDecoder.Value.PpmMinPulseWidth, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </controls:NumericSpinner.Style>
+                </controls:NumericSpinner>
+                <!--<TextBox Grid.Column="1" Grid.Row="0" Margin="8 2 4 2" IsReadOnly="True" Width="60">
                     <TextBox.Style>
                         <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
                             <Setter Property="Text" Value="{x:Null}" />
@@ -156,7 +170,7 @@
                             </Style.Triggers>
                         </Style>
                     </TextBox.Style>
-                </TextBox>
+                </TextBox>-->
                 <TextBlock Grid.Column="2" Grid.Row="0" VerticalAlignment="Center" Style="{StaticResource TextBlockLightStyleKey}">
                     <Run Text="("/><Run>
                         <Run.Style>
@@ -320,7 +334,11 @@
 
         <Border Style="{StaticResource BorderSeparator}"/>
 
-        <Grid  >
+        <controls:ControlContainer Title="{Binding RawChannels, TargetNullValue=0}" TitleStringFormat="R/C Channels ({0})" Description="{x:Null}">
+            
+        </controls:ControlContainer>
+
+        <!--<Grid  >
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
@@ -343,7 +361,7 @@
                        Text="" Visibility="Collapsed"  />
         </Grid>
 
-        <Border Style="{StaticResource BorderSeparator}"/>
+        <Border Style="{StaticResource BorderSeparator}"/>-->
 
     </StackPanel>
 </UserControl>

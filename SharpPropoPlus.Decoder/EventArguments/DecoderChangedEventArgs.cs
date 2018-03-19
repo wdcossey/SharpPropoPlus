@@ -1,6 +1,6 @@
 ﻿using System;
+using SharpPropoPlus.Contracts.Enums;
 using SharpPropoPlus.Contracts.Interfaces;
-using SharpPropoPlus.Contracts.Types;
 using SharpPropoPlus.Decoder.Contracts;
 
 namespace SharpPropoPlus.Decoder.EventArguments

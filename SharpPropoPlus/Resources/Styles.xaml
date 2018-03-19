@@ -2,7 +2,8 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:enums="clr-namespace:SharpPropoPlus.Enums"
                     xmlns:themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.AeroLite"
-                    xmlns:controls="clr-namespace:SharpPropoPlus.Controls">
+                    xmlns:controls="clr-namespace:SharpPropoPlus.Controls"
+                    xmlns:system="clr-namespace:System;assembly=mscorlib">
 
     <Color x:Key="AccentColor">#FF1C1E20</Color>
     <Color x:Key="AccentColorTranslucent">#AA1C1E20</Color>
@@ -12,7 +13,12 @@
     <Color x:Key="SecondaryColorTranslucent">#AA41C955</Color>
      
     <Color x:Key="PrimaryTextColor">#FFFFFF</Color>
-    
+
+    <Geometry x:Key="AudioOffGeometry">M 14.644531 0.648438 L 13.15625 2.132813 L 12.839844 1.816406 C 12.296875 1.273438 11.582031 1 10.863281 1 C 10.148438 1.003906 9.433594 1.273438 8.890625 1.820313 L 7.707031 3 L 7.351563 2.648438 L 6.648438 3.351563 L 8.292969 5 L 6.648438 6.648438 L 7.351563 7.351563 L 9 5.707031 L 10.292969 7 L 8.648438 8.648438 L 9.351563 9.351563 L 11 7.707031 L 12.644531 9.351563 L 13.355469 8.648438 L 13 8.292969 L 14.183594 7.109375 C 15.269531 6.023438 15.269531 4.246094 14.183594 3.160156 L 13.863281 2.84375 L 15.355469 1.351563 Z M 10.863281 2 C 11.324219 1.996094 11.78125 2.171875 12.132813 2.523438 L 13.476563 3.867188 C 14.179688 4.570313 14.179688 5.699219 13.476563 6.402344 L 12.292969 7.585938 L 8.414063 3.707031 L 9.597656 2.523438 C 9.949219 2.171875 10.40625 2 10.863281 2 Z M 3.351563 6.648438 L 2.648438 7.351563 L 3 7.707031 L 1.816406 8.890625 C 0.730469 9.976563 0.730469 11.753906 1.816406 12.839844 L 2.132813 13.15625 L 0.648438 14.644531 L 1.351563 15.355469 L 2.84375 13.863281 L 3.160156 14.183594 C 4.246094 15.269531 6.023438 15.269531 7.109375 14.183594 L 8.292969 13 L 8.648438 13.355469 L 9.351563 12.644531 Z M 3.707031 8.414063 L 7.585938 12.292969 L 6.402344 13.472656 C 5.699219 14.179688 4.570313 14.179688 3.867188 13.472656 L 2.523438 12.132813 C 1.820313 11.429688 1.820313 10.300781 2.523438 9.597656 Z</Geometry>
+
+    <FontFamily x:Key="MontserratLight">pack://application:,,,/Fonts/#Montserrat Light</FontFamily>
+    <FontFamily x:Key="Montserrat">pack://application:,,,/Fonts/#Montserrat</FontFamily>
+
     <!-- Brushes --> 
     <SolidColorBrush x:Key="AccentColorBrush" Color="{StaticResource AccentColor}"/>
     <SolidColorBrush x:Key="AccentColorTranslucentBrush" Color="{StaticResource AccentColorTranslucent}"/>
@@ -25,11 +31,11 @@
     
     <Style x:Key="TextBlockLightStyleKey" TargetType="{x:Type TextBlock}">
         <Setter Property="Foreground" Value="{StaticResource AccentColorBrush}"/>
-        <Setter Property="FontFamily" Value="pack://application:,,,/Fonts/#Montserrat Light"/>
+        <Setter Property="FontFamily" Value="{StaticResource MontserratLight}"/>
     </Style>
 
     <Style x:Key="TextBlockDefaultStyleKey" TargetType="{x:Type TextBlock}" BasedOn="{StaticResource TextBlockLightStyleKey}">
-        <Setter Property="FontFamily" Value="pack://application:,,,/Fonts/#Montserrat"/>
+        <Setter Property="FontFamily" Value="{StaticResource Montserrat}"/>
     </Style>
 
     <Style x:Key="TextBlockHeaderStyleKey" TargetType="{x:Type TextBlock}" BasedOn="{StaticResource TextBlockDefaultStyleKey}">
@@ -77,7 +83,7 @@
 
                         <Border VerticalAlignment="Stretch" HorizontalAlignment="Stretch"  Grid.Column="1" Padding="16 12 48 12">
                             <!--<ContentPresenter ContentTemplate="{TemplateBinding ItemTemplate}" Content="{TemplateBinding Header}"></ContentPresenter>-->
-                            <ContentControl x:Name="ContentControl" Foreground="{TemplateBinding Foreground}" ContentTemplate="{TemplateBinding ItemTemplate}" TextBlock.FontWeight="Light" TextBlock.FontSize="13" TextBlock.FontFamily="pack://application:,,,/Fonts/#Montserrat Light" Content="{TemplateBinding Header}" />
+                            <ContentControl x:Name="ContentControl" Foreground="{TemplateBinding Foreground}" ContentTemplate="{TemplateBinding ItemTemplate}" TextBlock.FontWeight="Light" TextBlock.FontSize="13" TextBlock.FontFamily="{StaticResource MontserratLight}" Content="{TemplateBinding Header}" />
                         </Border>
                     </Grid>
 
@@ -226,7 +232,7 @@
                 </Border>
             </Popup>
             <ToggleButton x:Name="toggleButton" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Grid.ColumnSpan="2" IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" Style="{StaticResource ComboBoxToggleButton2}"/>
-            <ContentPresenter x:Name="contentPresenter" TextBlock.FontSize="13" TextBlock.FontFamily="pack://application:,,,/Fonts/#Montserrat Light" ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}" ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}" Content="{TemplateBinding SelectionBoxItem}" ContentStringFormat="{TemplateBinding SelectionBoxItemStringFormat}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" IsHitTestVisible="false" Margin="{TemplateBinding Padding}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+            <ContentPresenter x:Name="contentPresenter" TextBlock.FontSize="13" TextBlock.FontFamily="{StaticResource MontserratLight}" ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}" ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}" Content="{TemplateBinding SelectionBoxItem}" ContentStringFormat="{TemplateBinding SelectionBoxItemStringFormat}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" IsHitTestVisible="false" Margin="{TemplateBinding Padding}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
         </Grid>
         <ControlTemplate.Triggers>
             <Trigger Property="HasDropShadow" SourceName="PART_Popup" Value="False">
@@ -276,7 +282,7 @@
                                     <Border x:Name="CheckBorder" Visibility="Hidden" VerticalAlignment="Stretch" Background="{TemplateBinding Foreground}" Grid.Column="0" Width="2"/>
 
                                     <Border VerticalAlignment="Stretch" HorizontalAlignment="Stretch"  Grid.Column="1" Padding="16 12 48 12">
-                                        <ContentPresenter x:Name="ContentControl" TextBlock.FontWeight="Light" TextBlock.FontSize="13" TextBlock.FontFamily="pack://application:,,,/Fonts/#Montserrat Light" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                                        <ContentPresenter x:Name="ContentControl" TextBlock.FontWeight="Light" TextBlock.FontSize="13" TextBlock.FontFamily="{StaticResource MontserratLight}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
                                                           VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
                                     </Border>
                                 </Grid>
@@ -313,7 +319,71 @@
             </Trigger>
         </Style.Triggers>
     </Style>
-    
+
+    <Style x:Key="AudioEndPointComboBoxStyle" TargetType="{x:Type ComboBox}" BasedOn="{StaticResource {x:Type ComboBox}}">
+        <Setter Property="ItemContainerStyle">
+            <Setter.Value>
+                <Style TargetType="{x:Type ComboBoxItem}">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type ComboBoxItem}">
+
+                                <Grid x:Name="Grid" Background="#01000000" Cursor="Hand">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Border x:Name="CheckBorder" Visibility="Hidden" VerticalAlignment="Stretch" Background="{TemplateBinding Foreground}" Grid.Column="0" Width="2"/>
+
+                                    <Border VerticalAlignment="Stretch" HorizontalAlignment="Stretch"  Grid.Column="1" Padding="16 12 48 12">
+                                        <ContentPresenter x:Name="ContentControl" TextBlock.FontWeight="Light" TextBlock.FontSize="13" TextBlock.FontFamily="{StaticResource MontserratLight}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                                    </Border>
+
+                                    <Path x:Name="DisabledPath" Visibility="Collapsed" Margin="0 0 16 0" Stretch="Uniform" Width="14" Fill="Black" Data="{StaticResource AudioOffGeometry}" Grid.Column="2"/>
+
+                                </Grid>
+
+                                <ControlTemplate.Triggers>
+
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter TargetName="ContentControl" Property="Opacity" Value="0.5" />
+                                    </Trigger>
+
+                                    <Trigger Property="IsSelected" Value="True">
+                                        <Setter TargetName="CheckBorder" Property="Visibility" Value="Visible" />
+                                    </Trigger>
+
+                                    <DataTrigger Binding="{Binding Disabled}" Value="True">
+                                        <Setter Property="Opacity" Value="0.5" />
+                                        <Setter Property="IsEnabled" Value="False" />
+                                        <Setter TargetName="DisabledPath" Property="Visibility" Value="Visible" />
+                                    </DataTrigger>
+
+
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </Setter.Value>
+        </Setter>
+
+
+        <!--<Style.Triggers>
+            <Trigger Property="IsEditable" Value="true">
+                <Setter Property="IsTabStop" Value="false"/>
+                <Setter Property="Padding" Value="2"/>
+                <Setter Property="Template" Value="{StaticResource ComboBoxEditableTemplate}"/>
+            </Trigger>
+
+            <Trigger Property="IsEnabled" Value="false">
+                <Setter Property="Opacity" Value="0.5"/>
+            </Trigger>
+        </Style.Triggers>-->
+    </Style>
+
     <SolidColorBrush x:Key="AccentBrush" >
         <SolidColorBrush.Color>
             <Binding Converter="{StaticResource SystemColorValueConverter}" Source="{StaticResource AccentColor}">
@@ -926,23 +996,22 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type TabItem}">
-                    <Grid x:Name="templateRoot" SnapsToDevicePixels="true" Margin="0 0 64 8">
+                    <Grid x:Name="templateRoot" SnapsToDevicePixels="true" Margin="0 0 0 8">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
 
                         <Border x:Name="selectedBorder" Visibility="Hidden" VerticalAlignment="Stretch" Margin="0 4 4 4" Background="{TemplateBinding Foreground}" Grid.Column="0" Width="2"/>
-                            
-                        <Border Grid.Column="1" x:Name="mainBorder" Cursor="Hand" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1,1,1,0" Background="{TemplateBinding Background}" Margin="0">
-                        </Border>
 
-                        <ContentPresenter Grid.Column="1" x:Name="contentPresenter" Cursor="Hand" Opacity="0.5" TextBlock.FontSize="14.5" Margin="8 8 0 8" TextBlock.FontFamily="pack://application:,,,/Fonts/#Montserrat Light" ContentSource="Header" Focusable="False" HorizontalAlignment="Left"  RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{Binding VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
+                        <Border Grid.Column="1" x:Name="mainBorder" HorizontalAlignment="Stretch" Cursor="Hand" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1,1,1,0" Background="{TemplateBinding Background}" Margin="0">
+                            <ContentPresenter x:Name="contentPresenter" Cursor="Hand" Opacity="0.5" TextBlock.FontSize="14.5" Margin="8 8 0 8" TextBlock.FontFamily="{StaticResource MontserratLight}" ContentSource="Header" Focusable="False" HorizontalAlignment="Left"  RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{Binding VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
+                        </Border>
                     </Grid>
                     <ControlTemplate.Triggers>
 
                         <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource Self}}" Value="true">
-                            <Setter TargetName="contentPresenter" Property="TextBlock.FontFamily" Value="pack://application:,,,/Fonts/#Montserrat"/>
+                            <Setter TargetName="contentPresenter" Property="TextBlock.FontFamily" Value="{StaticResource Montserrat}"/>
                             <Setter TargetName="selectedBorder" Property="Visibility" Value="Visible"/>
                             <Setter TargetName="contentPresenter" Property="Opacity" Value="1"/>
                         </DataTrigger>
@@ -952,6 +1021,7 @@
                                 <Condition Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Self}}" Value="true"/>
                                 <Condition Binding="{Binding TabStripPlacement, RelativeSource={RelativeSource AncestorType={x:Type TabControl}}}" Value="Left"/>
                             </MultiDataTrigger.Conditions>
+                            <Setter TargetName="contentPresenter" Property="Opacity" Value="1.0"></Setter>
                             <!--<Setter Property="Background" TargetName="mainBorder" Value="{StaticResource TabItem.MouseOver.Background}"/>
                             <Setter Property="BorderBrush" TargetName="mainBorder" Value="{StaticResource TabItem.MouseOver.Border}"/>
                             <Setter Property="BorderThickness" TargetName="mainBorder" Value="1,1,0,1"/>-->

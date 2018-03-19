@@ -10,9 +10,12 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
+using System.Windows.Media.Animation;
+using System.Windows.Navigation;
 using Microsoft.Practices.Unity;
 using SharpPropoPlus.Annotations;
 using SharpPropoPlus.Commands;
+using Unity;
 
 namespace SharpPropoPlus.Controls
 {
@@ -72,8 +75,11 @@ namespace SharpPropoPlus.Controls
                     if (type == null)
                         return;
 
-                    var root = Application.Instance.Container.Resolve(type/*, type.FullName*/);
-                    FrameContent.NavigationService.Navigate(root);
+                    if (FrameContent.Content == null || type != FrameContent.Content.GetType())
+                    {
+                        var root = Application.Instance.Container.Resolve(type /*, type.FullName*/);
+                        FrameContent.NavigationService.Navigate(root);
+                    }
                 });
             }
         }
@@ -297,6 +303,39 @@ namespace SharpPropoPlus.Controls
                 FrameContent.Navigated += (sender, args) =>
                 {
                     SetActiveMenuButton(args.Content.GetType());
+                };
+
+                FrameContent.Navigating += (sender, args) =>
+                {
+                    var ta = new DoubleAnimation();
+                    ta.Duration = TimeSpan.FromSeconds(0.5);
+                    ta.AccelerationRatio = 1;
+                    ta.To = 1;
+                    if (args.NavigationMode == NavigationMode.New)
+                    {
+                        ta.From = 0;
+                    }
+                    else if (args.NavigationMode == NavigationMode.Back)
+                    {
+                        ta.From = 0;
+                    }
+
+                    var ma = new ThicknessAnimation();
+                    ma.Duration = TimeSpan.FromSeconds(0.5);
+                    ma.DecelerationRatio = 1;
+
+                    if (args.NavigationMode == NavigationMode.New)
+                    {
+                        ma.From = new Thickness(-12, 0, -12, 0);
+                    }
+                    else if (args.NavigationMode == NavigationMode.Back)
+                    {
+                        ma.From = new Thickness(12, 0, 12, 0);
+                    }
+
+                    (args.Content as UIElement).BeginAnimation(OpacityProperty, ta);
+
+                    (args.Content as UIElement).BeginAnimation(MarginProperty, ma);
                 };
 
                 this.NavigateCommand.Execute(InitialPage);

@@ -18,31 +18,8 @@
 
     <StackPanel>
 
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition/>
-                <RowDefinition/>
-            </Grid.RowDefinitions>
-            
-            <TextBlock Grid.Column="0" 
-                       Grid.Row="0" 
-                       Margin="0" 
-                       Style="{StaticResource TextBlockHeaderStyleKey}" 
-                       Text="Input Device" />
-
-            <TextBlock Grid.Column="0" 
-                       Grid.Row="1" 
-                       Margin="0 2 0 0" 
-                       Style="{StaticResource TextBlockLightStyleKey}" 
-                       Text="Audio (input) device where the transmitter is connected." />
-
-            <ComboBox Grid.Column="1" 
-                      Grid.Row="0" 
-                      Grid.RowSpan="2"
+        <controls:ControlContainer Title="Input Device" Description="Audio (input) device where the transmitter is connected.">
+            <ComboBox Style="{StaticResource AudioEndPointComboBoxStyle}"
                       Margin="0" 
                       VerticalAlignment="Center" 
                       HorizontalAlignment="Right" 
@@ -50,36 +27,10 @@
                       MaxDropDownHeight="8" 
                       ItemsSource="{Binding AudioEndPointCollection}" 
                       SelectedItem="{Binding SelectedAudioEndPoint, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-        </Grid>
+        </controls:ControlContainer>
 
-        <Border Style="{StaticResource BorderSeparator}"/>
-
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition/>
-                <RowDefinition/>
-            </Grid.RowDefinitions>
-            
-            <TextBlock Grid.Column="0" 
-                       Grid.Row="0" 
-                       Margin="0" 
-                       Style="{StaticResource TextBlockHeaderStyleKey}" 
-                       Text="Bitrate" />
-
-            <TextBlock Grid.Column="0" 
-                       Grid.Row="1" 
-                       Margin="0 2 0 0" 
-                       Style="{StaticResource TextBlockLightStyleKey}" 
-                       Text="Number of audio samples carried per second (higher is better)." />
-            
-            <ComboBox Grid.Column="1" 
-                      Grid.Row="0" 
-                      Grid.RowSpan="2"
-                      Margin="0" 
+        <controls:ControlContainer Title="Bitrate" Description="Number of audio samples carried per second (higher is better).">
+            <ComboBox Margin="0" 
                       VerticalAlignment="Center" 
                       HorizontalAlignment="Right" 
                       SelectedIndex="0"
@@ -92,36 +43,10 @@
                     </DataTemplate>
                 </ComboBox.ItemTemplate>
             </ComboBox>
-        </Grid>
+        </controls:ControlContainer>
 
-        <Border Style="{StaticResource BorderSeparator}"/>
-
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition/>
-                <RowDefinition/>
-            </Grid.RowDefinitions>
-            
-            <TextBlock Grid.Column="0" 
-                       Grid.Row="0" 
-                       Margin="0" 
-                       Style="{StaticResource TextBlockHeaderStyleKey}" 
-                       Text="Source Channel" />
-
-            <TextBlock Grid.Column="0" 
-                       Grid.Row="1" 
-                       Margin="0 2 0 0" 
-                       Style="{StaticResource TextBlockLightStyleKey}" 
-                       Text="Audio signal communications channel." />
-
-            <ComboBox Grid.Column="1" 
-                      Grid.Row="0" 
-                      Grid.RowSpan="2"
-                      Margin="0" 
+        <controls:ControlContainer Title="Source Channel" Description="Audio signal communications channel.">
+            <ComboBox Margin="0" 
                       VerticalAlignment="Center" 
                       HorizontalAlignment="Right" 
                       SelectedIndex="0"
@@ -145,108 +70,98 @@
                     </DataTemplate>
                 </ComboBox.ItemTemplate>
             </ComboBox>
-        </Grid>
-        
-        <Border Style="{StaticResource BorderSeparator}"/>
-        
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition/>
-                <RowDefinition/>
-            </Grid.RowDefinitions>
+        </controls:ControlContainer>
 
-            <TextBlock >
-                <TextBlock.Style>
-                    <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource TextBlockHeaderStyleKey}">
-                        <Setter Property="Text" Value="Audio Levels"/>
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding SelectedAudioEndPoint.Channels}" Value="1">
-                                <Setter Property="Text" Value="Audio Level"/>
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </TextBlock.Style>
-            </TextBlock>
+        <controls:ControlContainer  >
+            <controls:ControlContainer.Style>
+                <Style TargetType="{x:Type controls:ControlContainer}" BasedOn="{StaticResource {x:Type controls:ControlContainer}}">
+                    <Setter Property="Title" Value="Audio Levels"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding SelectedAudioEndPoint.Channels}" Value="1">
+                            <Setter Property="Title" Value="Audio Level"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </controls:ControlContainer.Style>
 
-            <StackPanel Grid.Row="1">
-                <Grid Margin="0 2">
-                    <controls:StripIndicator ToolTip="Left" Height="10" Value="{Binding LeftChannelPeak, Mode=OneWay}" Maximum="100" Minimum="0" BorderThickness="1" >
-                        <controls:StripIndicator.Resources>
-                            <Style TargetType="{x:Type controls:StripIndicator}" BasedOn="{StaticResource {x:Type controls:StripIndicator}}">
-                                <!--<Style.Triggers>
+            <controls:ControlContainer.Description>
+                <StackPanel Grid.Row="1" Margin="0 2 0 0">
+                    <Grid Margin="0 2 0 0">
+                        <controls:StripIndicator ToolTip="Left" Height="10" Value="{Binding LeftChannelPeak, Mode=OneWay}" Maximum="100" Minimum="0" BorderThickness="1" >
+                            <controls:StripIndicator.Resources>
+                                <Style TargetType="{x:Type controls:StripIndicator}" BasedOn="{StaticResource {x:Type controls:StripIndicator}}">
+                                    <!--<Style.Triggers>
                                     <DataTrigger Binding="{Binding Muted}" Value="true">
                                         <Setter Property="BorderBrush" Value="Red"></Setter>
                                     </DataTrigger>
                                 </Style.Triggers>-->
-                            </Style>
-                        </controls:StripIndicator.Resources>
-                    </controls:StripIndicator>
-                    <TextBlock Panel.ZIndex="0" Visibility="Collapsed" Margin="8 0 0 0" VerticalAlignment="Center" HorizontalAlignment="Left">
-                        <TextBlock.Resources>
-                            <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource {x:Type TextBlock}}">
-                                <Setter Property="Text" Value="Left"/>
+                                </Style>
+                            </controls:StripIndicator.Resources>
+                        </controls:StripIndicator>
+                        <TextBlock Panel.ZIndex="0" Visibility="Collapsed" Margin="8 0 0 0" VerticalAlignment="Center" HorizontalAlignment="Left">
+                            <TextBlock.Resources>
+                                <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource {x:Type TextBlock}}">
+                                    <Setter Property="Text" Value="Left"/>
 
 
-                                <Style.Triggers>
-                                    <!--<DataTrigger Binding="{Binding Muted}" Value="true">
+                                    <Style.Triggers>
+                                        <!--<DataTrigger Binding="{Binding Muted}" Value="true">
                                         <Setter Property="Text" Value="Left (Muted)"></Setter>
                                     </DataTrigger>-->
 
-                                    <DataTrigger Binding="{Binding SelectedAudioEndPoint.Channels}" Value="1">
-                                        <Setter Property="Text" Value="Mono"/>
-                                    </DataTrigger>
+                                        <DataTrigger Binding="{Binding SelectedAudioEndPoint.Channels}" Value="1">
+                                            <Setter Property="Text" Value="Mono"/>
+                                        </DataTrigger>
 
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Resources>
+                        </TextBlock>
+
+                        <TextBlock Panel.ZIndex="0" Visibility="Collapsed" Margin="0 0 8 0" Text="{Binding LeftChannelPeak, Mode=OneWay, StringFormat=\{0\}%}" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+                    </Grid>
+
+                    <Grid Margin="0 2 0 0">
+                        <Grid.Style>
+                            <Style TargetType="{x:Type Grid}">
+                                <Setter Property="Visibility" Value="Visible"/>
+
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding SelectedAudioEndPoint.Channels}" Value="1">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                    </DataTrigger>
                                 </Style.Triggers>
                             </Style>
-                        </TextBlock.Resources>
-                    </TextBlock>
-
-                    <TextBlock Panel.ZIndex="0" Visibility="Collapsed" Margin="0 0 8 0" Text="{Binding LeftChannelPeak, Mode=OneWay, StringFormat=\{0\}%}" VerticalAlignment="Center" HorizontalAlignment="Right"/>
-                </Grid>
-
-                <Grid Margin="0 2">
-                    <Grid.Style>
-                        <Style TargetType="{x:Type Grid}">
-                            <Setter Property="Visibility" Value="Visible"/>
-
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding SelectedAudioEndPoint.Channels}" Value="1">
-                                    <Setter Property="Visibility" Value="Collapsed"/>
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </Grid.Style>
-                    <controls:StripIndicator ToolTip="Right" Height="10" Value="{Binding RightChannelPeak, Mode=OneWay, TargetNullValue=0}" Maximum="100" Minimum="0" BorderThickness="1" >
-                        <controls:StripIndicator.Resources>
-                            <Style TargetType="{x:Type controls:StripIndicator}" BasedOn="{StaticResource {x:Type controls:StripIndicator}}">
-                                <!--<Style.Triggers>
+                        </Grid.Style>
+                        <controls:StripIndicator ToolTip="Right" Height="10" Value="{Binding RightChannelPeak, Mode=OneWay, TargetNullValue=0}" Maximum="100" Minimum="0" BorderThickness="1" >
+                            <controls:StripIndicator.Resources>
+                                <Style TargetType="{x:Type controls:StripIndicator}" BasedOn="{StaticResource {x:Type controls:StripIndicator}}">
+                                    <!--<Style.Triggers>
                                     <DataTrigger Binding="{Binding Muted}" Value="true">
                                         <Setter Property="BorderBrush" Value="Red"></Setter>
                                     </DataTrigger>
                                 </Style.Triggers>-->
-                            </Style>
-                        </controls:StripIndicator.Resources>
-                    </controls:StripIndicator>
-                    <TextBlock Panel.ZIndex="0" Visibility="Collapsed" Margin="8 0 0 0" VerticalAlignment="Center" HorizontalAlignment="Left">
-                        <TextBlock.Resources>
-                            <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource {x:Type TextBlock}}" >
-                                <Setter Property="Text" Value="Right"/>
-                                <!--<Style.Triggers>
+                                </Style>
+                            </controls:StripIndicator.Resources>
+                        </controls:StripIndicator>
+                        <TextBlock Panel.ZIndex="0" Visibility="Collapsed" Margin="8 0 0 0" VerticalAlignment="Center" HorizontalAlignment="Left">
+                            <TextBlock.Resources>
+                                <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource {x:Type TextBlock}}" >
+                                    <Setter Property="Text" Value="Right"/>
+                                    <!--<Style.Triggers>
                                     <DataTrigger Binding="{Binding Muted}" Value="true">
                                         <Setter Property="Text" Value="Right (Muted)"></Setter>
                                     </DataTrigger>
                                 </Style.Triggers>-->
-                            </Style>
-                        </TextBlock.Resources>
-                    </TextBlock>
-                    <TextBlock Panel.ZIndex="0" Visibility="Collapsed" Margin="0 0 8 0" Text="{Binding RightChannelPeak, TargetNullValue='0%', Mode=OneWay, StringFormat=\{0\}%}" VerticalAlignment="Center" HorizontalAlignment="Right"/>
-                </Grid>
+                                </Style>
+                            </TextBlock.Resources>
+                        </TextBlock>
+                        <TextBlock Panel.ZIndex="0" Visibility="Collapsed" Margin="0 0 8 0" Text="{Binding RightChannelPeak, TargetNullValue='0%', Mode=OneWay, StringFormat=\{0\}%}" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+                    </Grid>
 
-            </StackPanel>
-            
-        </Grid>
-
-        <Border Style="{StaticResource BorderSeparator}"/>
+                </StackPanel>
+            </controls:ControlContainer.Description>
+        </controls:ControlContainer>
 
     </StackPanel>
 </UserControl>

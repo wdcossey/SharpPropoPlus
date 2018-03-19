@@ -3,8 +3,8 @@ using System.ComponentModel;
 using System.Linq;
 using System.Threading;
 using SharpPropoPlus.Contracts;
+using SharpPropoPlus.Contracts.Enums;
 using SharpPropoPlus.Contracts.Interfaces;
-using SharpPropoPlus.Contracts.Types;
 using SharpPropoPlus.Decoder.Contracts;
 
 namespace SharpPropoPlus.Decoder.Ppm.RadioLinkAT9

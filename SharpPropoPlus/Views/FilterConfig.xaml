@@ -5,6 +5,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
     xmlns:viewModels="clr-namespace:SharpPropoPlus.ViewModels"
     xmlns:componentModel="clr-namespace:System.ComponentModel;assembly=WindowsBase"
+    xmlns:controls="clr-namespace:SharpPropoPlus.Controls"
     x:Class="SharpPropoPlus.Views.FilterConfig"
     mc:Ignorable="d" 
     d:DesignHeight="400" 
@@ -35,56 +36,16 @@
 
     <StackPanel>
 
-        <Grid >
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
-            </Grid.ColumnDefinitions>
-            
-            <Grid.RowDefinitions>
-                <RowDefinition/>
-                <RowDefinition/>
-            </Grid.RowDefinitions>
-
-            <TextBlock Grid.Column="0" 
-                       Grid.Row="0"
-                       Margin="0" 
-                       Style="{StaticResource TextBlockHeaderStyleKey}" 
-                       Text="Toggle Signal Filter" />
-            
-            <TextBlock Grid.Column="0" 
-                       Grid.Row="1" 
-                       Margin="0 2 0 0" 
-                       Style="{StaticResource TextBlockLightStyleKey}" 
-                       Text="Enable or disable signal filtering with the desired filter (below)." />
-
+        <controls:ControlContainer Title="Toggle Signal Filter" Description="Enable or disable signal filtering with the desired filter (below).">
             <ToggleButton IsChecked="{Binding IsEnabled, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
-                          Grid.Column="1" 
-                          Grid.Row="0" 
-                          Grid.RowSpan="2" 
                           HorizontalAlignment="Right" 
                           VerticalAlignment="Center" 
                           Height="20" 
                           Style="{StaticResource AnimatedSwitch}"/>
-        </Grid>
+        </controls:ControlContainer>
 
-        <Border Style="{StaticResource BorderSeparator}"/>
-
-        <Grid >
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
-            </Grid.ColumnDefinitions>
-
-            <TextBlock Grid.Column="0" 
-                       Grid.Row="0" 
-                       Margin="0" 
-                       Style="{StaticResource TextBlockHeaderStyleKey}" 
-                       Text="Signal Filter" />
-
-            <ComboBox Grid.Column="1" 
-                      Grid.Row="0" 
-                      Margin="0" 
+        <controls:ControlContainer Title="Signal Filter" Description="{x:Null}">
+            <ComboBox Margin="0" 
                       VerticalAlignment="Center" 
                       HorizontalAlignment="Right" 
                       DisplayMemberPath="Metadata.Name" 
@@ -119,11 +80,7 @@
                     </GroupStyle>
                 </ComboBox.GroupStyle>
             </ComboBox>
-            
-        </Grid>
+        </controls:ControlContainer>
 
-        <Border Style="{StaticResource BorderSeparator}"/>
-
-       
     </StackPanel>
 </UserControl>

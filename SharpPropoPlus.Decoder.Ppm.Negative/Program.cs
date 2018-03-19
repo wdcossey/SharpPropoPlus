@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Threading;
 using SharpPropoPlus.Contracts;
+using SharpPropoPlus.Contracts.Enums;
 using SharpPropoPlus.Contracts.Interfaces;
-using SharpPropoPlus.Contracts.Types;
 using SharpPropoPlus.Decoder.Contracts;
 using SharpPropoPlus.Decoder.Structs;
 

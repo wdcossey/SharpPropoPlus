@@ -126,7 +126,6 @@
 
                                         <ItemsControl.Resources>
                                             <Style TargetType="{x:Type TextBlock}" >
-                                                <Setter Property="Foreground" Value="Red"/>
                                                 <Setter Property="FontFamily" Value="pack://application:,,,/Fonts/#Montserrat"/>
                                             </Style>
 
@@ -177,6 +176,17 @@
                                                 </RadioButton>
                                             </DataTemplate>
                                         </ItemsControl.ItemTemplate>
+                                        
+                                        <ItemsControl.Style>
+                                            <Style TargetType="{x:Type ItemsControl}">
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsToggleChecked, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type controls:CustomWindow}}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Value="False">
+                                                        <Setter Property="IsEnabled" Value="False"/>
+                                                        <Setter Property="Opacity" Value="0.5"></Setter>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </ItemsControl.Style>
                                     </ItemsControl>
 
 
@@ -230,7 +240,6 @@
                                     <Border Canvas.ZIndex="999"  Grid.Row="0" Grid.RowSpan="2" Background="{StaticResource AccentColorBrush}">
                                         <Border.Style>
                                             <Style TargetType="{x:Type Border}">
-
                                                 <Setter Property="Visibility" Value="Collapsed"/>
                                                 <Setter Property="Opacity" Value="0"/>
                                                 <Style.Triggers>

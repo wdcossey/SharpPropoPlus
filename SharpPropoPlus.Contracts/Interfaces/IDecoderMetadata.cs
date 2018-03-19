@@ -1,4 +1,4 @@
-﻿using SharpPropoPlus.Contracts.Types;
+﻿using SharpPropoPlus.Contracts.Enums;
 
 namespace SharpPropoPlus.Contracts.Interfaces
 {

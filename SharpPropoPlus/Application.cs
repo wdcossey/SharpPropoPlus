@@ -1,22 +1,20 @@
 ﻿using System;
-using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows.Controls;
 using System.Windows.Interop;
-using Microsoft.Practices.Unity;
 using MvvmDialogs;
 using SharpPropoPlus.Audio;
 using SharpPropoPlus.Audio.Enums;
 using SharpPropoPlus.Audio.EventArguments;
 using SharpPropoPlus.Decoder;
-using SharpPropoPlus.Decoder.EventArguments;
-using SharpPropoPlus.Events;
 using SharpPropoPlus.Helpers;
 using SharpPropoPlus.Interfaces;
 using SharpPropoPlus.vJoyMonitor;
 using SharpPropoPlus.ViewModels;
 using SharpPropoPlus.Filter;
 using SharpPropoPlus.Views;
+using Unity;
+using Unity.Lifetime;
 
 namespace SharpPropoPlus
 {
@@ -128,6 +126,7 @@ namespace SharpPropoPlus
 
             Container.RegisterType<IAdvancedConfigViewModel, AdvancedConfigViewModel>();
             Container.RegisterType<ILoggingTabViewModel, LoggingTabViewModel>();
+            Container.RegisterType<IAboutTabViewModel, AboutTabViewModel>();
             
             Container.RegisterType(typeof(UserControl), typeof(AudioConfig), new ContainerControlledLifetimeManager());
             Container.RegisterType(typeof(UserControl), typeof(FilterConfig), new ContainerControlledLifetimeManager());
@@ -135,6 +134,7 @@ namespace SharpPropoPlus
             Container.RegisterType(typeof(UserControl), typeof(TransmitterConfig), new ContainerControlledLifetimeManager());
             Container.RegisterType(typeof(UserControl), typeof(AdvancedConfig), new ContainerControlledLifetimeManager());
             Container.RegisterType(typeof(UserControl), typeof(LoggingTab), new ContainerControlledLifetimeManager());
+            Container.RegisterType(typeof(UserControl), typeof(AboutTab), new ContainerControlledLifetimeManager());
             
             var mainWindow = Container.Resolve<Shell>(); // Creating Main window
 

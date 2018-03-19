@@ -5,5 +5,6 @@ namespace SharpPropoPlus.Audio.Interfaces
         string DeviceName { get; }
         string DeviceId { get; }
         int Channels { get; }
+        bool Disabled { get; }
     }
 }

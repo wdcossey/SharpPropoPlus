@@ -1,14 +1,18 @@
-﻿using Microsoft.Practices.Unity;
-using SharpPropoPlus.Interfaces;
+﻿using SharpPropoPlus.Interfaces;
+using Unity.Attributes;
 
 namespace SharpPropoPlus.ViewModels
 {
     public class AdvancedConfigViewModel : BaseViewModel, IAdvancedConfigViewModel
     {
-        private ILoggingTabViewModel _loggingViewModel;
 
-        public AdvancedConfigViewModel([Dependency] ILoggingTabViewModel loggingTabViewModel)
+
+        private ILoggingTabViewModel _loggingViewModel;
+        private IAboutTabViewModel _aboutViewModel;
+
+        public AdvancedConfigViewModel([Dependency] ILoggingTabViewModel loggingTabViewModel, [Dependency] IAboutTabViewModel aboutTabViewModel)
         {
+            AboutViewModel = aboutTabViewModel;
             LoggingViewModel = loggingTabViewModel;
         }
 
@@ -19,6 +23,17 @@ namespace SharpPropoPlus.ViewModels
             private set
             {
                 _loggingViewModel = value;
+
+                OnPropertyChanged();
+            }
+        }
+
+        public IAboutTabViewModel AboutViewModel
+        {
+            get => _aboutViewModel;
+            private set
+            {
+                _aboutViewModel = value;
 
                 OnPropertyChanged();
             }

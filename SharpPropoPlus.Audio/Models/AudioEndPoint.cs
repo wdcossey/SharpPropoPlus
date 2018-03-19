@@ -10,11 +10,14 @@ namespace SharpPropoPlus.Audio.Models
 
         public int Channels { get; }
 
-        public AudioEndPoint(string deviceName, string deviceId, int channels)
+        public bool Disabled { get; }
+
+        public AudioEndPoint(string deviceName, string deviceId, int channels, bool disabled)
         {
             DeviceName = deviceName;
             DeviceId = deviceId;
             Channels = channels;
+            Disabled = disabled;
         }
     }
 }

@@ -21,6 +21,7 @@
                 <ResourceDictionary Source="Resources/Styles.xaml" />
                 <ResourceDictionary Source="Resources/JoystickMonitorStyle.xaml" />
                 <ResourceDictionary Source="Themes/MainWindow.xaml" />
+                <ResourceDictionary Source="Themes/ControlContainer.xaml" />
                 
             </ResourceDictionary.MergedDictionaries>
             

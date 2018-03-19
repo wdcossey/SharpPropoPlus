@@ -1,7 +1,8 @@
 ﻿using System;
 using System.ComponentModel.Composition;
+using SharpPropoPlus.Contracts.Enums;
 using SharpPropoPlus.Contracts.Interfaces;
-using SharpPropoPlus.Contracts.Types;
+
 namespace SharpPropoPlus.Decoder.Contracts
 {
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Property), MetadataAttribute]

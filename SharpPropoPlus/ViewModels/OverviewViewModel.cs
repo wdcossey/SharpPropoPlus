@@ -4,6 +4,8 @@ using System.Linq;
 using SharpPropoPlus.Audio;
 using SharpPropoPlus.Audio.Enums;
 using SharpPropoPlus.Audio.EventArguments;
+using SharpPropoPlus.Contracts.Enums;
+using SharpPropoPlus.Contracts.EventArguments;
 using SharpPropoPlus.Decoder;
 using SharpPropoPlus.Events;
 using SharpPropoPlus.Decoder.EventArguments;
@@ -40,6 +42,7 @@ namespace SharpPropoPlus.ViewModels
             GlobalEventAggregator.Instance.AddListener<DecoderChangedEventArgs>(DecoderChangedListener);
             GlobalEventAggregator.Instance.AddListener<JoystickUpdateEventArgs>(JoystickUpdateListener);
             GlobalEventAggregator.Instance.AddListener<FilterChangedEventArgs>(FilterChangedListener);
+            GlobalEventAggregator.Instance.AddListener<RecordingStateEventArgs>(RecordingStateListner);
 
             var currentDecoder = Application.Instance.DecoderManager.GetDecoderMetadata(Application.Instance.DecoderManager.Decoder);
 
@@ -48,7 +51,7 @@ namespace SharpPropoPlus.ViewModels
 
             var currentFilter = Application.Instance.FilterManager.GetFilterMetadata(Application.Instance.FilterManager.Filter);
 
-            FilterName = $"{currentFilter.Name}";
+            FilterName = currentFilter.Name;
             FilterDescription = currentFilter.Description;
             IsFilterEnabled = Application.Instance.FilterManager.IsEnabled;
 
@@ -69,13 +72,27 @@ namespace SharpPropoPlus.ViewModels
 
         }
 
+        private void RecordingStateListner(RecordingStateEventArgs args)
+        {
+            switch (args.State)
+            {
+                case RecordingState.Started:
+                    break;
+                case RecordingState.Stopped:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+
+
         private void FilterChangedListener(FilterChangedEventArgs args)
         {
             if (args == null)
                 return;
 
             IsFilterEnabled = args.IsEnabled;
-            FilterName = $"{args.Name}";
+            FilterName = args.Name;
             FilterDescription = args.Description;
         }
 
@@ -285,6 +302,7 @@ namespace SharpPropoPlus.ViewModels
             GlobalEventAggregator.Instance.RemoveListener<DecoderChangedEventArgs>(DecoderChangedListener);
             GlobalEventAggregator.Instance.RemoveListener<JoystickUpdateEventArgs>(JoystickUpdateListener);
             GlobalEventAggregator.Instance.RemoveListener<FilterChangedEventArgs>(FilterChangedListener);
+            GlobalEventAggregator.Instance.RemoveListener<RecordingStateEventArgs>(RecordingStateListner); ;
 
             base.Dispose();
         }

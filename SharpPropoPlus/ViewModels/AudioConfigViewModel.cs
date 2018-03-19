@@ -5,6 +5,8 @@ using SharpPropoPlus.Audio;
 using SharpPropoPlus.Audio.Enums;
 using SharpPropoPlus.Audio.EventArguments;
 using SharpPropoPlus.Audio.Models;
+using SharpPropoPlus.Contracts.Enums;
+using SharpPropoPlus.Contracts.EventArguments;
 using SharpPropoPlus.Events;
 using SharpPropoPlus.Interfaces;
 
@@ -43,7 +45,20 @@ namespace SharpPropoPlus.ViewModels
             _selectedBitrateItem = AudioHelper.Instance.Bitrate;
             _selectedChannelItem = AudioHelper.Instance.Channel;
 
-            GlobalEventAggregator.Instance.AddListener<PeakValueEventArgs>(PeakValueChangedListner);            
+            GlobalEventAggregator.Instance.AddListener<PeakValueEventArgs>(PeakValueChangedListner);
+            GlobalEventAggregator.Instance.AddListener<RecordingStateEventArgs>(RecordingStateListner);
+        }
+
+        private void RecordingStateListner(RecordingStateEventArgs args)
+        {
+            if (args.State == RecordingState.Stopped)
+            {
+                LeftChannelPeak = 0;
+                if (RightChannelPeak.HasValue)
+                {
+                    RightChannelPeak = 0;
+                }
+            }
         }
 
         private void PeakValueChangedListner(PeakValueEventArgs args)
@@ -168,7 +183,10 @@ namespace SharpPropoPlus.ViewModels
 
                 if (_selectedAudioEndPoint != null)
                 {
-                    AudioHelper.Instance.StartRecording(_selectedAudioEndPoint);
+                    if (Settings.Default.Enabled)
+                    {
+                        AudioHelper.Instance.StartRecording(_selectedAudioEndPoint);
+                    }
                 }
                 else
                 {
@@ -187,6 +205,7 @@ namespace SharpPropoPlus.ViewModels
         public override void Dispose()
         {
             GlobalEventAggregator.Instance.RemoveListener<PeakValueEventArgs>(PeakValueChangedListner);
+            GlobalEventAggregator.Instance.RemoveListener<RecordingStateEventArgs>(RecordingStateListner);
 
             base.Dispose();
         }

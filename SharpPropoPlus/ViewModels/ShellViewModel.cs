@@ -11,13 +11,12 @@ namespace SharpPropoPlus.ViewModels
     {
         public ShellViewModel()
         {
-            _isShellStateChecked = Settings.Default.Enabled;
-            _shellStateCommand = new RelayCommand<bool>(CommandAction);
+            IsShellStateChecked = Settings.Default.Enabled;
+            ShellStateCommand = new RelayCommand<bool>(CommandAction);
         }
 
         private void CommandAction(bool enabled)
         {
-
             GlobalEventAggregator.Instance.SendMessage(new SleepStateEventArgs(enabled));
 
             Settings.Default.Enabled = enabled;
@@ -28,16 +27,24 @@ namespace SharpPropoPlus.ViewModels
 
         public ICommand ShellStateCommand
         {
-            get { return _shellStateCommand; }
-            private set { _shellStateCommand = value; }
+            get => _shellStateCommand;
+            private set
+            {
+                _shellStateCommand = value;
+                OnPropertyChanged();
+            }
         }
 
         private bool _isShellStateChecked;
 
         public bool IsShellStateChecked
         {
-            get { return _isShellStateChecked; }
-            set { _isShellStateChecked = value; }
+            get => _isShellStateChecked;
+            set
+            {
+                _isShellStateChecked = value;
+                OnPropertyChanged();
+            }
         }
     }
 }

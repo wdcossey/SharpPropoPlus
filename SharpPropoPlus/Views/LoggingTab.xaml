@@ -6,126 +6,42 @@
              xmlns:local="clr-namespace:SharpPropoPlus.Views"
              xmlns:viewModels="clr-namespace:SharpPropoPlus.ViewModels"
              xmlns:md="https://github.com/fantasticfiasco/mvvm-dialogs"
+             xmlns:controls="clr-namespace:SharpPropoPlus.Controls"
              md:DialogServiceViews.IsRegistered="True"
              mc:Ignorable="d" 
              d:DesignHeight="480" 
              d:DesignWidth="640"
              d:DataContext="{d:DesignInstance viewModels:LoggingTabViewModel, d:IsDesignTimeCreatable=False}">
-
-    <UserControl.Resources>
-        <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource TextBlockLightStyleKey}"/>
-    </UserControl.Resources>
     
     <Grid>
         <StackPanel>
 
-            <Grid >
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
-
-                <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                </Grid.RowDefinitions>
-
-                <TextBlock Grid.Column="0" 
-                           Grid.Row="0"
-                           Margin="0" 
-                           Style="{StaticResource TextBlockHeaderStyleKey}" 
-                           Text="Log Window" />
-
-                <TextBlock Grid.Column="0" 
-                           Grid.Row="1" 
-                           Margin="0 2 0 0" 
-                           Style="{StaticResource TextBlockLightStyleKey}" 
-                           Text="Enable to show the log window." />
-
+            <controls:ControlContainer Title="Log Window" Description="Enable to show the log window.">
                 <ToggleButton IsChecked="{Binding IsEnabled, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
                               IsEnabled="False"
-                              Grid.Column="1" 
-                              Grid.Row="0" 
-                              Grid.RowSpan="2" 
                               HorizontalAlignment="Right" 
                               VerticalAlignment="Center" 
                               Height="20" 
                               Style="{StaticResource AnimatedSwitch}"/>
-            </Grid>
+            </controls:ControlContainer>
 
-            <Border Style="{StaticResource BorderSeparator}"/>
-
-            <Grid >
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
-
-                <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                </Grid.RowDefinitions>
-
-                <TextBlock Grid.Column="0" 
-                           Grid.Row="0"
-                           Margin="0" 
-                           Style="{StaticResource TextBlockHeaderStyleKey}" 
-                           Text="Input signal recording" />
-
-                <TextBlock Grid.Column="0" 
-                           Grid.Row="1" 
-                           Margin="0 2 0 0" 
-                           Style="{StaticResource TextBlockLightStyleKey}" 
-                           Text="Enable to log the audio input to a file." />
-
+            <controls:ControlContainer Title="Input signal recording" Description="Enable to log the audio input to a file.">
                 <ToggleButton IsChecked="{Binding IsEnabled, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
-                              IsEnabled="False"
-                              Grid.Column="1" 
-                              Grid.Row="0" 
-                              Grid.RowSpan="2" 
+                              IsEnabled="False" 
                               HorizontalAlignment="Right" 
                               VerticalAlignment="Center" 
                               Height="20" 
                               Style="{StaticResource AnimatedSwitch}"/>
-            </Grid>
+            </controls:ControlContainer>
 
-            <Border Style="{StaticResource BorderSeparator}"/>
-
-            <Grid >
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
-
-                <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                </Grid.RowDefinitions>
-
-                <TextBlock Grid.Column="0" 
-                           Grid.Row="0"
-                           Margin="0" 
-                           Style="{StaticResource TextBlockHeaderStyleKey}" 
-                           Text="Pulse data recording" />
-
-                <TextBlock Grid.Column="0" 
-                           Grid.Row="1" 
-                           Margin="0 2 0 0" 
-                           Style="{StaticResource TextBlockLightStyleKey}" 
-                           Text="Enable to log the pulse data to a file." />
-
+            <controls:ControlContainer Title="Pulse data recording" Description="Enable to log the pulse data to a file.">
                 <ToggleButton IsChecked="{Binding IsPulseRecordingEnabled, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
-                              Grid.Column="1" 
-                              Grid.Row="0" 
-                              Grid.RowSpan="2" 
                               HorizontalAlignment="Right" 
                               VerticalAlignment="Center" 
                               Height="20" 
                               Style="{StaticResource AnimatedSwitch}"/>
-            </Grid>
+            </controls:ControlContainer>
 
-            <Border Style="{StaticResource BorderSeparator}"/>
-            
         </StackPanel>
     </Grid>
 </UserControl>
