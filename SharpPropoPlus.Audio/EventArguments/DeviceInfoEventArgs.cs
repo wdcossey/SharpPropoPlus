@@ -13,17 +13,20 @@ namespace SharpPropoPlus.Audio.EventArguments
 
         public bool Disabled { get; }
 
+        public int? DeviceColor { get; }
+
         public AudioEndPointEventArgs()
         {
 
         }
-
-        public AudioEndPointEventArgs(string deviceName, string deviceId, int channels, bool disabled)
+         
+        public AudioEndPointEventArgs(string deviceName, string deviceId, int channels, bool disabled, int? deviceColor)
         {
             DeviceName = deviceName;
             DeviceId = deviceId;
             Channels = channels;
             Disabled = disabled;
+            DeviceColor = deviceColor;
         }
     }
 }

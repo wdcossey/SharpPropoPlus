@@ -13,8 +13,9 @@
                     <valueConverters:SystemColorValueConverter x:Key="SystemColorValueConverter" />
                     <valueConverters:AudioBitrateValueConverter x:Key="AudioBitrateValueConverter" />
                     <valueConverters:AudioChannelValueConverter x:Key="AudioChannelValueConverter" />
-                    <valueConverters:MathValueConverter x:Key="MathValueConverter" />
+                    <valueConverters:MathValueConverter x:Key="MathValueConverter" /> 
                     <valueConverters:DecoderOfTypeValueConverter x:Key="DecoderOfTypeValueConverter" />
+                    <valueConverters:IntegerSolidColorBrushConverter x:Key="IntegerSolidColorBrushConverter" />
                 </ResourceDictionary>
 
                 <ResourceDictionary Source="Resources/Fonts.xaml" />

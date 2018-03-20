@@ -11,15 +11,12 @@ namespace SharpPropoPlus.ValueConverters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            var metaData = value as IDecoderMetadata;
-            var type = parameter as TransmitterType?;
-
-            if (metaData == null || !type.HasValue)
+            if (!(value is IDecoderMetadata metaData) || !(parameter is TransmitterType type))
             {
                 return false;
             }
 
-            return metaData.TransmitterType == type.Value;
+            return metaData.TransmitterType == type;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

@@ -29,7 +29,8 @@ namespace SharpPropoPlus.ViewModels
         private string _filterDescription;
         private bool _isFilterEnabled;
         private ObservableCollection<IJoystickChannelData> _channelData;
-        
+        private int? _deviceColor;
+
         public OverviewViewModel()
         {
 
@@ -227,6 +228,7 @@ namespace SharpPropoPlus.ViewModels
                 return;
 
             DeviceName = args.DeviceName;
+            DeviceColor = args.DeviceColor;
         }
 
         private void PrefferedChannelListner(PreferredChannelEventArgs args)
@@ -247,6 +249,20 @@ namespace SharpPropoPlus.ViewModels
                     return;
 
                 _deviceName = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public int? DeviceColor
+        {
+            get => _deviceColor;
+
+            private set
+            {
+                if (_deviceColor == value)
+                    return;
+
+                _deviceColor = value;
                 OnPropertyChanged();
             }
         }

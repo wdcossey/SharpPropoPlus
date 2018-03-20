@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using CSCore;
 using CSCore.CoreAudioAPI;
+using CSCore.DeviceTopology.ExtensionMethods;
 using CSCore.SoundIn;
 using CSCore.Streams;
 using CSCore.Win32;
@@ -125,7 +126,7 @@ namespace SharpPropoPlus.Audio
 
         public void RefreshDevices()
         {
-            Devices = _deviceEnumerator.EnumAudioEndpoints(DataFlow.Capture, DeviceState.Active | DeviceState.UnPlugged).Select(s => new AudioEndPoint(s.FriendlyName, s.DeviceID, GetDeviceFormat(s).Channels, s.DeviceState != DeviceState.Active)).OrderBy(ob => ob.Disabled).ThenBy(tb => tb.DeviceName).ToList();
+            Devices = _deviceEnumerator.EnumAudioEndpoints(DataFlow.Capture, DeviceState.Active | DeviceState.UnPlugged).Select(s => new AudioEndPoint(s.FriendlyName, s.DeviceID, GetDeviceFormat(s).Channels, s.DeviceState != DeviceState.Active, (int?)((s.GetJackDescriptions()?.FirstOrDefault())?.Color)?.Value)).OrderBy(ob => ob.Disabled).ThenBy(tb => tb.DeviceName).ToList();
         }
 
         private static WaveFormat WaveFormatFromBlob(Blob blob)
@@ -235,6 +236,11 @@ namespace SharpPropoPlus.Audio
         {
             _currentDevice = _deviceEnumerator.GetDevice(audioEndPoint.DeviceId);
 
+            if (_currentDevice.DeviceState != DeviceState.Active)
+            {
+                return;
+            }
+
             StartRecording(_currentDevice);
 
             Settings.Default.InputDevice = audioEndPoint.DeviceId;
@@ -309,7 +315,9 @@ namespace SharpPropoPlus.Audio
 
             //var channels = deviceFormat.Channels;
 
-            var audioEndPointArgs = new AudioEndPointEventArgs(device.FriendlyName, device.DeviceID, deviceFormat.Channels, device.DeviceState != DeviceState.Active);
+            var jackDescription = device.GetJackDescriptions()?.FirstOrDefault();
+
+            var audioEndPointArgs = new AudioEndPointEventArgs(device.FriendlyName, device.DeviceID, deviceFormat.Channels, device.DeviceState != DeviceState.Active, (int?)(jackDescription?.Color)?.Value);
             AudioEndPointChanged?.Invoke(this, audioEndPointArgs);
             GlobalEventAggregator.Instance.SendMessage(audioEndPointArgs);
 
@@ -408,7 +416,6 @@ namespace SharpPropoPlus.Audio
 
                 var audioEndpointVolume = AudioEndpointVolume.FromDevice(_currentDevice);
                 var audioMeterInformation = AudioMeterInformation.FromDevice(_currentDevice);
-
 
                 while (!_pollingCancellationTokenSource.IsCancellationRequested)
                 {
