@@ -4,6 +4,7 @@ using System.Linq;
 using SharpPropoPlus.Audio;
 using SharpPropoPlus.Audio.Enums;
 using SharpPropoPlus.Audio.EventArguments;
+using SharpPropoPlus.Audio.Interfaces;
 using SharpPropoPlus.Contracts.Enums;
 using SharpPropoPlus.Contracts.EventArguments;
 using SharpPropoPlus.Decoder;
@@ -20,7 +21,7 @@ namespace SharpPropoPlus.ViewModels
     public class OverviewViewModel : BaseViewModel
     {
         private string _prefferedChannel = string.Empty;
-        private string _deviceName = string.Empty;
+        private IAudioEndPoint _device = null;
         private int _rawChannels;
         private string _joystickName = string.Empty;
         private string _decoderName;
@@ -56,7 +57,7 @@ namespace SharpPropoPlus.ViewModels
             FilterDescription = currentFilter.Description;
             IsFilterEnabled = Application.Instance.FilterManager.IsEnabled;
 
-            DeviceName = AudioHelper.Instance.DeviceName;
+            Device = AudioHelper.Instance.Device;
             JoystickName = JoystickInteraction.Instance.CurrentDevice.Name;
 
             ChannelData = new ObservableCollection<IJoystickChannelData>()
@@ -227,8 +228,7 @@ namespace SharpPropoPlus.ViewModels
             if (args == null)
                 return;
 
-            DeviceName = args.DeviceName;
-            DeviceColor = args.DeviceColor;
+            Device = args;
         }
 
         private void PrefferedChannelListner(PreferredChannelEventArgs args)
@@ -239,30 +239,16 @@ namespace SharpPropoPlus.ViewModels
             PrefferedChannel = args.Channel.ToString();
         }
 
-        public string DeviceName
+        public IAudioEndPoint Device
         {
-            get => _deviceName;
+            get => _device;
 
             private set
             {
-                if (_deviceName == value)
+                if (_device == value)
                     return;
 
-                _deviceName = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public int? DeviceColor
-        {
-            get => _deviceColor;
-
-            private set
-            {
-                if (_deviceColor == value)
-                    return;
-
-                _deviceColor = value;
+                _device = value;
                 OnPropertyChanged();
             }
         }

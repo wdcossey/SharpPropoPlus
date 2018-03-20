@@ -40,7 +40,7 @@ namespace SharpPropoPlus.ViewModels
                 new ReadOnlyObservableCollection<AudioEndPoint>(new ObservableCollection<AudioEndPoint>(AudioHelper.Instance.Devices));
 
             SelectedAudioEndPoint =
-                AudioEndPointCollection.FirstOrDefault(fd => fd.DeviceId == AudioHelper.Instance.DeviceId);
+                AudioEndPointCollection.FirstOrDefault(fd => fd.DeviceId == AudioHelper.Instance.Device.DeviceId);
 
             _selectedBitrateItem = AudioHelper.Instance.Bitrate;
             _selectedChannelItem = AudioHelper.Instance.Channel;

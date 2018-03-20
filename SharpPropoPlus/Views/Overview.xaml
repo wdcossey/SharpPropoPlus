@@ -62,7 +62,7 @@
 
         <TextBlock Grid.Column="0" Grid.Row="1" Margin="2 4" Padding="0" Text="Audio Input :" Style="{StaticResource TextBlockRightStyleKey}"></TextBlock>
         <Border Grid.Column="1" Grid.Row="1" Margin="2 4" BorderThickness="1" SnapsToDevicePixels="True" BorderBrush="#f0f0f0">
-            <TextBlock TextAlignment="Left" Text="{Binding DeviceName, Mode=OneWay}"/>
+            <TextBlock TextAlignment="Left" Text="{Binding Device.DeviceName, Mode=OneWay}"/>
         </Border>
         <Border Grid.Column="2" Grid.Row="1" Margin="2 4" BorderThickness="1" SnapsToDevicePixels="True" BorderBrush="#f0f0f0">
             <TextBlock TextAlignment="Left" >
@@ -88,14 +88,14 @@
             <Grid.Style>
                 <Style TargetType="{x:Type Grid}">
                     <Style.Triggers>
-                        <DataTrigger Binding="{Binding DeviceColor}" Value="{x:Null}">
+                        <DataTrigger Binding="{Binding Device.JackColor, Mode=OneWay}" Value="{x:Null}">
                             <Setter Property="Visibility" Value="Hidden"></Setter>
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>
             </Grid.Style>
 
-            <Ellipse Fill="{Binding DeviceColor, Converter={StaticResource IntegerSolidColorBrushConverter}}"
+            <Ellipse Fill="{Binding Device.JackColor, Mode=OneWay, Converter={StaticResource IntegerSolidColorBrushConverter}}"
                      Height="16"
                      Width="16"
                      VerticalAlignment="Center"

@@ -1,3 +1,4 @@
+CSCore.DeviceTopology.dll
 SharpPropoPlus.Audio.dll
 SharpPropoPlus.Audio.pdb
 SharpPropoPlus.Contracts.dll

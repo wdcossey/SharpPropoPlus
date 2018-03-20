@@ -5,15 +5,15 @@ namespace SharpPropoPlus.Audio.EventArguments
 {
     public class AudioEndPointEventArgs : EventArgs, IAudioEndPoint
     {
-        public string DeviceName { get; }
+        public string DeviceName { get; internal set; }
 
-        public string DeviceId { get; }
+        public string DeviceId { get; internal set; }
 
-        public int Channels { get; }
+        public int Channels { get; internal set; }
 
-        public bool Disabled { get; }
+        public bool Disabled { get; internal set; }
 
-        public int? DeviceColor { get; }
+        public int? JackColor { get; internal set; }
 
         public AudioEndPointEventArgs()
         {
@@ -26,7 +26,7 @@ namespace SharpPropoPlus.Audio.EventArguments
             DeviceId = deviceId;
             Channels = channels;
             Disabled = disabled;
-            DeviceColor = deviceColor;
+            JackColor = deviceColor;
         }
     }
 }

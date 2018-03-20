@@ -12,6 +12,7 @@ using CSCore.Streams;
 using CSCore.Win32;
 using SharpPropoPlus.Audio.Enums;
 using SharpPropoPlus.Audio.EventArguments;
+using SharpPropoPlus.Audio.Interfaces;
 using SharpPropoPlus.Audio.Models;
 using SharpPropoPlus.Contracts.EventArguments;
 using SharpPropoPlus.Events;
@@ -26,8 +27,8 @@ namespace SharpPropoPlus.Audio
         //private bool _quitPolling;
         private CancellationTokenSource _pollingCancellationTokenSource;
         private readonly MMDeviceEnumerator _deviceEnumerator;
-        private string _deviceId;
-        private string _deviceName;
+        //private string _deviceId;
+        private IAudioEndPoint _device;
         private readonly PeakValues _lastPeakValues;
         private static readonly object _sync = new object();
         private static volatile AudioHelper _instance;
@@ -61,8 +62,8 @@ namespace SharpPropoPlus.Audio
 
             _currentDevice = GetDefaultDevice();
 
-            DeviceId = _currentDevice.DeviceID;
-            DeviceName = _currentDevice.FriendlyName;
+            //DeviceId = _currentDevice.DeviceID;
+            Device = new AudioEndPoint(_currentDevice.FriendlyName, _currentDevice.DeviceID, GetDeviceFormat(_currentDevice).Channels, _currentDevice.DeviceState != DeviceState.Active, (int?)((_currentDevice.GetJackDescriptions()?.FirstOrDefault())?.Color)?.Value); ;
 
             _isStartUp = false;
         }
@@ -153,17 +154,17 @@ namespace SharpPropoPlus.Audio
             }
         }
 
-        public string DeviceName
+        public IAudioEndPoint Device
         {
-            get { return _deviceName; }
-            private set { _deviceName = value; }
+            get { return _device; }
+            private set { _device = value; }
         }
 
-        public string DeviceId
-        {
-            get { return _deviceId; }
-            private set { _deviceId = value; }
-        }
+        //public string DeviceId
+        //{
+        //    get { return _deviceId; }
+        //    private set { _deviceId = value; }
+        //}
 
         public AudioChannel Channel
         {
@@ -259,65 +260,19 @@ namespace SharpPropoPlus.Audio
             return new WaveFormat();
         }
 
-        private void StartRecording(MMDevice device)
+        private void StartRecording(MMDevice mmDevice)
         {
 
             StopRecording();
 
-            if (device == null || device.DataFlow != DataFlow.Capture)
-                throw new ArgumentNullException(nameof(device), "Selected Audio device is invalid.");
+            if (mmDevice == null || mmDevice.DataFlow != DataFlow.Capture)
+                throw new ArgumentNullException(nameof(mmDevice), "Selected Audio device is invalid.");
 
-            DeviceId = device.DeviceID;
-            DeviceName = device.FriendlyName;
+            Device = new AudioEndPoint(mmDevice.FriendlyName, mmDevice.DeviceID, GetDeviceFormat(mmDevice).Channels, mmDevice.DeviceState != DeviceState.Active, (int?)((mmDevice.GetJackDescriptions()?.FirstOrDefault())?.Color)?.Value);
 
-            //for (var i = 0; i < device.Properties.Count; i++)
-            //{
-            //  object value = null;
-            //  try
-            //  {
-            //    value = device.Properties[i].Value;
-            //  }
-            //  catch (Exception)
-            //  {
-            //    value = null;
-            //  }
+            var deviceFormat = GetDeviceFormat(mmDevice);
 
-            //  if (value != null && value.GetType() == typeof(byte[]))
-            //  {
-            //    if (((byte[]) value).Any())
-            //    {
-            //      value = string.Join(":", ((byte[])value).Select(s => $"{s:X}"));
-
-            //    }
-            //    else
-            //    {
-            //      value = null;
-            //    }
-            //  }
-            //  Debug.WriteLine("{0}: {1}\n\t{2}", i, device.Properties[i].Key.formatId, value);
-            //}
-
-
-            //device.AudioEndpointVolume.OnVolumeNotification += delegate(AudioVolumeNotificationData data)
-            //{
-            //  GlobalEventAggregator.Instance.SendMessage(new PeakValueEventArgs(new PeakValues(data.Muted, data.MasterVolume, data.ChannelVolume[0], data.ChannelVolume[1])));
-            //};
-
-
-            //var x = _deviceEnumerator.EnumerateAudioEndPoints(DataFlow.Capture, DeviceState.All)
-            //  .FirstOrDefault(w => w.ID == _deviceId);
-
-
-
-            //deviceFormat = new WaveFormat(192000, 16, deviceFormat.Channels);
-
-            var deviceFormat = GetDeviceFormat(device);
-
-            //var channels = deviceFormat.Channels;
-
-            var jackDescription = device.GetJackDescriptions()?.FirstOrDefault();
-
-            var audioEndPointArgs = new AudioEndPointEventArgs(device.FriendlyName, device.DeviceID, deviceFormat.Channels, device.DeviceState != DeviceState.Active, (int?)(jackDescription?.Color)?.Value);
+            var audioEndPointArgs = new AudioEndPointEventArgs(Device.DeviceName, Device.DeviceId, deviceFormat.Channels, Device.Disabled, Device.JackColor);
             AudioEndPointChanged?.Invoke(this, audioEndPointArgs);
             GlobalEventAggregator.Instance.SendMessage(audioEndPointArgs);
 
@@ -325,12 +280,11 @@ namespace SharpPropoPlus.Audio
                 new WasapiCapture(false, AudioClientShareMode.Shared, 0, deviceFormat,
                     ThreadPriority.Highest)
                 {
-                    Device = device
+                    Device = mmDevice
                 };
 
             _soundIn.Initialize();
 
-            //var soundInSource = new SoundInSource(_soundIn);
             SoundInSource soundInSource = new SoundInSource(_soundIn)
             {
                 FillWithZeros = false
@@ -346,9 +300,6 @@ namespace SharpPropoPlus.Audio
 
             //byte[] buffer = new byte[_finalSource.WaveFormat.BytesPerSecond / 2];
             soundInSource.DataAvailable += SoundInSourceOnDataAvailable;
-
-
-            //singleBlockNotificationStream.SingleBlockRead += SingleBlockNotificationStreamOnSingleBlockRead;
 
             _soundIn.Start();
 
