@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 
 namespace SharpPropoPlus
 {
@@ -9,9 +10,18 @@ namespace SharpPropoPlus
     {
         protected override void OnStartup(StartupEventArgs e)
         {
-            base.OnStartup(e);
+            try
+            {
+                base.OnStartup(e);
 
-            Application.Instance.ShowMainWindow();
+                Application.Instance.ShowMainWindow();
+            }
+            catch (Exception exception)
+            {
+                MessageBox.Show(exception.ToString());
+                Console.WriteLine(exception);
+            }
+
 
         }
 

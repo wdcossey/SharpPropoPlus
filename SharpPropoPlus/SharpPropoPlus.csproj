@@ -63,6 +63,8 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>true</Prefer32Bit>
+    <Optimize>false</Optimize>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
     <OutputPath>bin\x86\Release\</OutputPath>
@@ -200,7 +202,6 @@
     <Compile Include="Enums\JoystickChannel.cs" />
     <Compile Include="ExtensionMethods\ObjectExtensionMethods.cs" />
     <Compile Include="ExtensionMethods\EnumExtensionMethods.cs" />
-    <Compile Include="Helpers\DeviceNotification.cs" />
     <Compile Include="Interfaces\IAboutTabViewModel.cs" />
     <Compile Include="Interfaces\IShellViewModel.cs" />
     <Compile Include="Interfaces\IAdvancedConfigViewModel.cs" />
@@ -379,6 +380,7 @@
   <ItemGroup>
     <Folder Include="AttachedProperties\" />
     <Folder Include="Contracts\" />
+    <Folder Include="Helpers\" />
     <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
@@ -421,12 +423,13 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PreBuildEvent>xcopy /E /Y /I /EXCLUDE:$(ProjectDir)exclude.txt "$(SolutionDir)Decoders\$(ConfigurationName)\*.*" "$(TargetDir)"
-xcopy /E /Y /I /EXCLUDE:$(ProjectDir)exclude.txt "$(SolutionDir)Filters\$(ConfigurationName)\*.*" "$(TargetDir)"</PreBuildEvent>
+    <PreBuildEvent>"$(SolutionDir)Tools\NetRevisionTool.exe" /patch "$(ProjectDir)"
+xcopy /E /Y /I /EXCLUDE:$(ProjectDir)exclude.txt "$(SolutionDir)Decoders\$(ConfigurationName)\*.*" "$(TargetDir)"
+xcopy /E /Y /I /EXCLUDE:$(ProjectDir)exclude.txt "$(SolutionDir)Filters\$(ConfigurationName)\*.*" "$(TargetDir)"
+</PreBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
-    <PostBuildEvent>
-    </PostBuildEvent>
+    <PostBuildEvent>"$(SolutionDir)Tools\NetRevisionTool.exe" /restore "$(ProjectDir)"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

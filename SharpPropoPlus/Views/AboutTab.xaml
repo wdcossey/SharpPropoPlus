@@ -17,7 +17,7 @@
         <Style TargetType="{x:Type Hyperlink}">
             <Setter Property="Foreground" Value="{StaticResource AccentColorBrush}"/>
             <Setter Property="TextDecorations" Value="Underline"/>
-            <Setter Property="FontFamily" Value="pack://application:,,,/Fonts/#Montserrat"/>
+            <Setter Property="FontFamily" Value="{StaticResource Montserrat}"/>
             <Style.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
                     <Setter Property="Foreground" Value="{StaticResource AccentColorBrush}"/>
@@ -44,14 +44,32 @@
                 <controls:ControlContainer.Description>
                     <TextBlock Style="{StaticResource TextBlockLightStyleKey}" TextAlignment="Center">
                         <Run Text="Version"/>
-                        <Run FontFamily="pack://application:,,,/Fonts/#Montserrat" Text="1.0.0.0"/>
+                        <Run Style="{StaticResource RunBoldStyleKey}" Text="{Binding FileVersion}"/>
                         <LineBreak/>
                         <Run Text="Copyright ©"/>
-                        <Run FontFamily="pack://application:,,,/Fonts/#Montserrat" Text="William D Cossey"/>
+                        <Run Style="{StaticResource RunBoldStyleKey}" Text="William D Cossey"/>
                     </TextBlock>
                 </controls:ControlContainer.Description>
 
             </controls:ControlContainer>
+
+
+            <controls:ControlContainer>
+                <controls:ControlContainer.Title>
+                    <TextBlock Style="{StaticResource TextBlockLightStyleKey}" Margin="0" TextAlignment="Center">
+                        <Run Text="Contributors"/>
+                    </TextBlock>
+                </controls:ControlContainer.Title>
+
+                <controls:ControlContainer.Description>
+                    <TextBlock Style="{StaticResource TextBlockLightStyleKey}" TextAlignment="Center">
+
+                        <Hyperlink Command="{Binding HyperlinkCommand}" CommandParameter="https://github.com/Radrik5">Dmitry Oksenchuk</Hyperlink>
+
+                    </TextBlock>
+                </controls:ControlContainer.Description>
+            </controls:ControlContainer>
+
             <controls:ControlContainer>
                 <controls:ControlContainer.Title>
                     <TextBlock Style="{StaticResource TextBlockLightStyleKey}" Margin="0" TextAlignment="Center">
@@ -63,15 +81,16 @@
 
                 <controls:ControlContainer.Description>
                     <TextBlock Style="{StaticResource TextBlockLightStyleKey}" TextAlignment="Center">
-                        <Run FontFamily="pack://application:,,,/Fonts/#Montserrat" Text="Shaul Eizikovich"/>
+                        <Run Style="{StaticResource RunBoldStyleKey}" Text="Shaul Eizikovich"/>
                     </TextBlock>
                 </controls:ControlContainer.Description>
 
             </controls:ControlContainer>
-            <controls:ControlContainer  >
+
+            <controls:ControlContainer>
                 <controls:ControlContainer.Title>
                     <TextBlock Style="{StaticResource TextBlockLightStyleKey}" Margin="0" TextAlignment="Center">
-                        <Run Text="#PropoPlus uses software developed by the community."/>
+                        <Run Text="#PropoPlus uses software developed by the community"/>
                     </TextBlock>
                 </controls:ControlContainer.Title>
 
@@ -80,39 +99,39 @@
 
                         <Hyperlink Command="{Binding HyperlinkCommand}" CommandParameter="http://vjoystick.sourceforge.net">vJoy</Hyperlink>
                         <Run Text="by"/>
-                        <Run FontFamily="pack://application:,,,/Fonts/#Montserrat" Text="Shaul Eizikovich"/>
+                        <Run Style="{StaticResource RunBoldStyleKey}" Text="Shaul Eizikovich"/>
                         <LineBreak/>
 
                         <Hyperlink Command="{Binding HyperlinkCommand}" CommandParameter="https://github.com/filoe/cscore">CSCore</Hyperlink>
                         <Run Text="by"/>
-                        <Run FontFamily="pack://application:,,,/Fonts/#Montserrat" Text="Florian R."/>
+                        <Run Style="{StaticResource RunBoldStyleKey}" Text="Florian Rosmann"/>
                         <LineBreak/>
 
                         <Hyperlink Command="{Binding HyperlinkCommand}" CommandParameter="http://sharpdx.org/">SharpDX</Hyperlink>
                         <Run Text="by"/>
-                        <Run FontFamily="pack://application:,,,/Fonts/#Montserrat" Text="Alexandre Mutel"/>
+                        <Run Style="{StaticResource RunBoldStyleKey}" Text="Alexandre Mutel"/>
                         <LineBreak/>
                         
                         <Hyperlink Command="{Binding HyperlinkCommand}" CommandParameter="https://github.com/FantasticFiasco/mvvm-dialogs">MvvmDialogs</Hyperlink>
                         <Run Text="by"/>
-                        <Run FontFamily="pack://application:,,,/Fonts/#Montserrat" Text="Mattias Kindborg"/>
+                        <Run Style="{StaticResource RunBoldStyleKey}" Text="Mattias Kindborg"/>
                         <LineBreak/>
                         
                         <Hyperlink Command="{Binding HyperlinkCommand}" CommandParameter="https://github.com/staxmanade/EventAggregator.Net">EventAggregator.Net</Hyperlink>
                         <Run Text="by"/>
-                        <Run FontFamily="pack://application:,,,/Fonts/#Montserrat" Text="Jason Jarrett"/>
+                        <Run Style="{StaticResource RunBoldStyleKey}" Text="Jason Jarrett"/>
                         <LineBreak/>
                         
                         <Hyperlink Command="{Binding HyperlinkCommand}" CommandParameter="https://github.com/Stopbyte/WPF-Numeric-Spinner-NumericUpDown">Numeric Spinner</Hyperlink>
                         <Run Text="by"/>
-                        <Run FontFamily="pack://application:,,,/Fonts/#Montserrat" Text="Yassine"/>
+                        <Run Style="{StaticResource RunBoldStyleKey}" Text="Yassine"/>
                         <LineBreak/>
                         
                         <Hyperlink Command="{Binding HyperlinkCommand}" CommandParameter="https://github.com/JulietaUla/Montserrat">Montserrat Font Project</Hyperlink>
                         <Run Text="by"/>
-                        <Run FontFamily="pack://application:,,,/Fonts/#Montserrat" Text="Julieta Ulanovsky"/>
-   
-                        
+                        <Run Style="{StaticResource RunBoldStyleKey}" Text="Julieta Ulanovsky"/>
+
+
                     </TextBlock>
                 </controls:ControlContainer.Description>
             </controls:ControlContainer>

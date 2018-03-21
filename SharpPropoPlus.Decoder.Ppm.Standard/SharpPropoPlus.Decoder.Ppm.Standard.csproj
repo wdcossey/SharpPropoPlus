@@ -30,7 +30,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
+    <RunPostBuildEvent>Always</RunPostBuildEvent>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -57,7 +57,12 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>xcopy /E /Y /I "$(TargetDir)*.*" "$(SolutionDir)Decoders\$(ConfigurationName)\"</PostBuildEvent>
+    <PostBuildEvent>"$(SolutionDir)Tools\NetRevisionTool.exe" /restore "$(ProjectDir)"
+xcopy /E /Y /I "$(TargetDir)*.*" "$(SolutionDir)Decoders\$(ConfigurationName)\"</PostBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PreBuildEvent>"$(SolutionDir)Tools\NetRevisionTool.exe" /patch "$(ProjectDir)"
+</PreBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -13,7 +13,6 @@ using SharpPropoPlus.Decoder.EventArguments;
 using SharpPropoPlus.Enums;
 using SharpPropoPlus.Filter.EventArguments;
 using SharpPropoPlus.Interfaces;
-using SharpPropoPlus.vJoyMonitor;
 using SharpPropoPlus.vJoyMonitor.EventArguments;
 
 namespace SharpPropoPlus.ViewModels
@@ -30,7 +29,6 @@ namespace SharpPropoPlus.ViewModels
         private string _filterDescription;
         private bool _isFilterEnabled;
         private ObservableCollection<IJoystickChannelData> _channelData;
-        private int? _deviceColor;
 
         public OverviewViewModel()
         {

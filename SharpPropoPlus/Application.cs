@@ -7,7 +7,7 @@ using SharpPropoPlus.Audio;
 using SharpPropoPlus.Audio.Enums;
 using SharpPropoPlus.Audio.EventArguments;
 using SharpPropoPlus.Decoder;
-using SharpPropoPlus.Helpers;
+//using SharpPropoPlus.Helpers;
 using SharpPropoPlus.Interfaces;
 using SharpPropoPlus.vJoyMonitor;
 using SharpPropoPlus.ViewModels;
@@ -140,12 +140,12 @@ namespace SharpPropoPlus
 
             mainWindow.Loaded += (sender, args) =>
             {
-                var windowHandle = new WindowInteropHelper(mainWindow).Handle;
+                //var windowHandle = new WindowInteropHelper(mainWindow).Handle;
 
-                var source = HwndSource.FromHwnd(windowHandle);
-                source?.AddHook(WndProc);
+                //var source = HwndSource.FromHwnd(windowHandle);
+                //source?.AddHook(WndProc);
 
-                DeviceNotification.RegisterDeviceNotification(windowHandle, true);
+                //DeviceNotification.RegisterDeviceNotification(windowHandle, true);
             };
 
 
@@ -155,70 +155,71 @@ namespace SharpPropoPlus
             //System.Windows.Application.Current.MainWindow.Show();
         }
 
-        private static IntPtr WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
-        {
-            //  do stuff
-            if (msg == DeviceNotification.WM_DEVICECHANGE)
-            {
-                var action = (int) wParam;
+        //private static IntPtr WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
+        //{
+        //    //  do stuff
+        //    if (msg == DeviceNotification.WM_DEVICECHANGE)
+        //    {
+        //        var action = (int) wParam;
 
-                if (lParam.Equals(IntPtr.Zero) && !wParam.Equals(IntPtr.Zero))
-                {
+        //        if (lParam.Equals(IntPtr.Zero) && !wParam.Equals(IntPtr.Zero))
+        //        {
 
-                }
+        //        }
 
-                else if (!lParam.Equals(IntPtr.Zero) && !wParam.Equals(IntPtr.Zero))
-                {
-                    var pHdr = Marshal.PtrToStructure<DeviceNotification.DEV_BROADCAST_HDR>(lParam);
+        //        else if (!lParam.Equals(IntPtr.Zero) && !wParam.Equals(IntPtr.Zero))
+        //        {
+        //            var pHdr = Marshal.PtrToStructure<DeviceNotification.DEV_BROADCAST_HDR>(lParam);
 
-                    switch (pHdr.dbch_DeviceType)
-                    {
-                        case DeviceNotification.DbtDevtypDeviceinterface:
+        //            switch (pHdr.dbch_DeviceType)
+        //            {
+        //                case DeviceNotification.DbtDevtypDeviceinterface:
 
-                            var pDevInf =
-                                Marshal.PtrToStructure<DeviceNotification.DEV_BROADCAST_DEVICEINTERFACE>(lParam);
+        //                    var pDevInf =
+        //                        Marshal.PtrToStructure<DeviceNotification.DEV_BROADCAST_DEVICEINTERFACE>(lParam);
 
-                            switch (action)
-                            {
-                                case DeviceNotification.DBT_DEVICEARRIVAL:
-                                    // do something...
-                                    break;
-                                case DeviceNotification.DBT_DEVICEREMOVECOMPLETE:
-                                    // do something...
-                                    break;
-                            }
-                            break;
+        //                    switch (action)
+        //                    {
+        //                        case DeviceNotification.DBT_DEVICEARRIVAL:
+        //                            // do something...
+        //                            break;
+        //                        case DeviceNotification.DBT_DEVICEREMOVECOMPLETE:
+        //                            // do something...
+        //                            break;
+        //                    }
+        //                    break;
 
-                        //case DBT_DEVTYP_HANDLE:
-                        //    PDEV_BROADCAST_HANDLE pDevHnd = (PDEV_BROADCAST_HANDLE)pHdr;
-                        //    // do something...
-                        //    break;
+        //                //case DBT_DEVTYP_HANDLE:
+        //                //    PDEV_BROADCAST_HANDLE pDevHnd = (PDEV_BROADCAST_HANDLE)pHdr;
+        //                //    // do something...
+        //                //    break;
 
-                        //case DBT_DEVTYP_OEM:
-                        //    PDEV_BROADCAST_OEM pDevOem = (PDEV_BROADCAST_OEM)pHdr;
-                        //    // do something...
-                        //    break;
+        //                //case DBT_DEVTYP_OEM:
+        //                //    PDEV_BROADCAST_OEM pDevOem = (PDEV_BROADCAST_OEM)pHdr;
+        //                //    // do something...
+        //                //    break;
 
-                        //case DBT_DEVTYP_PORT:
-                        //    PDEV_BROADCAST_PORT pDevPort = (PDEV_BROADCAST_PORT)pHdr;
-                        //    // do something...
-                        //    break;
+        //                //case DBT_DEVTYP_PORT:
+        //                //    PDEV_BROADCAST_PORT pDevPort = (PDEV_BROADCAST_PORT)pHdr;
+        //                //    // do something...
+        //                //    break;
 
-                        //case DBT_DEVTYP_VOLUME:
-                        //    PDEV_BROADCAST_VOLUME pDevVolume = (PDEV_BROADCAST_VOLUME)pHdr;
-                        //    // do something...
-                        //    break;
-                    }
-                }
+        //                //case DBT_DEVTYP_VOLUME:
+        //                //    PDEV_BROADCAST_VOLUME pDevVolume = (PDEV_BROADCAST_VOLUME)pHdr;
+        //                //    // do something...
+        //                //    break;
+        //            }
+        //        }
 
-            }
-            return IntPtr.Zero;
-        }
+        //    }
+        //    return IntPtr.Zero;
+        //}
 
         public void Dispose()
         {
             AudioHelper.Instance.DataAvailable -= AudioDataAvailable;
             AudioHelper.Instance.Dispose();
+            JoystickHelper.Instance.Dispose();
             //GlobalEventAggregator.Instance.AddListener<AudioDataEventArgs>(AudioDataAction);
         }
     }
