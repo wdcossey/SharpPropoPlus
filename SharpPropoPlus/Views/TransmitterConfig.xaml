@@ -39,34 +39,8 @@
 
     <StackPanel>
 
-
-        <Grid >
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
-            </Grid.ColumnDefinitions>
-            
-            <Grid.RowDefinitions>
-                <RowDefinition/>
-                <RowDefinition/>
-            </Grid.RowDefinitions>
-            
-            <TextBlock Grid.Column="0" 
-                       Grid.Row="0" 
-                       Margin="0" 
-                       Style="{StaticResource TextBlockHeaderStyleKey}" 
-                       Text="Signal Decoder" />
-            
-            <TextBlock Grid.Column="0" 
-                       Grid.Row="1" 
-                       Margin="0 2 0 0" 
-                       Style="{StaticResource TextBlockLightStyleKey}" 
-                       Text="Select the signal decoder that matches your transmitter."  />
-
-            <ComboBox Grid.Column="1" 
-                      Grid.Row="0" 
-                      Grid.RowSpan="2" 
-                      Margin="0" 
+        <controls:ControlContainer Title="Signal Decoder" TitleStringFormat="{x:Null}" Description="Select the signal decoder that matches your transmitter.">
+            <ComboBox Margin="0" 
                       VerticalAlignment="Center" 
                       HorizontalAlignment="Right" 
                       DisplayMemberPath="Metadata.Name" 
@@ -101,238 +75,218 @@
                     </GroupStyle>
                 </ComboBox.GroupStyle>
             </ComboBox>
-        </Grid>
+        </controls:ControlContainer>
 
-        <Border Visibility="Collapsed">
-            <Border.Style>
-                <Style TargetType="{x:Type Border}" BasedOn="{StaticResource BorderSeparator}">
+        <controls:ControlContainer Title="Decoder Settings">
+
+            <controls:ControlContainer.Style>
+                <Style TargetType="{x:Type controls:ControlContainer}"  BasedOn="{StaticResource {x:Type controls:ControlContainer}}" >
                     <Setter Property="Visibility" Value="Collapsed"/>
                     <Style.Triggers>
-                        <DataTrigger Binding="{Binding SelectedDecoder.Metadata, Converter={StaticResource DecoderOfTypeValueConverter}, ConverterParameter={x:Static types:TransmitterType.Ppm}}" Value="True">
+                        <DataTrigger Binding="{Binding SelectedDecoder.Metadata.TransmitterType}" Value="{x:Static types:TransmitterType.Ppm}">
                             <Setter Property="Visibility" Value="Visible"/>
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>
-            </Border.Style>
-        </Border>
+            </controls:ControlContainer.Style>
 
-        <StackPanel Orientation="Vertical" Visibility="Collapsed">
-            <StackPanel.Style>
-                <Style TargetType="{x:Type StackPanel}">
-                    <Setter Property="Visibility" Value="Collapsed"/>
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding SelectedDecoder.Metadata, Converter={StaticResource DecoderOfTypeValueConverter}, ConverterParameter={x:Static types:TransmitterType.Ppm}}" Value="True">
-                            <Setter Property="Visibility" Value="Visible"/>
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </StackPanel.Style>
-            <!--<Border HorizontalAlignment="Stretch" SnapsToDevicePixels="True" BorderThickness="0 0 0 1" BorderBrush="#f0f0f0"/>-->
-            <TextBlock Style="{StaticResource TextBlockHeaderStyleKey}" Text="Decoder Settings" />
+            <controls:ControlContainer.Description>
 
-            <Grid Margin="8">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
-                
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
+                <Grid Margin="8">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
 
-                <TextBlock Grid.Column="0" Grid.Row="0" HorizontalAlignment="Right" VerticalAlignment="Center" Style="{StaticResource TextBlockDefaultStyleKey}" Text="Pulse Width (Min) :" />
-                <controls:NumericSpinner Grid.Column="1" Grid.Row="0" Margin="8 2 4 2" MinValue="0.0" Decimals="1" Step="0.1" MinWidth="80">
-                    <controls:NumericSpinner.Style>
-                        <Style TargetType="{x:Type controls:NumericSpinner}" >
-                            <!--<Setter Property="Value" Value="{x:Null}" />-->
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding SelectedDecoder.Metadata, Converter={StaticResource DecoderOfTypeValueConverter}, ConverterParameter={x:Static types:TransmitterType.Ppm}}" Value="True">
-                                    <Setter Property="Value" Value="{Binding SelectedDecoder.Value.PpmMinPulseWidth, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </controls:NumericSpinner.Style>
-                </controls:NumericSpinner>
-                <!--<TextBox Grid.Column="1" Grid.Row="0" Margin="8 2 4 2" IsReadOnly="True" Width="60">
-                    <TextBox.Style>
-                        <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
-                            <Setter Property="Text" Value="{x:Null}" />
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding SelectedDecoder.Metadata, Converter={StaticResource DecoderOfTypeValueConverter}, ConverterParameter={x:Static types:TransmitterType.Ppm}}" Value="True">
-                                    <Setter Property="Text" Value="{Binding SelectedDecoder.Value.PpmMinPulseWidth, Mode=OneWay}" />
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </TextBox.Style>
-                </TextBox>-->
-                <TextBlock Grid.Column="2" Grid.Row="0" VerticalAlignment="Center" Style="{StaticResource TextBlockLightStyleKey}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Column="0" Grid.Row="0" HorizontalAlignment="Right" VerticalAlignment="Center" Style="{StaticResource TextBlockDefaultStyleKey}" Text="Pulse Width (Min) :" />
+                    <controls:NumericSpinner Grid.Column="1" Grid.Row="0" Margin="8 2 4 2" MinValue="0.0" Decimals="2" Step="0.01" MinWidth="80">
+                        <controls:NumericSpinner.Style>
+                            <Style TargetType="{x:Type controls:NumericSpinner}" >
+                                <Setter Property="Value" Value="0.0" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding SelectedDecoder.Metadata.TransmitterType}" Value="{x:Static types:TransmitterType.Ppm}">
+                                        <Setter Property="Value" Value="{Binding SelectedDecoder.Value.PpmMinPulseWidth, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </controls:NumericSpinner.Style>
+                    </controls:NumericSpinner>
+
+                    <TextBlock Grid.Column="2" Grid.Row="0" VerticalAlignment="Center" Style="{StaticResource TextBlockLightStyleKey}">
                     <Run Text="("/><Run>
                         <Run.Style>
                             <Style TargetType="{x:Type Run}">
                                 <Setter Property="Text" Value="{x:Null}" />
                                 <Style.Triggers>
-                                    <DataTrigger Binding="{Binding SelectedDecoder.Metadata, Converter={StaticResource DecoderOfTypeValueConverter}, ConverterParameter={x:Static types:TransmitterType.Ppm}}" Value="True">
+                                    <DataTrigger Binding="{Binding SelectedDecoder.Metadata.TransmitterType}" Value="{x:Static types:TransmitterType.Ppm}">
                                         <Setter Property="Text" Value="{Binding SelectedDecoder.Value.PpmMinPulseWidth, Converter={StaticResource MathValueConverter}, ConverterParameter=@VALUE/192, StringFormat='{}{0:0.###}'}" />
                                     </DataTrigger>
                                 </Style.Triggers>
                             </Style>
                         </Run.Style>
                     </Run><Run FontSize="10" Text="ms"/><Run Text=")"/>
-                </TextBlock>
+                    </TextBlock>
 
-                <TextBlock Grid.Column="0" Grid.Row="1" HorizontalAlignment="Right" VerticalAlignment="Center" Style="{StaticResource TextBlockDefaultStyleKey}" Text="Pulse Width (Max) :" />
-                <TextBox Grid.Column="1" Grid.Row="1" Margin="8 2 4 2" IsReadOnly="True" Width="60">
-                    <TextBox.Style>
-                        <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
-                            <Setter Property="Text" Value="{x:Null}" />
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding SelectedDecoder.Metadata, Converter={StaticResource DecoderOfTypeValueConverter}, ConverterParameter={x:Static types:TransmitterType.Ppm}}" Value="True">
-                                    <Setter Property="Text" Value="{Binding SelectedDecoder.Value.PpmMaxPulseWidth, Mode=OneWay}" />
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </TextBox.Style>
-                </TextBox>
-                <TextBlock Grid.Column="2" Grid.Row="1" VerticalAlignment="Center" Style="{StaticResource TextBlockLightStyleKey}" >
+                    <TextBlock Grid.Column="0" Grid.Row="1" HorizontalAlignment="Right" VerticalAlignment="Center" Style="{StaticResource TextBlockDefaultStyleKey}" Text="Pulse Width (Max) :" />
+                    <controls:NumericSpinner Grid.Column="1" Grid.Row="1" Margin="8 2 4 2" MinValue="0.0" Decimals="2" Step="0.01" MinWidth="80">
+                        <controls:NumericSpinner.Style>
+                            <Style TargetType="{x:Type controls:NumericSpinner}" >
+                                <Setter Property="Value" Value="0.0" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding SelectedDecoder.Metadata.TransmitterType}" Value="{x:Static types:TransmitterType.Ppm}">
+                                        <Setter Property="Value" Value="{Binding SelectedDecoder.Value.PpmMaxPulseWidth, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </controls:NumericSpinner.Style>
+                    </controls:NumericSpinner>
+                    
+
+                    <TextBlock Grid.Column="2" Grid.Row="1" VerticalAlignment="Center" Style="{StaticResource TextBlockLightStyleKey}" >
                     <Run Text="("/><Run>
                         <Run.Style>
                             <Style TargetType="{x:Type Run}">
                                 <Setter Property="Text" Value="{x:Null}" />
                                 <Style.Triggers>
-                                    <DataTrigger Binding="{Binding SelectedDecoder.Metadata, Converter={StaticResource DecoderOfTypeValueConverter}, ConverterParameter={x:Static types:TransmitterType.Ppm}}" Value="True">
+                                    <DataTrigger Binding="{Binding SelectedDecoder.Metadata.TransmitterType}" Value="{x:Static types:TransmitterType.Ppm}">
                                         <Setter Property="Text" Value="{Binding SelectedDecoder.Value.PpmMaxPulseWidth, Converter={StaticResource MathValueConverter}, ConverterParameter=@VALUE/192, StringFormat='{}{0:0.###}'}" />
                                     </DataTrigger>
                                 </Style.Triggers>
                             </Style>
                         </Run.Style>
                     </Run><Run FontSize="10" Text="ms"/><Run Text=")"/>
-                </TextBlock>
+                    </TextBlock>
 
-                <TextBlock Grid.Column="0" Grid.Row="2" HorizontalAlignment="Right" VerticalAlignment="Center" Style="{StaticResource TextBlockDefaultStyleKey}" Text="Packet Separator :" />
-                <TextBox Grid.Column="1" Grid.Row="2" Margin="8 2 4 2" IsReadOnly="True" Width="60">
-                    <TextBox.Style>
-                        <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
-                            <Setter Property="Text" Value="{x:Null}" />
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding SelectedDecoder.Metadata, Converter={StaticResource DecoderOfTypeValueConverter}, ConverterParameter={x:Static types:TransmitterType.Ppm}}" Value="True">
-                                    <Setter Property="Text" Value="{Binding SelectedDecoder.Value.PpmTrig, Mode=OneWay}" />
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </TextBox.Style>
-                </TextBox>
-                <TextBlock Grid.Column="2" Grid.Row="2" VerticalAlignment="Center" Style="{StaticResource TextBlockLightStyleKey}" >
+                    <TextBlock Grid.Column="0" Grid.Row="2" HorizontalAlignment="Right" VerticalAlignment="Center" Style="{StaticResource TextBlockDefaultStyleKey}" Text="Packet Separator :" />
+                    <controls:NumericSpinner Grid.Column="1" Grid.Row="2" Margin="8 2 4 2" MinValue="0.0" Decimals="2" Step="0.01" MinWidth="80">
+                        <controls:NumericSpinner.Style>
+                            <Style TargetType="{x:Type controls:NumericSpinner}" >
+                                <Setter Property="Value" Value="0.0" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding SelectedDecoder.Metadata.TransmitterType}" Value="{x:Static types:TransmitterType.Ppm}">
+                                        <Setter Property="Value" Value="{Binding SelectedDecoder.Value.PpmTrig, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </controls:NumericSpinner.Style>
+                    </controls:NumericSpinner>
+                    
+
+                    <TextBlock Grid.Column="2" Grid.Row="2" VerticalAlignment="Center" Style="{StaticResource TextBlockLightStyleKey}" >
                     <Run Text="("/><Run>
                         <Run.Style>
                             <Style TargetType="{x:Type Run}">
                                 <Setter Property="Text" Value="{x:Null}" />
                                 <Style.Triggers>
-                                    <DataTrigger Binding="{Binding SelectedDecoder.Metadata, Converter={StaticResource DecoderOfTypeValueConverter}, ConverterParameter={x:Static types:TransmitterType.Ppm}}" Value="True">
+                                    <DataTrigger Binding="{Binding SelectedDecoder.Metadata.TransmitterType}" Value="{x:Static types:TransmitterType.Ppm}">
                                         <Setter Property="Text" Value="{Binding SelectedDecoder.Value.PpmTrig, Converter={StaticResource MathValueConverter}, ConverterParameter=@VALUE/192, StringFormat='{}{0:0.###}'}" />
                                     </DataTrigger>
                                 </Style.Triggers>
                             </Style>
                         </Run.Style>
                     </Run><Run FontSize="10" Text="ms"/><Run Text=")"/>
-                </TextBlock>
+                    </TextBlock>
 
-                <TextBlock Grid.Column="0" Grid.Row="3" HorizontalAlignment="Right" VerticalAlignment="Center" Style="{StaticResource TextBlockDefaultStyleKey}" Text="Channel Separator :" />
-                <TextBox Grid.Column="1" Grid.Row="3" Margin="8 2 4 2" IsReadOnly="True" Width="60">
-                    <TextBox.Style>
-                        <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
-                            <Setter Property="Text" Value="{x:Null}" />
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding SelectedDecoder.Metadata, Converter={StaticResource DecoderOfTypeValueConverter}, ConverterParameter={x:Static types:TransmitterType.Ppm}}" Value="True">
-                                    <Setter Property="Text" Value="{Binding SelectedDecoder.Value.PpmSeparator, Mode=OneWay}" />
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </TextBox.Style>
-                </TextBox>
-                <TextBlock Grid.Column="2" Grid.Row="3" VerticalAlignment="Center" Style="{StaticResource TextBlockLightStyleKey}" >
+                    <TextBlock Grid.Column="0" Grid.Row="3" HorizontalAlignment="Right" VerticalAlignment="Center" Style="{StaticResource TextBlockDefaultStyleKey}" Text="Channel Separator :" />
+                    <controls:NumericSpinner Grid.Column="1" Grid.Row="3" Margin="8 2 4 2" MinValue="0.0" Decimals="2" Step="0.01" MinWidth="80">
+                        <controls:NumericSpinner.Style>
+                            <Style TargetType="{x:Type controls:NumericSpinner}" >
+                                <Setter Property="Value" Value="0.0" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding SelectedDecoder.Metadata.TransmitterType}" Value="{x:Static types:TransmitterType.Ppm}">
+                                        <Setter Property="Value" Value="{Binding SelectedDecoder.Value.PpmSeparator, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </controls:NumericSpinner.Style>
+                    </controls:NumericSpinner>
+
+                    <TextBlock Grid.Column="2" Grid.Row="3" VerticalAlignment="Center" Style="{StaticResource TextBlockLightStyleKey}" >
                     <Run Text="("/><Run>
                         <Run.Style>
                             <Style TargetType="{x:Type Run}">
                                 <Setter Property="Text" Value="{x:Null}" />
                                 <Style.Triggers>
-                                    <DataTrigger Binding="{Binding SelectedDecoder.Metadata, Converter={StaticResource DecoderOfTypeValueConverter}, ConverterParameter={x:Static types:TransmitterType.Ppm}}" Value="True">
+                                    <DataTrigger Binding="{Binding SelectedDecoder.Metadata.TransmitterType}" Value="{x:Static types:TransmitterType.Ppm}">
                                         <Setter Property="Text" Value="{Binding SelectedDecoder.Value.PpmSeparator, Converter={StaticResource MathValueConverter}, ConverterParameter=@VALUE/192, StringFormat='{}{0:0.###}'}" />
                                     </DataTrigger>
                                 </Style.Triggers>
                             </Style>
                         </Run.Style>
                     </Run><Run FontSize="10" Text="ms"/><Run Text=")"/>
-                </TextBlock>
+                    </TextBlock>
 
-                <TextBlock Grid.Column="0" Grid.Row="4" HorizontalAlignment="Right" VerticalAlignment="Center" Style="{StaticResource TextBlockDefaultStyleKey}" Text="Glitch :" />
-                <TextBox Grid.Column="1" Grid.Row="4" Margin="8 2 4 2" IsReadOnly="True" Width="60">
-                    <TextBox.Style>
-                        <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
-                            <Setter Property="Text" Value="{x:Null}" />
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding SelectedDecoder.Metadata, Converter={StaticResource DecoderOfTypeValueConverter}, ConverterParameter={x:Static types:TransmitterType.Ppm}}" Value="True">
-                                    <Setter Property="Text" Value="{Binding SelectedDecoder.Value.PpmGlitch, Mode=OneWay}" />
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </TextBox.Style>
-                </TextBox>
-                <TextBlock Grid.Column="2" Grid.Row="4" VerticalAlignment="Center" Style="{StaticResource TextBlockLightStyleKey}" >
+                    <TextBlock Grid.Column="0" Grid.Row="4" HorizontalAlignment="Right" VerticalAlignment="Center" Style="{StaticResource TextBlockDefaultStyleKey}" Text="Glitch :" />
+                    <controls:NumericSpinner Grid.Column="1" Grid.Row="4" Margin="8 2 4 2" MinValue="0.0" Decimals="2" Step="0.01" MinWidth="80">
+                        <controls:NumericSpinner.Style>
+                            <Style TargetType="{x:Type controls:NumericSpinner}" >
+                                <Setter Property="Value" Value="0.0" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding SelectedDecoder.Metadata.TransmitterType}" Value="{x:Static types:TransmitterType.Ppm}">
+                                        <Setter Property="Value" Value="{Binding SelectedDecoder.Value.PpmGlitch, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </controls:NumericSpinner.Style>
+                    </controls:NumericSpinner>
+                    
+                    <TextBlock Grid.Column="2" Grid.Row="4" VerticalAlignment="Center" Style="{StaticResource TextBlockLightStyleKey}" >
                     <Run Text="("/><Run>
                         <Run.Style>
                             <Style TargetType="{x:Type Run}">
                                 <Setter Property="Text" Value="{x:Null}" />
                                 <Style.Triggers>
-                                    <DataTrigger Binding="{Binding SelectedDecoder.Metadata, Converter={StaticResource DecoderOfTypeValueConverter}, ConverterParameter={x:Static types:TransmitterType.Ppm}}" Value="True">
+                                    <DataTrigger Binding="{Binding SelectedDecoder.Metadata.TransmitterType}" Value="{x:Static types:TransmitterType.Ppm}">
                                         <Setter Property="Text" Value="{Binding SelectedDecoder.Value.PpmGlitch, Converter={StaticResource MathValueConverter}, ConverterParameter=@VALUE/192, StringFormat='{}{0:0.###}'}" />
                                     </DataTrigger>
                                 </Style.Triggers>
                             </Style>
                         </Run.Style>
                     </Run><Run FontSize="10" Text="ms"/><Run Text=")"/>
-                </TextBlock>
+                    </TextBlock>
 
-                <TextBlock Grid.Column="0" Grid.Row="5" HorizontalAlignment="Right" VerticalAlignment="Center" Style="{StaticResource TextBlockDefaultStyleKey}" Text="Jitter :" />
-                <TextBox Grid.Column="1" Grid.Row="5" Margin="8 2 4 2" IsReadOnly="True" Width="60" >
-                    <TextBox.Style>
-                        <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
-                            <Setter Property="Text" Value="{x:Null}" />
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding SelectedDecoder.Metadata, Converter={StaticResource DecoderOfTypeValueConverter}, ConverterParameter={x:Static types:TransmitterType.Ppm}}" Value="True">
-                                    <Setter Property="Text" Value="{Binding SelectedDecoder.Value.PpmJitter, Mode=OneWay}" />
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </TextBox.Style>
-                </TextBox>
-                <TextBlock Grid.Column="2" Grid.Row="5" VerticalAlignment="Center" Style="{StaticResource TextBlockLightStyleKey}" >
+                    <TextBlock Grid.Column="0" Grid.Row="5" HorizontalAlignment="Right" VerticalAlignment="Center" Style="{StaticResource TextBlockDefaultStyleKey}" Text="Jitter :" />
+                    <controls:NumericSpinner Grid.Column="1" Grid.Row="5" Margin="8 2 4 2" MinValue="0.0" Decimals="2" Step="0.01" MinWidth="80">
+                        <controls:NumericSpinner.Style>
+                            <Style TargetType="{x:Type controls:NumericSpinner}" >
+                                <Setter Property="Value" Value="0.0" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding SelectedDecoder.Metadata.TransmitterType}" Value="{x:Static types:TransmitterType.Ppm}">
+                                        <Setter Property="Value" Value="{Binding SelectedDecoder.Value.PpmJitter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </controls:NumericSpinner.Style>
+                    </controls:NumericSpinner>
+                    
+                    
+                    <TextBlock Grid.Column="2" Grid.Row="5" VerticalAlignment="Center" Style="{StaticResource TextBlockLightStyleKey}" >
                     <Run Text="("/><Run>
                         <Run.Style>
                             <Style TargetType="{x:Type Run}">
                                 <Setter Property="Text" Value="{x:Null}" />
                                 <Style.Triggers>
-                                    <DataTrigger Binding="{Binding SelectedDecoder.Metadata, Converter={StaticResource DecoderOfTypeValueConverter}, ConverterParameter={x:Static types:TransmitterType.Ppm}}" Value="True">
+                                    <DataTrigger Binding="{Binding SelectedDecoder.Metadata.TransmitterType}" Value="{x:Static types:TransmitterType.Ppm}">
                                         <Setter Property="Text" Value="{Binding SelectedDecoder.Value.PpmJitter, Converter={StaticResource MathValueConverter}, ConverterParameter=@VALUE/192, StringFormat='{}{0:0.###}'}" />
                                     </DataTrigger>
                                 </Style.Triggers>
                             </Style>
                         </Run.Style>
                     </Run><Run FontSize="10" Text="ms"/><Run Text=")"/>
-                </TextBlock>
-                
-                
-            </Grid>
-
-            
-        </StackPanel>
-
-        <Border Style="{StaticResource BorderSeparator}"/>
+                    </TextBlock>
+                </Grid>
+            </controls:ControlContainer.Description>
+        </controls:ControlContainer>
 
         <controls:ControlContainer Title="{Binding RawChannels, TargetNullValue=0}" TitleStringFormat="R/C Channels ({0})" Description="{x:Null}">
             

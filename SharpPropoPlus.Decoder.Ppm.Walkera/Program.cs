@@ -1,7 +1,4 @@
-﻿using System;
-using System.Diagnostics;
-using System.Threading;
-using SharpPropoPlus.Contracts;
+﻿using System.Threading;
 using SharpPropoPlus.Contracts.Enums;
 using SharpPropoPlus.Contracts.Interfaces;
 using SharpPropoPlus.Decoder.Contracts;
@@ -28,22 +25,22 @@ namespace SharpPropoPlus.Decoder.Ppm.Walkera
         /// <summary>
         /// 
         /// </summary>
-        public override double PpmJitterDefault => 4.25;
+        public override double PpmJitterDefault => Settings.Default.PpmJitter;//4.25;
 
         /// <summary>
         /// 
         /// </summary>
-        public override double PpmMinPulseWidthDefault => 78.4;
+        public override double PpmMinPulseWidthDefault => Settings.Default.PpmMinPulseWidth;//78.4;
 
         /// <summary>
         /// 
         /// </summary>
-        public override double PpmMaxPulseWidthDefault => 304.8;
+        public override double PpmMaxPulseWidthDefault => Settings.Default.PpmMaxPulseWidth;//304.8;
 
         /// <summary>
         /// 
         /// </summary>
-        public override double PpmSeparatorDefault => 65.3;
+        public override double PpmSeparatorDefault => Settings.Default.PpmSeparator;//65.3;
 
         #endregion PPM Values (Walkera)
 
@@ -122,6 +119,7 @@ namespace SharpPropoPlus.Decoder.Ppm.Walkera
             /* convert pulse width in samples to joystick Position values (newdata)
             joystick Position of 0 correspond to width over 100 samples (2.25mSec)
             joystick Position of 1023 correspond to width under 30 samples (0.68mSec)*/
+
             var newdata = (int) ((width - PpmMinPulseWidth) /
                                  (PpmMaxPulseWidth - PpmMinPulseWidth) * 1024);
 
@@ -167,6 +165,25 @@ namespace SharpPropoPlus.Decoder.Ppm.Walkera
 
             DataCount++;
         }
+
+        #region Config
+
+        protected override void LoadConfig()
+        {
+            
+        }
+
+        protected override void SaveConfig()
+        {
+            Settings.Default.PpmMinPulseWidth = PpmMinPulseWidth;
+            Settings.Default.PpmMaxPulseWidth = PpmMaxPulseWidth;
+            Settings.Default.PpmSeparator = PpmSeparator;
+            Settings.Default.PpmJitter = PpmJitter;
+
+            Settings.Default.Save();
+        }
+
+        #endregion
 
         /// <summary>
         /// Resets the static variables.

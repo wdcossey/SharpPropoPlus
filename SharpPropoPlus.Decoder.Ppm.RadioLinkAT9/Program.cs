@@ -1,8 +1,4 @@
-﻿using System;
-using System.ComponentModel;
-using System.Linq;
-using System.Threading;
-using SharpPropoPlus.Contracts;
+﻿using System.Threading;
 using SharpPropoPlus.Contracts.Enums;
 using SharpPropoPlus.Contracts.Interfaces;
 using SharpPropoPlus.Decoder.Contracts;
@@ -157,6 +153,20 @@ namespace SharpPropoPlus.Decoder.Ppm.RadioLinkAT9
             DataCount++;
 
         }
+
+        #region Config
+
+        protected override void LoadConfig()
+        {
+
+        }
+
+        protected override void SaveConfig()
+        {
+
+        }
+
+        #endregion
 
         /// <summary>
         /// Resets the static variables.

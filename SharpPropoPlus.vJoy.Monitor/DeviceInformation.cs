@@ -2,32 +2,29 @@
 
 namespace SharpPropoPlus.vJoyMonitor
 {
-  public class DeviceInformation
-  {
-    private readonly int _deviceId;
-    private readonly string _name;
-    private readonly Guid _productGuid;
-    private readonly VjdStat _status;
-
-    internal DeviceInformation()
+    public class DeviceInformation
     {
-      
+        private readonly string _name;
+
+        internal DeviceInformation()
+        {
+
+        }
+
+        public DeviceInformation(int deviceId, string name, Guid productGuid, VjdStat status)
+        {
+            Id = deviceId;
+            _name = name;
+            Guid = productGuid;
+            Status = status;
+        }
+
+        public int Id { get; }
+
+        public VjdStat Status { get; }
+
+        public string Name => $"{_name} #{Id}";
+
+        public Guid Guid { get; }
     }
-
-    public DeviceInformation(int deviceId, string name, Guid productGuid, VjdStat status)
-    {
-      _deviceId = deviceId;
-      _name = name;
-      _productGuid = productGuid;
-      _status = status;
-    }
-
-    public int Id => _deviceId;
-
-    public VjdStat Status => _status;
-
-    public string Name => $"{_name} #{_deviceId}";
-
-    public Guid Guid => _productGuid;
-  }
 }

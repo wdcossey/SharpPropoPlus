@@ -119,14 +119,14 @@ namespace SharpPropoPlus.Decoder
         private static vJoy.JoystickState _joystickState;
         private static bool _initialized;
 
-        public void Send(int nChannels, int[] channel, bool filterChannels, IPropoPlusFilter filter)
+        public void Send(int channelCount, int[] channelData, bool filterChannels, IPropoPlusFilter filter)
         {
             bool writeOk;
             //uint rId = 2; //m_vJoyDeviceId;
             int i;
             int k;
-            var ch = new int[channel.Length];
-            var nCh = 0;
+            var ch = new int[channelData.Length];
+            var filteredChannelCount = 0;
 
             if (VJoy.GetVJDStatus(vJoyDeviceId) == VjdStat.VJD_STAT_FREE)
             {
@@ -139,19 +139,23 @@ namespace SharpPropoPlus.Decoder
 
             //Duplicate channel data
             //memcpy(ch, channel, MAX_JS_CH * sizeof(int));
-            Array.Copy(channel, ch, ch.Length);
+            Array.Copy(channelData, ch, ch.Length);
 
-            nCh = nChannels;
+            filteredChannelCount = channelCount;
 
             if (filterChannels && filter != null)
             {
-                nCh = filter.RunFilter(ref ch, nChannels);
-                if (nCh > 0)
-                    nCh = nChannels;
+                filteredChannelCount = filter.RunFilter(ref ch, channelCount);
+                if (filteredChannelCount > 0)
+                    filteredChannelCount = channelCount;
+
+
             }
 
             // Create a public duplication of processed data for monitoring
             //memcpy(m_PrcChannel, ch, MAX_JS_CH * sizeof(int));
+
+            GlobalEventAggregator.Instance.SendMessage(new ChannelsUpdateEventArgs(channelData, channelCount, ch, filteredChannelCount));
 
             // Fill-in the structure to be fed to the vJoy device - Axes the Buttons
             for (i = 0; /*i<=n_ch &&*/ i <= (int) HidUsageFlags.HID_USAGE_SL1 - (int) HidUsageFlags.HID_USAGE_X; i++)
@@ -160,7 +164,7 @@ namespace SharpPropoPlus.Decoder
                 //iMapped = Map2Nibble(m_Mapping, i); // Prepare mapping re-indexing
                 var iMapped = Map2Nibble(0x12345678, i);
 
-                if (iMapped > nChannels)
+                if (iMapped > channelCount)
                     continue;
 
                 // Test value - if (-1) value is illegal

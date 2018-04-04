@@ -4,10 +4,6 @@ namespace SharpPropoPlus.Decoder.EventArguments
 {
     public class JoystickChangedEventArgs : EventArgs
     {
-        private readonly int _deviceId;
-        private readonly string _name;
-        private readonly Guid _productGuid;
-
         internal JoystickChangedEventArgs()
         {
 
@@ -16,15 +12,15 @@ namespace SharpPropoPlus.Decoder.EventArguments
         public JoystickChangedEventArgs(int deviceId, string name, Guid productGuid)
             : this()
         {
-            _deviceId = deviceId;
-            _name = name;
-            _productGuid = productGuid;
+            Id = deviceId;
+            Name = name;
+            Guid = productGuid;
         }
 
-        public int Id => _deviceId;
+        public int Id { get; }
 
-        public string Name => _name;
+        public string Name { get; }
 
-        public Guid Guid => _productGuid;
+        public Guid Guid { get; }
     }
 }

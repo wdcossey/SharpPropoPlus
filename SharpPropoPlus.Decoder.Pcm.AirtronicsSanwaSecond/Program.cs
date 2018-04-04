@@ -1,6 +1,4 @@
-﻿using System;
-using System.Threading;
-using SharpPropoPlus.Contracts;
+﻿using System.Threading;
 using SharpPropoPlus.Contracts.Enums;
 using SharpPropoPlus.Contracts.Interfaces;
 using SharpPropoPlus.Decoder.Contracts;
@@ -43,6 +41,8 @@ namespace SharpPropoPlus.Decoder.Pcm.AirtronicsSanwaSecond
         /// </summary>
         /// <param name="width"></param>
         /// <param name="input"></param>
+        /// <param name="filterChannels"></param>
+        /// <param name="filter"></param>
         protected override void Process(int width, bool input, bool filterChannels, IPropoPlusFilter filter)
         {
             if (Monitor.IsEntered(MonitorLock))
@@ -72,12 +72,12 @@ namespace SharpPropoPlus.Decoder.Pcm.AirtronicsSanwaSecond
                 }
                 else
                 {   // Second data chunk - get joystick m_Position from channel data
-                    ChannelData[0] = Smooth(ChannelData[0], Convert20bits(DataBuffer[2])); // Elevator	(Ch1)
-                    ChannelData[1] = Smooth(ChannelData[1], Convert20bits(DataBuffer[3])); // Ailerons	(Ch2)
-                    ChannelData[2] = Smooth(ChannelData[2], Convert20bits(DataBuffer[6])); // Throtle	(Ch3)
-                    ChannelData[3] = Smooth(ChannelData[3], Convert20bits(DataBuffer[7])); // Rudder	(Ch4)
-                    ChannelData[4] = Smooth(ChannelData[4], Convert20bits(DataBuffer[1])); // Gear		(Ch5)
-                    ChannelData[5] = Smooth(ChannelData[5], Convert20bits(DataBuffer[5])); // Flaps		(Ch6)
+                    ChannelData[0] = Smooth(ChannelData[0], Convert20Bits(DataBuffer[2])); // Elevator	(Ch1)
+                    ChannelData[1] = Smooth(ChannelData[1], Convert20Bits(DataBuffer[3])); // Ailerons	(Ch2)
+                    ChannelData[2] = Smooth(ChannelData[2], Convert20Bits(DataBuffer[6])); // Throtle	(Ch3)
+                    ChannelData[3] = Smooth(ChannelData[3], Convert20Bits(DataBuffer[7])); // Rudder	(Ch4)
+                    ChannelData[4] = Smooth(ChannelData[4], Convert20Bits(DataBuffer[1])); // Gear		(Ch5)
+                    ChannelData[5] = Smooth(ChannelData[5], Convert20Bits(DataBuffer[5])); // Flaps		(Ch6)
 
                     RawChannelCount = 6;
                     JoystickInteraction.Instance.Send(RawChannelCount, ChannelData, filterChannels, filter);
@@ -86,14 +86,14 @@ namespace SharpPropoPlus.Decoder.Pcm.AirtronicsSanwaSecond
                     {
                         PosUpdateCounter++;
                     }
-                };
+                }
 
                 Sync = true;       // Sync bit is set for the first 10 bits of the chunk (No channel data here)
                 BitStream = 0;
                 BitCount = -1;
                 _chunk = input;  // Mark chunk polarity - 0: Low channels, 1: High channels
                 //return 0;
-            };
+            }
 
             if (Sync)
             {
@@ -102,7 +102,7 @@ namespace SharpPropoPlus.Decoder.Pcm.AirtronicsSanwaSecond
             else
             {
                 shift = 20; // Read a channel data
-            };
+            }
 
             BitStream = ((BitStream << 1) + 1) << (pulse - 1);
             BitCount += pulse;
@@ -117,10 +117,22 @@ namespace SharpPropoPlus.Decoder.Pcm.AirtronicsSanwaSecond
                 {
                     DataCount = 0;
                 }
-            };
-
-            return;
+            }
         }
+
+        #region Config
+
+        protected override void LoadConfig()
+        {
+
+        }
+
+        protected override void SaveConfig()
+        {
+
+        }
+
+        #endregion
 
         /// <summary>
         /// Resets the static variables.
@@ -146,10 +158,9 @@ namespace SharpPropoPlus.Decoder.Pcm.AirtronicsSanwaSecond
 
         #region Airtronics/Sanwa [2] PCM helper functions
         /* Helper function - Airtronic/Sanwa PCM2 data convertor */
-        private static int  Convert20bits(int input)
+        private static int  Convert20Bits(int input)
         {
             int[] quartet = new int[5];
-            int value;
 
             quartet[4] = Air2Symbol[((input  >> 16)&0xF)];
             if (quartet[4]<0)
@@ -171,7 +182,7 @@ namespace SharpPropoPlus.Decoder.Pcm.AirtronicsSanwaSecond
             if (quartet[4]<0)
                 return -1;
 
-            value = quartet[4] + (quartet[3]<<2) + (quartet[2]<<4) + (quartet[1]<<6) + (quartet[0]<<8);
+            var value = quartet[4] + (quartet[3]<<2) + (quartet[2]<<4) + (quartet[1]<<6) + (quartet[0]<<8);
             return 1023-2*value;
         }
 

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Threading;
-using SharpPropoPlus.Contracts;
+﻿using System.Threading;
 using SharpPropoPlus.Contracts.Enums;
 using SharpPropoPlus.Contracts.Interfaces;
 using SharpPropoPlus.Decoder.Contracts;
@@ -48,6 +46,8 @@ namespace SharpPropoPlus.Decoder.Ppm.Standard
         /// </summary>
         /// <param name="width"></param>
         /// <param name="input"></param>
+        /// <param name="filterChannels"></param>
+        /// <param name="filter"></param>
         protected override void Process(int width, bool input, bool filterChannels, IPropoPlusFilter filter)
         {
             if (Monitor.IsEntered(MonitorLock))
@@ -66,7 +66,7 @@ namespace SharpPropoPlus.Decoder.Ppm.Standard
                 _prevSeparator = true;
                 FormerSync = false;
                 return;
-            };
+            }
 
             // Two separators in a row is an error - resseting
             if ((width < PpmSeparator) && _prevSeparator)
@@ -75,7 +75,7 @@ namespace SharpPropoPlus.Decoder.Ppm.Standard
                 RawChannelCount = 0;
                 DataCount = 0;
                 return;
-            };
+            }
 
             /* sync is detected at the end of a very long pulse (over 200 samples = 4.5mSec) */
             if (/*sync == 0 && */width > PpmTrig)
@@ -110,7 +110,7 @@ namespace SharpPropoPlus.Decoder.Ppm.Standard
                 }
 
                 _prevSeparator = false;
-            };
+            }
 
             // Cancel jitter /* Version 3.3.3 */
             width = PrevWidth[DataCount].Filter(width, PpmJitter);
@@ -183,6 +183,20 @@ namespace SharpPropoPlus.Decoder.Ppm.Standard
 
             DataCount++;
         }
+
+        #region Config
+
+        protected override void LoadConfig()
+        {
+
+        }
+
+        protected override void SaveConfig()
+        {
+
+        }
+
+        #endregion
 
         /// <summary>
         /// Resets the static variables.

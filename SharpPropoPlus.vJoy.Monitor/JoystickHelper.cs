@@ -26,7 +26,7 @@ namespace SharpPropoPlus.vJoyMonitor
         //private Joystick _joystick;
 
         public event EventHandler<JoystickUpdateEventArgs> JoystickUpdate;
-        
+
         public JoystickHelper()
         {
             _quitPolling = false;
@@ -172,7 +172,8 @@ namespace SharpPropoPlus.vJoyMonitor
 
                         joystick.GetCurrentState(ref data);
 
-                        var args = new JoystickUpdateEventArgs(data.X, data.Y, data.Z, data.RotationX, data.RotationY, data.RotationZ, data.Sliders[0], data.Sliders[1]);
+                        var args = new JoystickUpdateEventArgs(data.X, data.Y, data.Z, data.RotationX, data.RotationY,
+                            data.RotationZ, data.Sliders[0], data.Sliders[1]);
                         JoystickUpdate?.Invoke(this, args);
                         GlobalEventAggregator.Instance.SendMessage(args);
 

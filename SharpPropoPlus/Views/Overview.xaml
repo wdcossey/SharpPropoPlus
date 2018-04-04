@@ -141,6 +141,10 @@
             
         </Grid>
 
+        <Grid Grid.Column="2" Grid.Row="2" Margin="0 4" HorizontalAlignment="Stretch" >
+            <controls:ChannelMonitor Data="{Binding RawChannelData}" Background="Crimson"/>
+        </Grid>
+
         <TextBlock Grid.Column="0" Grid.Row="3" Margin="2 4" Padding="0" Text="Filter :" FontFamily="pack://application:,,,/Fonts/#Montserrat"></TextBlock>
         <Grid Grid.Column="1" Grid.Row="3" Margin="0 4" HorizontalAlignment="Stretch" >
             <Border Margin="2 0" BorderThickness="1" SnapsToDevicePixels="True" BorderBrush="#f0f0f0">
@@ -169,15 +173,28 @@
             </Border>
         </Grid>
 
+        <Grid Grid.Column="2" Grid.Row="3" Margin="0 4" HorizontalAlignment="Stretch" >
+            <Grid.Style>
+                <Style TargetType="{x:Type Grid}">
+                    <Setter Property="Visibility" Value="Hidden"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsFilterEnabled}" Value="True">
+                            <Setter Property="Visibility" Value="Visible"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Grid.Style>
+            <controls:ChannelMonitor Data="{Binding FilteredChannelData}" Background="DodgerBlue"/>
+        </Grid>
+
+
         <TextBlock Grid.Column="0" Grid.Row="4" Margin="2 4" Padding="0" Text="vJoy Monitor :" FontFamily="pack://application:,,,/Fonts/#Montserrat"></TextBlock>
         <Border Grid.Column="1" Grid.Row="4" Margin="2 4" BorderThickness="1" SnapsToDevicePixels="True" BorderBrush="#f0f0f0">
             <TextBlock TextAlignment="Left" Text="{Binding JoystickName, Mode=OneWay}"></TextBlock>
         </Border>
 
         <Grid Grid.Column="2" Grid.Row="4" Margin="0 4" HorizontalAlignment="Stretch" >
-            <Border >
-                <controls:JoystickMonitor Data="{Binding ChannelData}"></controls:JoystickMonitor>
-            </Border>
+            <controls:JoystickMonitor Data="{Binding ChannelData}"/>
         </Grid>
 
     </Grid>

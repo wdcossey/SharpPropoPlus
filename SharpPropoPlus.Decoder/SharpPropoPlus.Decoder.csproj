@@ -50,6 +50,7 @@
     <Compile Include="EventArguments\DebugPulseEventArgs.cs" />
     <Compile Include="EventArguments\DecoderChangedEventArgs.cs" />
     <Compile Include="EventArguments\JoystickChangedEventArgs.cs" />
+    <Compile Include="EventArguments\ChannelsUpdateEventArgs.cs" />
     <Compile Include="EventArguments\PeakValueEventArgs.cs" />
     <Compile Include="IDecoderManager.cs" />
     <Compile Include="JoystickInteraction.cs" />

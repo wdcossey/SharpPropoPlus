@@ -5,66 +5,67 @@ using vJoyInterfaceWrap;
 
 namespace SharpPropoPlus.vJoyMonitor
 {
-  public class DeviceEnumerator : IDisposable
-  {
-
-    public static readonly Guid VJoyProductGuid = new Guid("bead1234-0000-0000-0000-504944564944");
-    
-    public DeviceInformationCollection GetDevices(VjdStat[] status)
+    public class DeviceEnumerator : IDisposable
     {
-      using (var input = new DirectInput())
-      {
-        var deviceInstances = input.GetDevices().Where(w => w.ProductGuid.Equals(VJoyProductGuid)).ToList();
 
-        var result = new DeviceInformationCollection();
-        for (short i = 0; i < 16; i++)
+        public static readonly Guid VJoyProductGuid = new Guid("bead1234-0000-0000-0000-504944564944");
+
+        public DeviceInformationCollection GetDevices(VjdStat[] status)
         {
-          var deviceId = Convert.ToUInt32(i);
-
-          try
-          {
-            var joystick = new vJoy();
-
-            if (!joystick.isVJDExists(deviceId))
-              continue;
-
-            var joyStatus = joystick.GetVJDStatus(deviceId);
-
-            if (!status.Contains(joyStatus))
-              continue;
-
-            foreach (var device in deviceInstances.Select(s => new Joystick(input, s.InstanceGuid)))
+            using (var input = new DirectInput())
             {
-              var objects = device.GetObjects(DeviceObjectTypeFlags.All);
+                var deviceInstances = input.GetDevices().Where(w => w.ProductGuid.Equals(VJoyProductGuid)).ToList();
 
-              var first = objects.FirstOrDefault(fd => fd.ReportId.Equals(i));
+                var result = new DeviceInformationCollection();
+                for (short i = 0; i < 16; i++)
+                {
+                    var deviceId = Convert.ToUInt32(i);
 
-              if (first == null)
-                continue;
+                    try
+                    {
+                        var joystick = new vJoy();
 
-              result.Add(first.ReportId, device.Information.ProductName.TrimEnd('\0'), device.Information.InstanceGuid,
-                joyStatus);
+                        if (!joystick.isVJDExists(deviceId))
+                            continue;
 
-              break;
+                        var joyStatus = joystick.GetVJDStatus(deviceId);
 
+                        if (!status.Contains(joyStatus))
+                            continue;
+
+                        foreach (var device in deviceInstances.Select(s => new Joystick(input, s.InstanceGuid)))
+                        {
+                            var objects = device.GetObjects(DeviceObjectTypeFlags.All);
+
+                            var first = objects.FirstOrDefault(fd => fd.ReportId.Equals(i));
+
+                            if (first == null)
+                                continue;
+
+                            result.Add(first.ReportId, device.Information.ProductName.TrimEnd('\0'),
+                                device.Information.InstanceGuid,
+                                joyStatus);
+
+                            break;
+
+                        }
+
+
+                    }
+                    catch (Exception)
+                    {
+                        throw;
+                    }
+                }
+
+                return result;
             }
 
-
-          }
-          catch (Exception)
-          {
-            throw;
-          }
         }
 
-        return result;
-      }
+        public void Dispose()
+        {
 
+        }
     }
-
-    public void Dispose()
-    {
-
-    }
-  }
 }

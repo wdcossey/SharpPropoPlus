@@ -122,9 +122,14 @@
                         <Run Style="{StaticResource RunBoldStyleKey}" Text="Jason Jarrett"/>
                         <LineBreak/>
                         
-                        <Hyperlink Command="{Binding HyperlinkCommand}" CommandParameter="https://github.com/Stopbyte/WPF-Numeric-Spinner-NumericUpDown">Numeric Spinner</Hyperlink>
+                        <Hyperlink Command="{Binding HyperlinkCommand}" CommandParameter="https://bitbucket.org/hardcodet/notifyicon-wpf">NotifyIcon</Hyperlink>
                         <Run Text="by"/>
-                        <Run Style="{StaticResource RunBoldStyleKey}" Text="Yassine"/>
+                        <Run Style="{StaticResource RunBoldStyleKey}" Text="Philipp Sumi"/>
+                        <LineBreak/>
+                        
+                        <Hyperlink Command="{Binding HyperlinkCommand}" CommandParameter="https://github.com/wwwStorage/NumericUpDown">NumericUpDown</Hyperlink>
+                        <Run Text="by"/>
+                        <Run Style="{StaticResource RunBoldStyleKey}" Text="wwwStorage"/>
                         <LineBreak/>
                         
                         <Hyperlink Command="{Binding HyperlinkCommand}" CommandParameter="https://github.com/JulietaUla/Montserrat">Montserrat Font Project</Hyperlink>

@@ -118,6 +118,8 @@ namespace SharpPropoPlus.Decoder.Pcm.Futaba
         /// </summary>
         /// <param name="width"></param>
         /// <param name="input"></param>
+        /// <param name="filterChannels"></param>
+        /// <param name="filter"></param>
         protected override void Process(int width, bool input, bool filterChannels, IPropoPlusFilter filter)
         {
             if (Monitor.IsEntered(MonitorLock))
@@ -278,6 +280,20 @@ namespace SharpPropoPlus.Decoder.Pcm.Futaba
                     break;
             }
         }
+
+        #region Config
+
+        protected override void LoadConfig()
+        {
+
+        }
+
+        protected override void SaveConfig()
+        {
+
+        }
+
+        #endregion
 
         /// <summary>
         /// Resets the static variables.

@@ -1,0 +1,24 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="SharpPropoPlus.Decoder.Ppm" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="PpmMinPulseWidth" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">96</Value>
+    </Setting>
+    <Setting Name="PpmMaxPulseWidth" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">288</Value>
+    </Setting>
+    <Setting Name="PpmTrig" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">870</Value>
+    </Setting>
+    <Setting Name="PpmSeparator" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">95</Value>
+    </Setting>
+    <Setting Name="PpmGlitch" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">21</Value>
+    </Setting>
+    <Setting Name="PpmJitter" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">5</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

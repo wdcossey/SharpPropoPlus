@@ -4,8 +4,6 @@ namespace SharpPropoPlus.Decoder.EventArguments
 {
     public class PollChannelsEventArgs : EventArgs
     {
-        private int _rawChannels;
-
         private PollChannelsEventArgs()
         {
 
@@ -17,10 +15,6 @@ namespace SharpPropoPlus.Decoder.EventArguments
             RawChannels = channels;
         }
 
-        public int RawChannels
-        {
-            get { return _rawChannels; }
-            protected set { _rawChannels = value; }
-        }
+        public int RawChannels { get; protected set; }
     }
 }

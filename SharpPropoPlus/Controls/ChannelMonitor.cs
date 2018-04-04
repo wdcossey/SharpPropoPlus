@@ -6,15 +6,15 @@ using SharpPropoPlus.Interfaces;
 
 namespace SharpPropoPlus.Controls
 {
-    public class JoystickMonitor : UserControl
+    public class ChannelMonitor : UserControl
     {
-        public ObservableCollection<IJoystickChannelData> Data
+        public ObservableCollection<IChannelData> Data
         {
-            get => (ObservableCollection<IJoystickChannelData>) this.GetValue(DataProperty);
+            get => (ObservableCollection<IChannelData>) this.GetValue(DataProperty);
             set => this.SetValue(DataProperty, value);
         }
 
         public static readonly DependencyProperty DataProperty = DependencyProperty.Register(
-            "Data", typeof(ObservableCollection<IJoystickChannelData>), typeof(JoystickMonitor), new PropertyMetadata(null));
+            "Data", typeof(ObservableCollection<IChannelData>), typeof(ChannelMonitor), new PropertyMetadata(null));
     }
 }

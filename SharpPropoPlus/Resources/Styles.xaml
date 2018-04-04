@@ -28,7 +28,6 @@
 
     <!--<SolidColorBrush x:Key="AccentBrush1" Color="{Binding Converter={StaticResource SystemColorValueConverter}, Source={StaticResource AccentColor}, ConverterParameter={x:Static enums:ImmersiveColors.ImmersiveStartSelectionBackground}}" />-->
  
-    
     <Style x:Key="TextBlockLightStyleKey" TargetType="{x:Type TextBlock}">
         <Setter Property="Foreground" Value="{StaticResource AccentColorBrush}"/>
         <Setter Property="FontFamily" Value="{StaticResource MontserratLight}"/>

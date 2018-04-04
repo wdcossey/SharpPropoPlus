@@ -24,11 +24,8 @@ namespace SharpPropoPlus.Audio
     {
 
         private Task _pollingTask;
-        //private bool _quitPolling;
         private CancellationTokenSource _pollingCancellationTokenSource;
         private readonly MMDeviceEnumerator _deviceEnumerator;
-        //private string _deviceId;
-        private IAudioEndPoint _device;
         private readonly PeakValues _lastPeakValues;
         private static readonly object _sync = new object();
         private static volatile AudioHelper _instance;
@@ -53,7 +50,6 @@ namespace SharpPropoPlus.Audio
 
             GlobalEventAggregator.Instance.AddListener<SleepStateEventArgs>(SleepStateListner);
 
-            //_quitPolling = false;
             _deviceEnumerator = new MMDeviceEnumerator();
             _lastPeakValues = new PeakValues();
 
@@ -62,7 +58,6 @@ namespace SharpPropoPlus.Audio
 
             _currentDevice = GetDefaultDevice();
 
-            //DeviceId = _currentDevice.DeviceID;
             Device = new AudioEndPoint(_currentDevice.FriendlyName, _currentDevice.DeviceID, GetDeviceFormat(_currentDevice).Channels, _currentDevice.DeviceState != DeviceState.Active, (int?)((_currentDevice.GetJackDescriptions()?.FirstOrDefault())?.Color)?.Value); ;
 
             _isStartUp = false;
@@ -112,8 +107,6 @@ namespace SharpPropoPlus.Audio
         {
             get
             {
-                //var x = _deviceEnumerator.EnumerateAudioEndPoints(DataFlow.Capture, DeviceState.Active);
-
                 if (_devices == null)
                 {
                     RefreshDevices();
@@ -154,17 +147,8 @@ namespace SharpPropoPlus.Audio
             }
         }
 
-        public IAudioEndPoint Device
-        {
-            get { return _device; }
-            private set { _device = value; }
-        }
+        public IAudioEndPoint Device { get; private set; }
 
-        //public string DeviceId
-        //{
-        //    get { return _deviceId; }
-        //    private set { _deviceId = value; }
-        //}
 
         public AudioChannel Channel
         {
@@ -357,11 +341,6 @@ namespace SharpPropoPlus.Audio
 
         private void PollAudioLevels()
         {
-
-            //_quitPolling = false;
-
-            
-
             _pollingTask = Task.Factory.StartNew(() =>
             {
 
@@ -395,36 +374,13 @@ namespace SharpPropoPlus.Audio
                     PreferredChannel = preferredChannel.Channel;
 
                     GlobalEventAggregator.Instance.SendMessage(preferredChannel);
-
-                    //Task.Delay(200, _pollingCancellationTokenSource.Token);
                 }
-
-                //_quitPolling = false;
 
                 audioEndpointVolume?.Dispose();
                 audioMeterInformation?.Dispose();
 
             }, _pollingCancellationTokenSource.Token);
-
-           
-
         }
-
-        //protected virtual void OnPeakValuesChanged(PeakValueEventArgs e)
-        //{
-        //  var handler = PeakValuesChanged;
-        //  handler?.Invoke(this, e);
-        //}
-
-        //protected virtual void OnDeviceChanged(DeviceInfoEventArgs e)
-        //{
-        //  var handler = DeviceChanged;
-        //  handler?.Invoke(this, e);
-        //}
-
-        //public event EventHandler<PeakValueEventArgs> PeakValuesChanged;
-
-        //public event EventHandler<DeviceInfoEventArgs> DeviceChanged;
 
         public void Dispose()
         {
@@ -432,8 +388,6 @@ namespace SharpPropoPlus.Audio
                 StopRecording();
 
             _soundIn?.Dispose();
-
-            //_device?.Dispose();
 
             _deviceEnumerator?.Dispose();
 

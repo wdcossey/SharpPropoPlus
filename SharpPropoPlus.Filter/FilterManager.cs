@@ -7,7 +7,6 @@ using System.Linq;
 using System.Reflection;
 using SharpPropoPlus.Contracts.Interfaces;
 using SharpPropoPlus.Events;
-using SharpPropoPlus.Filter.Contracts;
 using SharpPropoPlus.Filter.EventArguments;
 
 namespace SharpPropoPlus.Filter

@@ -1,4 +1,5 @@
-﻿using SharpPropoPlus.Contracts.Interfaces;
+﻿using System;
+using SharpPropoPlus.Contracts.Interfaces;
 using SharpPropoPlus.Decoder.Contracts;
 
 namespace SharpPropoPlus.Decoder.Ppm
@@ -6,6 +7,14 @@ namespace SharpPropoPlus.Decoder.Ppm
     public abstract class PpmPulseProcessor<TJitterFilter> : PulseProcessor<TJitterFilter>, IPropoPlusPpmDecoder
         where TJitterFilter : IJitterFilter
     {
+        private bool _loadingConfig = false;
+
+        private double _ppmJitter;
+        private double _ppmGlitch;
+        private double _ppmSeparator;
+        private double _ppmTrig;
+        private double _ppmMaxPulseWidth;
+        private double _ppmMinPulseWidth;
 
         #region PPM Values (General)
 
@@ -30,7 +39,15 @@ namespace SharpPropoPlus.Decoder.Ppm
         /// PPM_MIN
         /// PPM minimal pulse width (0.5 mSec)
         /// </summary>
-        public virtual double PpmMinPulseWidth { get; set; }
+        public virtual double PpmMinPulseWidth
+        {
+            get => _ppmMinPulseWidth;
+            set
+            {
+                _ppmMinPulseWidth = value;
+                SaveConfigInternal();
+            }
+        }
 
         /// <summary>
         /// 
@@ -41,7 +58,15 @@ namespace SharpPropoPlus.Decoder.Ppm
         /// PPM_MAX
         /// PPM maximal pulse width (1.5 mSec)
         /// </summary>
-        public virtual double PpmMaxPulseWidth { get; set; }
+        public virtual double PpmMaxPulseWidth
+        {
+            get => _ppmMaxPulseWidth;
+            set
+            {
+                _ppmMaxPulseWidth = value;
+                SaveConfigInternal();
+            }
+        }
 
         /// <summary>
         /// 
@@ -52,7 +77,15 @@ namespace SharpPropoPlus.Decoder.Ppm
         /// PPM_TRIG
         /// PPM inter packet  separator pulse ( = 4.5mSec)
         /// </summary>
-        public virtual double PpmTrig { get; set; }
+        public virtual double PpmTrig
+        {
+            get => _ppmTrig;
+            set
+            {
+                _ppmTrig = value;
+                SaveConfigInternal();
+            }
+        }
 
         /// <summary>
         /// 
@@ -63,7 +96,15 @@ namespace SharpPropoPlus.Decoder.Ppm
         /// PPM_SEP
         /// PPM inter-channel separator pulse  - this is a maximum value that can never occur
         /// </summary>
-        public virtual double PpmSeparator { get; set; }
+        public virtual double PpmSeparator
+        {
+            get => _ppmSeparator;
+            set
+            {
+                _ppmSeparator = value;
+                SaveConfigInternal();
+            }
+        }
 
         /// <summary>
         /// 
@@ -74,7 +115,15 @@ namespace SharpPropoPlus.Decoder.Ppm
         /// PPM_GLITCH
         /// Pulses of this size or less are just a glitch
         /// </summary>
-        public virtual double PpmGlitch { get; set; }
+        public virtual double PpmGlitch
+        {
+            get => _ppmGlitch;
+            set
+            {
+                _ppmGlitch = value;
+                SaveConfigInternal();
+            }
+        }
 
         /// <summary>
         /// 
@@ -85,13 +134,19 @@ namespace SharpPropoPlus.Decoder.Ppm
         /// PPM_JITTER
         /// Pulses of this size or less are just a glitch
         /// </summary>
-        public virtual double PpmJitter { get; set; }
+        public virtual double PpmJitter
+        {
+            get => _ppmJitter;
+            set
+            {
+                _ppmJitter = value;
+                SaveConfigInternal();
+            }
+        }
 
         public virtual double[] PpmJitterAlpha { get; set; } = { 16d, 12d, 6d, 3d, 2d };
 
         #endregion
-
-
 
         protected abstract override void Process(int width, bool input, bool filterChannels, IPropoPlusFilter filter);
 
@@ -99,26 +154,47 @@ namespace SharpPropoPlus.Decoder.Ppm
 
         public override void Reset()
         {
-            PpmMinPulseWidth = PpmMinPulseWidthDefault;
-            PpmMaxPulseWidth = PpmMaxPulseWidthDefault;
-            PpmTrig = PpmTrigDefault;
-            PpmSeparator = PpmSeparatorDefault;
-            PpmGlitch = PpmGlitchDefault;
-            PpmJitter = PpmJitterDefault;
+            try
+            {
+                _loadingConfig = true;
 
-            ChannelData = new int[BufferLength];
+                LoadConfig();
 
-            Sync = false;
+                PpmMinPulseWidth = PpmMinPulseWidthDefault;
+                PpmMaxPulseWidth = PpmMaxPulseWidthDefault;
+                PpmTrig = PpmTrigDefault;
+                PpmSeparator = PpmSeparatorDefault;
+                PpmGlitch = PpmGlitchDefault;
+                PpmJitter = PpmJitterDefault;
 
-            DataBuffer = new int[BufferLength]; /* Array of pulse widthes in joystick values */
-            DataCount = 0; /* pulse index (corresponds to channel index) */
+                ChannelData = new int[BufferLength];
 
-            FormerSync = false;
+                Sync = false;
 
-            PosUpdateCounter = 0;
+                DataBuffer = new int[BufferLength]; /* Array of pulse widthes in joystick values */
+                DataCount = 0; /* pulse index (corresponds to channel index) */
 
-            //static int i = 0;
-            PrevWidth = new TJitterFilter[BufferLength]; /* array of previous width values */
+                FormerSync = false;
+
+                PosUpdateCounter = 0;
+
+                //static int i = 0;
+                PrevWidth = new TJitterFilter[BufferLength]; /* array of previous width values */
+
+                SaveConfig();
+            }
+            finally
+            {
+                _loadingConfig = false;
+            }
+        }
+
+        private void SaveConfigInternal()
+        {
+            if (!_loadingConfig)
+            {
+                SaveConfig();
+            }
         }
 
     }

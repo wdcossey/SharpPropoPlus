@@ -3,25 +3,19 @@ using SharpPropoPlus.Audio.Models;
 
 namespace SharpPropoPlus.Audio.EventArguments
 {
-  public class PeakValueEventArgs : EventArgs
-  {
-    private PeakValues _values;
-
-    public PeakValues Values
+    public class PeakValueEventArgs : EventArgs
     {
-      get { return _values; }
-      internal set { _values = value; }
-    }
+        public PeakValues Values { get; internal set; }
 
-    private PeakValueEventArgs()
-    {
+        private PeakValueEventArgs()
+        {
 
-    }
+        }
 
-    public PeakValueEventArgs(PeakValues values)
-      : this()
-    {
-      Values = values;
+        public PeakValueEventArgs(PeakValues values)
+            : this()
+        {
+            Values = values;
+        }
     }
-  }
 }
