@@ -102,6 +102,7 @@
                                              Style="{StaticResource JoystickProgressBar}"
                                              Background="{Binding Background, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type controls:ChannelMonitor}}}"
                                              Maximum="1023"
+                                             Width="{Binding BarWidth, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type controls:ChannelMonitor}}}"
                                              ToolTip="{Binding ToolTip}"/>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>

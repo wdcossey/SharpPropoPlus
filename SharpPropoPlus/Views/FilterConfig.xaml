@@ -82,5 +82,44 @@
             </ComboBox>
         </controls:ControlContainer>
 
+        <!--<controls:ControlContainer Title="Toggle Visuals" Description="Show or hide channel Input &amp; Output.">
+            <ToggleButton IsChecked="{Binding IsEnabled, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                          HorizontalAlignment="Right" 
+                          VerticalAlignment="Center" 
+                          Height="20" 
+                          Style="{StaticResource AnimatedSwitch}"/>
+        </controls:ControlContainer>-->
+
+        <controls:ControlContainer Title="Input">
+            <controls:ControlContainer.Style>
+                <Style TargetType="{x:Type controls:ControlContainer}" BasedOn="{StaticResource {x:Type controls:ControlContainer}}">
+                    <Setter Property="Visibility" Value="Hidden"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsEnabled}" Value="True">
+                            <Setter Property="Visibility" Value="Visible"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </controls:ControlContainer.Style>
+            <controls:ControlContainer.Description>
+                <controls:ChannelMonitor Margin="0 2 0 0" BarWidth="12" HorizontalAlignment="Left" Height="60" Data="{Binding RawChannelData}" Background="Crimson"/>
+            </controls:ControlContainer.Description>
+        </controls:ControlContainer>
+
+        <controls:ControlContainer Title="Output">
+            <controls:ControlContainer.Style>
+                <Style TargetType="{x:Type controls:ControlContainer}" BasedOn="{StaticResource {x:Type controls:ControlContainer}}">
+                    <Setter Property="Visibility" Value="Hidden"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsEnabled}" Value="True">
+                            <Setter Property="Visibility" Value="Visible"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </controls:ControlContainer.Style>
+            <controls:ControlContainer.Description>
+                <controls:ChannelMonitor Margin="0 2 0 0" BarWidth="12" HorizontalAlignment="Left" Height="60" Data="{Binding FilteredChannelData}" Background="DodgerBlue"/>
+            </controls:ControlContainer.Description>
+        </controls:ControlContainer>
     </StackPanel>
 </UserControl>

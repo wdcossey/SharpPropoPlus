@@ -288,9 +288,11 @@
             </controls:ControlContainer.Description>
         </controls:ControlContainer>
 
-        <controls:ControlContainer Title="{Binding RawChannels, TargetNullValue=0}" TitleStringFormat="R/C Channels ({0})" Description="{x:Null}">
-            
-        </controls:ControlContainer>
+        <!--<controls:ControlContainer Title="{Binding RawChannels, TargetNullValue=0}" TitleStringFormat="R/C Channels ({0})" >
+            <controls:ControlContainer.Description>
+                <controls:ChannelMonitor Margin="0 2 0 0" BarWidth="12" HorizontalAlignment="Left" Height="60" Data="{Binding RawChannelData}" Background="Crimson"/>
+            </controls:ControlContainer.Description>
+        </controls:ControlContainer>-->
 
         <!--<Grid  >
             <Grid.ColumnDefinitions>

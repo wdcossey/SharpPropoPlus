@@ -14,11 +14,14 @@ namespace SharpPropoPlus.ViewModels
         private ReadOnlyObservableCollection<Lazy<IPropoPlusDecoder, IDecoderMetadata>> _decoderCollection;
         private Lazy<IPropoPlusDecoder, IDecoderMetadata> _selectedDecoder;
         private int _rawChannels;
+        private ObservableCollection<IChannelData> _rawChannelData;
+        private ObservableCollection<IChannelData> _filteredChannelData;
 
         public TransmitterConfigViewModel()
         {
 
             GlobalEventAggregator.Instance.AddListener<PollChannelsEventArgs>(PollChannelListner);
+            GlobalEventAggregator.Instance.AddListener<ChannelsUpdateEventArgs>(ChannelsUpdateListener);
 
             DecoderCollection =
                new ReadOnlyObservableCollection<Lazy<IPropoPlusDecoder, IDecoderMetadata>>(new ObservableCollection<Lazy<IPropoPlusDecoder, IDecoderMetadata>>(Application.Instance.DecoderManager.Decoders.ToList()));
@@ -78,9 +81,54 @@ namespace SharpPropoPlus.ViewModels
             }
         }
 
+        private void ChannelsUpdateListener(ChannelsUpdateEventArgs args)
+        {
+            if (args == null)
+                return;
+
+            var rawChannelData = new int[16];
+            Array.Copy(args.RawChannels, rawChannelData, Math.Min(args.RawCount, rawChannelData.Length));
+
+            RawChannelData = new ObservableCollection<IChannelData>(rawChannelData.Select(s => new ChannelDataViewModel("", s)));
+
+            var filteredChannelData = new int[16];
+            Array.Copy(args.FilterChannels, filteredChannelData, Math.Min(filteredChannelData.Length, args.RawCount));
+
+            FilteredChannelData = new ObservableCollection<IChannelData>(filteredChannelData.Select(s => new ChannelDataViewModel("", s)));
+        }
+
+        public ObservableCollection<IChannelData> RawChannelData
+        {
+            get => _rawChannelData;
+            set
+            {
+                if (_rawChannelData == value)
+                    return;
+
+                _rawChannelData = value;
+
+                OnPropertyChanged();
+            }
+        }
+
+        public ObservableCollection<IChannelData> FilteredChannelData
+        {
+            get => _filteredChannelData;
+            set
+            {
+                if (_filteredChannelData == value)
+                    return;
+
+                _filteredChannelData = value;
+
+                OnPropertyChanged();
+            }
+        }
+
         public override void Dispose()
         {
             GlobalEventAggregator.Instance.RemoveListener<PollChannelsEventArgs>(PollChannelListner);
+            GlobalEventAggregator.Instance.RemoveListener<ChannelsUpdateEventArgs>(ChannelsUpdateListener);
 
             base.Dispose();
         }

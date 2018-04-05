@@ -125,7 +125,7 @@ namespace SharpPropoPlus.ViewModels
             RawChannelData = new ObservableCollection<IChannelData>(rawChannelData.Select(s => new ChannelDataViewModel("", s)));
 
             var filteredChannelData = new int[8];
-            Array.Copy(args.FilterChannels, filteredChannelData, filteredChannelData.Length);
+            Array.Copy(args.FilterChannels, filteredChannelData, Math.Min(args.RawCount, filteredChannelData.Length));
 
             FilteredChannelData = new ObservableCollection<IChannelData>(filteredChannelData.Select(s => new ChannelDataViewModel("", s)));
         }
@@ -347,6 +347,7 @@ namespace SharpPropoPlus.ViewModels
             GlobalEventAggregator.Instance.RemoveListener<JoystickChangedEventArgs>(JoystickChangedListener);
             GlobalEventAggregator.Instance.RemoveListener<DecoderChangedEventArgs>(DecoderChangedListener);
             GlobalEventAggregator.Instance.RemoveListener<JoystickUpdateEventArgs>(JoystickUpdateListener);
+            GlobalEventAggregator.Instance.RemoveListener<ChannelsUpdateEventArgs>(ChannelsUpdateListener);
             GlobalEventAggregator.Instance.RemoveListener<FilterChangedEventArgs>(FilterChangedListener);
             GlobalEventAggregator.Instance.RemoveListener<RecordingStateEventArgs>(RecordingStateListner); ;
 
