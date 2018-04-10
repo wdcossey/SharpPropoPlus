@@ -107,7 +107,7 @@ namespace SharpPropoPlus.Decoder
 
         private Lazy<IPropoPlusDecoder, IDecoderMetadata> GetDecoder(string uniqueIdentifier)
         {
-            return Decoders.Single(s => s.Metadata.UniqueIdentifier == uniqueIdentifier);
+            return Decoders.SingleOrDefault(s => s.Metadata.UniqueIdentifier == uniqueIdentifier);
         }
 
         public IDecoderMetadata GetDecoderMetadata(IPropoPlusDecoder decoder)

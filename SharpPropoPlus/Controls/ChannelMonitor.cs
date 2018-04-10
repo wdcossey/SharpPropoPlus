@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
@@ -17,13 +18,13 @@ namespace SharpPropoPlus.Controls
         public static readonly DependencyProperty DataProperty = DependencyProperty.Register(
             "Data", typeof(ObservableCollection<IChannelData>), typeof(ChannelMonitor), new PropertyMetadata(null));
 
-        public double? BarWidth
+        public double BarWidth
         {
-            get => (double?) this.GetValue(BarWidthProperty);
+            get => (double) this.GetValue(BarWidthProperty);
             set => this.SetValue(BarWidthProperty, value);
         }
 
         public static readonly DependencyProperty BarWidthProperty = DependencyProperty.Register(
-            "BarWidth", typeof(double?), typeof(ChannelMonitor), new PropertyMetadata(null));
+            "BarWidth", typeof(double), typeof(ChannelMonitor), new PropertyMetadata(double.NaN));
     }
 }

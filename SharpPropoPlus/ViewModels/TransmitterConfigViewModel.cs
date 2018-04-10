@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Linq;
+using SharpPropoPlus.Contracts.Enums;
 using SharpPropoPlus.Contracts.Interfaces;
 using SharpPropoPlus.Decoder.Contracts;
 using SharpPropoPlus.Decoder.EventArguments;
@@ -16,6 +17,8 @@ namespace SharpPropoPlus.ViewModels
         private int _rawChannels;
         private ObservableCollection<IChannelData> _rawChannelData;
         private ObservableCollection<IChannelData> _filteredChannelData;
+        private bool _showSettings;
+        private TransmitterType _transmitterType;
 
         public TransmitterConfigViewModel()
         {
@@ -63,6 +66,9 @@ namespace SharpPropoPlus.ViewModels
                 Application.Instance.DecoderManager.ChangeDecoder(_selectedDecoder.Value);
 
                 OnPropertyChanged();
+
+                TransmitterType = _selectedDecoder.Metadata.TransmitterType;
+                ShowSettings = _selectedDecoder.Metadata.TransmitterType == TransmitterType.Ppm && ShowSettings;
             }
         }
 
@@ -87,12 +93,12 @@ namespace SharpPropoPlus.ViewModels
                 return;
 
             var rawChannelData = new int[16];
-            Array.Copy(args.RawChannels, rawChannelData, Math.Min(args.RawCount, rawChannelData.Length));
+            Array.Copy(args.RawChannels, rawChannelData, Math.Min(Math.Min(args.RawChannels.Length, args.RawCount), rawChannelData.Length));
 
             RawChannelData = new ObservableCollection<IChannelData>(rawChannelData.Select(s => new ChannelDataViewModel("", s)));
 
             var filteredChannelData = new int[16];
-            Array.Copy(args.FilterChannels, filteredChannelData, Math.Min(filteredChannelData.Length, args.RawCount));
+            Array.Copy(args.FilterChannels, filteredChannelData, Math.Min(Math.Min(args.FilterChannels.Length, args.RawCount), filteredChannelData.Length));
 
             FilteredChannelData = new ObservableCollection<IChannelData>(filteredChannelData.Select(s => new ChannelDataViewModel("", s)));
         }
@@ -120,6 +126,38 @@ namespace SharpPropoPlus.ViewModels
                     return;
 
                 _filteredChannelData = value;
+
+                OnPropertyChanged();
+            }
+        }
+
+        public bool ShowSettings
+        {
+            get => _showSettings;
+            set
+            {
+                if (_showSettings == value)
+                {
+                    return;
+                }
+
+                _showSettings = value;
+
+                OnPropertyChanged();
+            }
+        }
+        
+        public TransmitterType TransmitterType
+        {
+            get => _transmitterType;
+            set
+            {
+                if (_transmitterType == value)
+                {
+                    return;
+                }
+
+                _transmitterType = value;
 
                 OnPropertyChanged();
             }

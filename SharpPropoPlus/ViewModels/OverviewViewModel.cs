@@ -73,6 +73,16 @@ namespace SharpPropoPlus.ViewModels
                 new JoystickChannelDataViewModel(JoystickChannel.JoystickSlider1, 0),
             };
 
+            const string strRawChannel = "Transmitter Channel";
+            const string strFilterChannel = "Filter Channel";
+
+            RawChannelData = new ObservableCollection<IChannelData>();
+            FilteredChannelData = new ObservableCollection<IChannelData>();
+            for (var i = 1; i < 9; i++)
+            {
+                RawChannelData.Add(new ChannelDataViewModel($"{strRawChannel} {i}", 0));
+                FilteredChannelData.Add(new ChannelDataViewModel($"{strFilterChannel} {((char)(64+i))}", 0));
+            }
         }
 
         private void RecordingStateListner(RecordingStateEventArgs args)
@@ -119,15 +129,30 @@ namespace SharpPropoPlus.ViewModels
             if (args == null)
                 return;
 
-            var rawChannelData = new int[8];
-            Array.Copy(args.RawChannels, rawChannelData, Math.Min(args.RawCount, rawChannelData.Length));
+            //var rawChannelData = new int[8];
+            //Array.Copy(args.RawChannels, rawChannelData, Math.Min(args.RawCount, rawChannelData.Length));
+            //RawChannelData = new ObservableCollection<IChannelData>(rawChannelData.Select(s => new ChannelDataViewModel("", s)));
 
-            RawChannelData = new ObservableCollection<IChannelData>(rawChannelData.Select(s => new ChannelDataViewModel("", s)));
+            if (RawChannelData != null)
+            {
+                for (var i = 0; i < RawChannelData.Count; i++)
+                {
+                    RawChannelData[i].SetValue(args.RawChannels[i]);
+                }
+            }
 
-            var filteredChannelData = new int[8];
-            Array.Copy(args.FilterChannels, filteredChannelData, Math.Min(args.RawCount, filteredChannelData.Length));
+            //var filteredChannelData = new int[8];
+            //Array.Copy(args.FilterChannels, filteredChannelData, Math.Min(args.RawCount, filteredChannelData.Length));
+            //FilteredChannelData = new ObservableCollection<IChannelData>(filteredChannelData.Select(s => new ChannelDataViewModel("", s)));
 
-            FilteredChannelData = new ObservableCollection<IChannelData>(filteredChannelData.Select(s => new ChannelDataViewModel("", s)));
+            if (FilteredChannelData != null)
+            {
+                for (var i = 0; i < FilteredChannelData.Count; i++)
+                {
+                    FilteredChannelData[i].SetValue(args.FilterChannels[i]);
+                }
+            }
+
         }
 
         private void DecoderChangedListener(DecoderChangedEventArgs args)

@@ -5,7 +5,7 @@ namespace SharpPropoPlus.ViewModels
 {
     public class ChannelDataViewModel : BaseViewModel, IChannelData
     {
-        private int _value;
+        private int _value = 0;
         private string _toolTip;
         
         public int Value

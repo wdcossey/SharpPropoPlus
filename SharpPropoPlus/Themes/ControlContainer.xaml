@@ -16,8 +16,6 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type controls:ControlContainer}" >
-
-
                     <Grid >
                         <Grid.RowDefinitions>
                             <RowDefinition/>
@@ -95,9 +93,7 @@
                                               Grid.Column="1" 
                                               Grid.Row="0" 
                                               Grid.RowSpan="2"
-                                              Margin="0"
-                                              VerticalAlignment="Center" 
-                                              HorizontalAlignment="Right"  >
+                                              Margin="0"  >
 
                             </ContentPresenter>
                         </Grid>
@@ -107,7 +103,7 @@
                                 <Style TargetType="{x:Type Border}" BasedOn="{StaticResource BorderSeparator}">
                                     <Style.Triggers>
                                         <DataTrigger Binding="{Binding HasBorder, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type controls:ControlContainer}}}" Value="False">
-                                            <Setter Property="Visibility" Value="Hidden"/>
+                                            <Setter Property="Visibility" Value="Collapsed"/>
                                         </DataTrigger>
                                     </Style.Triggers>
                                 </Style>
@@ -115,13 +111,6 @@
 
                         </Border>
                     </Grid>
-                    
-                    
-
-
-                    <ControlTemplate.Triggers>
-
-                    </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

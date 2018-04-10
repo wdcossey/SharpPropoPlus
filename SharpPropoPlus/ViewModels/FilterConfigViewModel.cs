@@ -30,6 +30,8 @@ namespace SharpPropoPlus.ViewModels
 
             SelectedFilter =
                 FilterCollection.FirstOrDefault(fd => fd.Value == Application.Instance.FilterManager.Filter);
+
+            IsEnabled = Application.Instance.FilterManager.IsEnabled;
         }
 
         public ReadOnlyObservableCollection<Lazy<IPropoPlusFilter, IFilterMetadata>> FilterCollection
@@ -85,12 +87,12 @@ namespace SharpPropoPlus.ViewModels
                 return;
 
             var rawChannelData = new int[16];
-            Array.Copy(args.RawChannels, rawChannelData, Math.Min(args.RawCount, rawChannelData.Length));
+            Array.Copy(args.RawChannels, rawChannelData, Math.Min(Math.Min(args.RawChannels.Length, args.RawCount), rawChannelData.Length));
 
             RawChannelData = new ObservableCollection<IChannelData>(rawChannelData.Select(s => new ChannelDataViewModel("", s)));
 
             var filteredChannelData = new int[16];
-            Array.Copy(args.FilterChannels, filteredChannelData, Math.Min(filteredChannelData.Length, args.RawCount));
+            Array.Copy(args.FilterChannels, filteredChannelData, Math.Min(Math.Min(args.FilterChannels.Length, args.RawCount), filteredChannelData.Length));
 
             FilteredChannelData = new ObservableCollection<IChannelData>(filteredChannelData.Select(s => new ChannelDataViewModel("", s)));
         }

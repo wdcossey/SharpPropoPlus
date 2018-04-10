@@ -45,16 +45,29 @@ namespace SharpPropoPlus.Filter
             _filters = _filters.OrderBy(ob => ob.Metadata.Name);
 
             Filter = GetDefaultFilter();
+
+            IsEnabled = Settings.Default.IsEnabled;
         }
 
         private IPropoPlusFilter GetDefaultFilter()
         {
+            if (!string.IsNullOrWhiteSpace(Settings.Default.Filter))
+            {
+                var filter = GetFilter(Settings.Default.Filter);
+                
+                if (filter != null)
+                    return filter.Value;
+            }
+
             return Filters.First()?.Value;
         }
 
         public void ChangeFilter(IPropoPlusFilter filter)
         {
             Filter = filter;
+
+            Settings.Default.Filter = Filters.First(f => f.Value == filter)?.Metadata?.UniqueIdentifier;
+            Settings.Default.Save();
         }
 
         public bool IsEnabled
@@ -71,6 +84,9 @@ namespace SharpPropoPlus.Filter
                 _isEnabled = value;
 
                 Notify();
+
+                Settings.Default.IsEnabled = _isEnabled;
+                Settings.Default.Save();
             }
         }
 
@@ -110,6 +126,11 @@ namespace SharpPropoPlus.Filter
         private Lazy<IPropoPlusFilter, IFilterMetadata> GetFilter(IPropoPlusFilter filter = null)
         {
             return Filters.FirstOrDefault(fd => fd.Value == (filter ?? Filter));
+        }
+         
+        private Lazy<IPropoPlusFilter, IFilterMetadata> GetFilter(string uniqueIdentifier)
+        {
+            return Filters.SingleOrDefault(s => s.Metadata.UniqueIdentifier == uniqueIdentifier);
         }
 
         public IFilterMetadata GetFilterMetadata(IPropoPlusFilter decoder)

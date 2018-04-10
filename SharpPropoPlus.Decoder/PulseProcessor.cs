@@ -404,8 +404,5 @@ namespace SharpPropoPlus.Decoder
 
         protected abstract void Process(int width, bool input, bool filterChannels, IPropoPlusFilter filter);
         
-        protected abstract void LoadConfig();
-        
-        protected abstract void SaveConfig();
     }
 }

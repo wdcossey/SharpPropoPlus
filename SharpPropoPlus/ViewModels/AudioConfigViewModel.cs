@@ -70,7 +70,7 @@ namespace SharpPropoPlus.ViewModels
 
         public ReadOnlyObservableCollection<AudioBitrate> BitrateCollection
         {
-            get { return _bitrateCollection; }
+            get => _bitrateCollection;
             private set
             {
                 _bitrateCollection = value;
@@ -80,7 +80,7 @@ namespace SharpPropoPlus.ViewModels
 
         public AudioBitrate SelectedBitrateItem
         {
-            get { return _selectedBitrateItem; }
+            get => _selectedBitrateItem;
             set
             {
                 if (_selectedBitrateItem == value)
@@ -96,7 +96,7 @@ namespace SharpPropoPlus.ViewModels
 
         public int LeftChannelPeak
         {
-            get { return _leftChannelPeak; }
+            get => _leftChannelPeak;
             private set
             {
                 if (Equals(_leftChannelPeak, value))
@@ -109,7 +109,7 @@ namespace SharpPropoPlus.ViewModels
 
         public int? RightChannelPeak
         {
-            get { return _rightChannelPeak; }
+            get => _rightChannelPeak;
             private set
             {
                 if (Equals(_rightChannelPeak, value))
@@ -122,7 +122,7 @@ namespace SharpPropoPlus.ViewModels
 
         public bool Muted
         {
-            get { return _muted; }
+            get => _muted;
             private set
             {
                 if (Equals(_muted, value))
@@ -135,7 +135,7 @@ namespace SharpPropoPlus.ViewModels
 
         public ReadOnlyObservableCollection<AudioChannel> ChannelCollection
         {
-            get { return _channelCollection; }
+            get => _channelCollection;
             private set
             {
                 _channelCollection = value;
@@ -155,7 +155,7 @@ namespace SharpPropoPlus.ViewModels
 
         public AudioChannel SelectedChannelItem
         {
-            get { return _selectedChannelItem; }
+            get => _selectedChannelItem;
             set
             {
                 if (_selectedChannelItem == value)
@@ -171,7 +171,7 @@ namespace SharpPropoPlus.ViewModels
 
         public AudioEndPoint SelectedAudioEndPoint
         {
-            get { return _selectedAudioEndPoint; }
+            get => _selectedAudioEndPoint;
             set
             {
                 if (_selectedAudioEndPoint == value)

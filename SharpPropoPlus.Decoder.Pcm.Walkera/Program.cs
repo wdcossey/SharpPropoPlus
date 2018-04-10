@@ -118,20 +118,6 @@ namespace SharpPropoPlus.Decoder.Pcm.Walkera
             }
         }
 
-        #region Config
-
-        protected override void LoadConfig()
-        {
-
-        }
-
-        protected override void SaveConfig()
-        {
-
-        }
-
-        #endregion
-
         /// <summary>
         /// Resets the static variables.
         /// </summary>

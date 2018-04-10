@@ -147,20 +147,6 @@ namespace SharpPropoPlus.Decoder.Pcm.JrGraupner
             }
         }
 
-        #region Config
-
-        protected override void LoadConfig()
-        {
-
-        }
-
-        protected override void SaveConfig()
-        {
-
-        }
-
-        #endregion
-
         /// <summary>
         /// Resets the static variables.
         /// </summary>

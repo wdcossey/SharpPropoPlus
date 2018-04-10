@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using SharpPropoPlus.Contracts.Enums;
 using SharpPropoPlus.Contracts.Interfaces;
 using SharpPropoPlus.Decoder.Contracts;
@@ -20,29 +21,9 @@ namespace SharpPropoPlus.Decoder.Ppm.Walkera
 
         //static int i = 0;
 
-        #region PPM Values (Walkera)
+        private static readonly Lazy<IPropoPlusPpmSettings> SettingsStatic = new Lazy<IPropoPlusPpmSettings>(() => new Settings());
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public override double PpmJitterDefault => Settings.Default.PpmJitter;//4.25;
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public override double PpmMinPulseWidthDefault => Settings.Default.PpmMinPulseWidth;//78.4;
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public override double PpmMaxPulseWidthDefault => Settings.Default.PpmMaxPulseWidth;//304.8;
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public override double PpmSeparatorDefault => Settings.Default.PpmSeparator;//65.3;
-
-        #endregion PPM Values (Walkera)
+        public override IPropoPlusPpmSettings Settings => SettingsStatic.Value;
 
         public override string[] Description => new[]
         {
@@ -165,25 +146,6 @@ namespace SharpPropoPlus.Decoder.Ppm.Walkera
 
             DataCount++;
         }
-
-        #region Config
-
-        protected override void LoadConfig()
-        {
-            
-        }
-
-        protected override void SaveConfig()
-        {
-            Settings.Default.PpmMinPulseWidth = PpmMinPulseWidth;
-            Settings.Default.PpmMaxPulseWidth = PpmMaxPulseWidth;
-            Settings.Default.PpmSeparator = PpmSeparator;
-            Settings.Default.PpmJitter = PpmJitter;
-
-            Settings.Default.Save();
-        }
-
-        #endregion
 
         /// <summary>
         /// Resets the static variables.

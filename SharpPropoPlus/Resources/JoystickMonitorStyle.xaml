@@ -13,7 +13,7 @@
                             Name="PART_Track" 
                             CornerRadius="0" 
                             Background="Transparent"
-                            BorderBrush="#F0F0F0"
+                            BorderBrush="{StaticResource LightBorderColorBrush}"
                             BorderThickness="1" 
                             SnapsToDevicePixels="True"/>
                         <Border 
@@ -51,7 +51,7 @@
         <Setter Property="Minimum" Value="0"/>
         <Setter Property="Maximum" Value="1000"/>
         <Setter Property="Margin" Value="2 0"/>
-        <Setter Property="BorderBrush" Value="#F0F0F0"/>
+        <Setter Property="BorderBrush" Value="{StaticResource LightBorderColorBrush}"/>
         <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="Background" Value="{StaticResource SecondaryColorBrush}"/>
     </Style>

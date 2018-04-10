@@ -281,20 +281,6 @@ namespace SharpPropoPlus.Decoder.Pcm.Futaba
             }
         }
 
-        #region Config
-
-        protected override void LoadConfig()
-        {
-
-        }
-
-        protected override void SaveConfig()
-        {
-
-        }
-
-        #endregion
-
         /// <summary>
         /// Resets the static variables.
         /// </summary>

@@ -132,9 +132,17 @@ namespace SharpPropoPlus.Controls
             //BorderBrush = new SolidColorBrush(colour);
             //Fill = new SolidColorBrush(colour);
 
-            ProgressBarWidth =
-                Math.Min((Value / (Maximum + Minimum) * ActualWidth) - (BorderThickness.Left + BorderThickness.Right),
-                    ActualWidth - (BorderThickness.Left + BorderThickness.Right));
+            if (Value.Equals(0d))
+            {
+                ProgressBarWidth = 0;
+            }
+            else
+            {
+                ProgressBarWidth =
+                    Math.Min((Value / (Maximum + Minimum) * ActualWidth) - (BorderThickness.Left + BorderThickness.Right),
+                        ActualWidth - (BorderThickness.Left + BorderThickness.Right));
+            }
+
         }
     }
 }

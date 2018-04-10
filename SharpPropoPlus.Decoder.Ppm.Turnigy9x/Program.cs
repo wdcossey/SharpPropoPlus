@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using SharpPropoPlus.Contracts.Enums;
 using SharpPropoPlus.Contracts.Interfaces;
 using SharpPropoPlus.Decoder.Contracts;
@@ -22,17 +23,9 @@ namespace SharpPropoPlus.Decoder.Ppm.Turnigy9x
 
         //static int i = 0;
 
-
-        #region  PPM Values (Turnigy)
-
-        public override double PpmSeparatorDefault => 61.44;
-
-        public override double PpmMinPulseWidthDefault => 130.56;
-
-        public override double PpmMaxPulseWidthDefault => 322.56;
-    
-
-        #endregion PPM Values (Turnigy)
+        private static readonly Lazy<IPropoPlusPpmSettings> SettingsStatic = new Lazy<IPropoPlusPpmSettings>(() => new Settings());
+        
+        public override IPropoPlusPpmSettings Settings => SettingsStatic.Value;
 
         public override string[] Description => new[]
         {
@@ -44,6 +37,7 @@ namespace SharpPropoPlus.Decoder.Ppm.Turnigy9x
             Reset();
         }
 
+        
         /// <summary>
         /// <para>Process Pulse for Turnigy 9X PPM</para>
         /// <para>This is how it works:</para>
@@ -194,20 +188,6 @@ namespace SharpPropoPlus.Decoder.Ppm.Turnigy9x
 
             DataCount++;
         }
-
-        #region Config
-
-        protected override void LoadConfig()
-        {
-
-        }
-
-        protected override void SaveConfig()
-        {
-
-        }
-
-        #endregion
 
         /// <summary>
         /// Resets the static variables.

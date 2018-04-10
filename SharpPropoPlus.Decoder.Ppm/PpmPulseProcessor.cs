@@ -18,22 +18,28 @@ namespace SharpPropoPlus.Decoder.Ppm
 
         #region PPM Values (General)
 
-        private const double PPM_SEPARATOR_DEFAULT = 95.0;
+        //private const double PPM_SEPARATOR_DEFAULT = 95.0;
 
-        private const double PPM_MIN_PULSE_WIDTH_DEFAULT = 96.0;
+        //private const double PPM_MIN_PULSE_WIDTH_DEFAULT = 96.0;
         
-        private const double PPM_MAX_PULSE_WIDTH_DEFAULT = 288.0;
+        //private const double PPM_MAX_PULSE_WIDTH_DEFAULT = 288.0;
 
-        private const double PPM_TRIG_DEFAULT = 870.0;
+        //private const double PPM_TRIG_DEFAULT = 870.0;
 
-        private const double PPM_GLITCH_DEFAULT = 21.0;
+        //private const double PPM_GLITCH_DEFAULT = 21.0;
 
-        private const double PPM_JITTER_DEFAULT = 5.0;
+        //private const double PPM_JITTER_DEFAULT = 5.0;
 
         /// <summary>
         /// 
         /// </summary>
-        public virtual double PpmMinPulseWidthDefault => PPM_MIN_PULSE_WIDTH_DEFAULT;
+        public abstract IPropoPlusPpmSettings Settings { get; }
+
+        /// <summary>
+        /// PPM_MIN
+        /// PPM minimal pulse width (0.5 mSec)
+        /// </summary>
+        //public virtual double PpmMinPulseWidthDefault => PPM_MIN_PULSE_WIDTH_DEFAULT;
 
         /// <summary>
         /// PPM_MIN
@@ -52,7 +58,7 @@ namespace SharpPropoPlus.Decoder.Ppm
         /// <summary>
         /// 
         /// </summary>
-        public virtual double PpmMaxPulseWidthDefault => PPM_MAX_PULSE_WIDTH_DEFAULT;
+        //public virtual double PpmMaxPulseWidthDefault => PPM_MAX_PULSE_WIDTH_DEFAULT;
 
         /// <summary>
         /// PPM_MAX
@@ -71,7 +77,7 @@ namespace SharpPropoPlus.Decoder.Ppm
         /// <summary>
         /// 
         /// </summary>
-        public virtual double PpmTrigDefault => PPM_TRIG_DEFAULT;
+        //public virtual double PpmTrigDefault => PPM_TRIG_DEFAULT;
 
         /// <summary>
         /// PPM_TRIG
@@ -90,7 +96,7 @@ namespace SharpPropoPlus.Decoder.Ppm
         /// <summary>
         /// 
         /// </summary>
-        public virtual double PpmSeparatorDefault => PPM_SEPARATOR_DEFAULT;
+        //public virtual double PpmSeparatorDefault => PPM_SEPARATOR_DEFAULT;
 
         /// <summary>
         /// PPM_SEP
@@ -109,7 +115,7 @@ namespace SharpPropoPlus.Decoder.Ppm
         /// <summary>
         /// 
         /// </summary>
-        public virtual double PpmGlitchDefault => PPM_GLITCH_DEFAULT;
+        //public virtual double PpmGlitchDefault => PPM_GLITCH_DEFAULT;
 
         /// <summary>
         /// PPM_GLITCH
@@ -128,7 +134,7 @@ namespace SharpPropoPlus.Decoder.Ppm
         /// <summary>
         /// 
         /// </summary>
-        public virtual double PpmJitterDefault => PPM_JITTER_DEFAULT;
+        //public virtual double PpmJitterDefault => PPM_JITTER_DEFAULT;
 
         /// <summary>
         /// PPM_JITTER
@@ -158,14 +164,14 @@ namespace SharpPropoPlus.Decoder.Ppm
             {
                 _loadingConfig = true;
 
-                LoadConfig();
+                //LoadConfig();
 
-                PpmMinPulseWidth = PpmMinPulseWidthDefault;
-                PpmMaxPulseWidth = PpmMaxPulseWidthDefault;
-                PpmTrig = PpmTrigDefault;
-                PpmSeparator = PpmSeparatorDefault;
-                PpmGlitch = PpmGlitchDefault;
-                PpmJitter = PpmJitterDefault;
+                PpmMinPulseWidth =  Settings.PpmMinPulseWidth.Equals(0d) ? Settings.PpmMinPulseWidthDefault : Settings.PpmMinPulseWidth;
+                PpmMaxPulseWidth = Settings.PpmMaxPulseWidth.Equals(0d) ? Settings.PpmMaxPulseWidthDefault : Settings.PpmMaxPulseWidth;
+                PpmTrig = Settings.PpmTrig.Equals(0d) ? Settings.PpmTrigDefault : Settings.PpmTrig;
+                PpmSeparator = Settings.PpmSeparator.Equals(0d) ? Settings.PpmSeparatorDefault : Settings.PpmSeparator;
+                PpmGlitch = Settings.PpmGlitch.Equals(0d) ? Settings.PpmGlitchDefault : Settings.PpmGlitch;
+                PpmJitter = Settings.PpmJitter.Equals(0d) ? Settings.PpmJitterDefault : Settings.PpmJitter;
 
                 ChannelData = new int[BufferLength];
 
@@ -187,6 +193,18 @@ namespace SharpPropoPlus.Decoder.Ppm
             {
                 _loadingConfig = false;
             }
+        }
+
+        private void SaveConfig()
+        {
+            Settings.PpmMinPulseWidth = PpmMinPulseWidth;
+            Settings.PpmMaxPulseWidth = PpmMaxPulseWidth;
+            Settings.PpmTrig = PpmTrig;
+            Settings.PpmSeparator = PpmSeparator;
+            Settings.PpmGlitch = PpmGlitch;
+            Settings.PpmJitter = PpmJitter;
+
+            Settings.Save();
         }
 
         private void SaveConfigInternal()

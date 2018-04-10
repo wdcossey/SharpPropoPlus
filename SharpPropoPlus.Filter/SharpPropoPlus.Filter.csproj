@@ -46,6 +46,11 @@
     <Compile Include="FilterProcessor.cs" />
     <Compile Include="IFilterManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SharpPropoPlus.Contracts\SharpPropoPlus.Contracts.csproj">
@@ -56,6 +61,13 @@
       <Project>{1409edfb-e81d-4daa-b7e4-0ae893be4cac}</Project>
       <Name>SharpPropoPlus.Events</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

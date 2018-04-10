@@ -66,7 +66,7 @@
                                                     <RowDefinition/>
                                                 </Grid.RowDefinitions>
                                                 <Grid Grid.Row="0" Margin="0" Background="#01000000" Opacity="0.75" >
-                                                    <Border VerticalAlignment="Stretch" SnapsToDevicePixels="True" BorderBrush="#f0f0f0" BorderThickness="0 0 0 1" HorizontalAlignment="Stretch" Margin="8 0" Padding="8 6 40 6">
+                                                    <Border VerticalAlignment="Stretch" SnapsToDevicePixels="True" BorderBrush="{StaticResource LightBorderColorBrush}" BorderThickness="0 0 0 1" HorizontalAlignment="Stretch" Margin="8 0" Padding="8 6 40 6">
                                                         <ContentPresenter x:Name="ContentControl" Content="{Binding Name, Mode=OneWay, Converter={StaticResource DescriptionAttributeValueConverter}}" TextBlock.FontWeight="Light" TextBlock.FontSize="11" TextBlock.FontFamily="pack://application:,,,/Fonts/#Montserrat Light" />
                                                     </Border>
                                                 </Grid>
