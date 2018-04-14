@@ -45,6 +45,7 @@
     <Compile Include="Contracts\ExportDecoderAttribute.cs" />
     <Compile Include="Contracts\IPropoPlusPpmDecoder.cs" />
     <Compile Include="Contracts\IJitterFilter.cs" />
+    <Compile Include="Contracts\IPropoPlusSettings.cs" />
     <Compile Include="Contracts\IPropoPlusPpmSettings.cs" />
     <Compile Include="DecoderManager.cs" />
     <Compile Include="Enums\HidUsageFlags.cs" />

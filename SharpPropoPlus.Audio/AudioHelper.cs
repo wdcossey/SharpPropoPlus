@@ -16,6 +16,7 @@ using SharpPropoPlus.Audio.Interfaces;
 using SharpPropoPlus.Audio.Models;
 using SharpPropoPlus.Contracts.EventArguments;
 using SharpPropoPlus.Events;
+using DeviceStateChangedEventArgs = SharpPropoPlus.Audio.EventArguments.DeviceStateChangedEventArgs;
 using RecordingState = SharpPropoPlus.Contracts.Enums.RecordingState;
 
 namespace SharpPropoPlus.Audio
@@ -51,6 +52,11 @@ namespace SharpPropoPlus.Audio
             GlobalEventAggregator.Instance.AddListener<SleepStateEventArgs>(SleepStateListner);
 
             _deviceEnumerator = new MMDeviceEnumerator();
+
+            _deviceEnumerator.DeviceAdded += DeviceAdded;
+            _deviceEnumerator.DeviceRemoved += DeviceRemoved;
+            _deviceEnumerator.DeviceStateChanged += DeviceStateChanged;
+            _deviceEnumerator.DevicePropertyChanged += DevicePropertyChanged;
             _lastPeakValues = new PeakValues();
 
             SetBitrate((AudioBitrate)Settings.Default.Bitrate);
@@ -61,6 +67,35 @@ namespace SharpPropoPlus.Audio
             Device = new AudioEndPoint(_currentDevice.FriendlyName, _currentDevice.DeviceID, GetDeviceFormat(_currentDevice).Channels, _currentDevice.DeviceState != DeviceState.Active, (int?)((_currentDevice.GetJackDescriptions()?.FirstOrDefault())?.Color)?.Value); ;
 
             _isStartUp = false;
+        }
+
+        private void DevicePropertyChanged(object sender, DevicePropertyChangedEventArgs args)
+        {
+
+        }
+
+        private void DeviceStateChanged(object sender, CSCore.CoreAudioAPI.DeviceStateChangedEventArgs args)
+        {
+            GlobalEventAggregator.Instance.SendMessage(new DeviceStateChangedEventArgs(args.DeviceId, (AudioDeviceState)(int)args.DeviceState));
+
+            var device = _deviceEnumerator.GetDevice(args.DeviceId);
+
+            if (device == null || device.DeviceState != DeviceState.Active)
+            {
+                //do something with the disabled device!
+            }
+
+            RefreshDevices();
+        }
+
+        private void DeviceRemoved(object sender, DeviceNotificationEventArgs args)
+        {
+
+        }
+
+        private void DeviceAdded(object sender, DeviceNotificationEventArgs args)
+        {
+
         }
 
         private void SleepStateListner(SleepStateEventArgs args)
@@ -86,7 +121,7 @@ namespace SharpPropoPlus.Audio
                 {
                     var device = _deviceEnumerator.GetDevice(Settings.Default.InputDevice);
 
-                    if (device != null)
+                    if (device != null && device.DeviceState == DeviceState.Active)
                         return device;
                 }
                 catch (CoreAudioAPIException ex)
@@ -217,7 +252,7 @@ namespace SharpPropoPlus.Audio
             StartRecording(_currentDevice);
         }
 
-        public void StartRecording(AudioEndPoint audioEndPoint)
+        public void StartRecording(IAudioEndPoint audioEndPoint)
         {
             _currentDevice = _deviceEnumerator.GetDevice(audioEndPoint.DeviceId);
 
@@ -246,11 +281,15 @@ namespace SharpPropoPlus.Audio
 
         private void StartRecording(MMDevice mmDevice)
         {
-
             StopRecording();
 
             if (mmDevice == null || mmDevice.DataFlow != DataFlow.Capture)
                 throw new ArgumentNullException(nameof(mmDevice), "Selected Audio device is invalid.");
+
+            if (mmDevice.DeviceState != DeviceState.Active)
+            {
+                return;
+            }
 
             Device = new AudioEndPoint(mmDevice.FriendlyName, mmDevice.DeviceID, GetDeviceFormat(mmDevice).Channels, mmDevice.DeviceState != DeviceState.Active, (int?)((mmDevice.GetJackDescriptions()?.FirstOrDefault())?.Color)?.Value);
 
@@ -277,7 +316,7 @@ namespace SharpPropoPlus.Audio
             _convertedSource = soundInSource
                 .ChangeSampleRate(192000) // sample rate
                 .ToSampleSource()
-                .ToWaveSource(/*_audioBitrate == AudioBitrate.Eightbit ? 8 :*/ 16); //bits per sample
+                .ToWaveSource(/*_audioBitrate == AudioBitrate.EightBit ? 8 :*/ 16); //bits per sample
 
             //var singleBlockNotificationStream = new SingleBlockNotificationStream(soundInSource.ToSampleSource());
             //_finalSource = singleBlockNotificationStream.ToWaveSource();
@@ -384,7 +423,7 @@ namespace SharpPropoPlus.Audio
 
         public void Dispose()
         {
-            if (_pollingTask.Status == TaskStatus.Running || !_pollingCancellationTokenSource.IsCancellationRequested)
+            if (_pollingTask?.Status == TaskStatus.Running || _pollingCancellationTokenSource?.IsCancellationRequested != true)
                 StopRecording();
 
             _soundIn?.Dispose();

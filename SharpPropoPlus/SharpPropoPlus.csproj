@@ -222,6 +222,7 @@
     <Compile Include="ValueConverters\IntegerSolidColorBrushConverter.cs" />
     <Compile Include="ViewModels\AboutTabViewModel.cs" />
     <Compile Include="ViewModels\AdvancedConfigViewModel.cs" />
+    <Compile Include="ViewModels\AudioEndPointViewModel.cs" />
     <Compile Include="ViewModels\ChannelDataViewModel.cs" />
     <Compile Include="ViewModels\JoystickChannelDataViewModel.cs" />
     <Compile Include="Properties\Annotations.cs" />

@@ -29,6 +29,13 @@ namespace SharpPropoPlus.Decoder
 
         public DecoderManager()
         {
+            if (Settings.Default.UpgradeRequired)
+            {
+                Settings.Default.Upgrade();
+                Settings.Default.UpgradeRequired = false;
+                Settings.Default.Save();
+            }
+
             //An aggregate catalog that combines multiple catalogs
             _catalog = new AggregateCatalog();
 

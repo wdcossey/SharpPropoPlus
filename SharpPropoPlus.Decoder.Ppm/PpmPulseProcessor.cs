@@ -16,30 +16,12 @@ namespace SharpPropoPlus.Decoder.Ppm
         private double _ppmMaxPulseWidth;
         private double _ppmMinPulseWidth;
 
-        #region PPM Values (General)
-
-        //private const double PPM_SEPARATOR_DEFAULT = 95.0;
-
-        //private const double PPM_MIN_PULSE_WIDTH_DEFAULT = 96.0;
-        
-        //private const double PPM_MAX_PULSE_WIDTH_DEFAULT = 288.0;
-
-        //private const double PPM_TRIG_DEFAULT = 870.0;
-
-        //private const double PPM_GLITCH_DEFAULT = 21.0;
-
-        //private const double PPM_JITTER_DEFAULT = 5.0;
-
         /// <summary>
         /// 
         /// </summary>
         public abstract IPropoPlusPpmSettings Settings { get; }
 
-        /// <summary>
-        /// PPM_MIN
-        /// PPM minimal pulse width (0.5 mSec)
-        /// </summary>
-        //public virtual double PpmMinPulseWidthDefault => PPM_MIN_PULSE_WIDTH_DEFAULT;
+        #region PPM Values (General)
 
         /// <summary>
         /// PPM_MIN
@@ -51,14 +33,13 @@ namespace SharpPropoPlus.Decoder.Ppm
             set
             {
                 _ppmMinPulseWidth = value;
-                SaveConfigInternal();
+
+                if (!_ppmMinPulseWidth.Equals(Settings.PpmMinPulseWidth))
+                {
+                    SaveConfigInternal();
+                }
             }
         }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        //public virtual double PpmMaxPulseWidthDefault => PPM_MAX_PULSE_WIDTH_DEFAULT;
 
         /// <summary>
         /// PPM_MAX
@@ -70,14 +51,13 @@ namespace SharpPropoPlus.Decoder.Ppm
             set
             {
                 _ppmMaxPulseWidth = value;
-                SaveConfigInternal();
+
+                if (!_ppmMaxPulseWidth.Equals(Settings.PpmMaxPulseWidth))
+                {
+                    SaveConfigInternal();
+                }
             }
         }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        //public virtual double PpmTrigDefault => PPM_TRIG_DEFAULT;
 
         /// <summary>
         /// PPM_TRIG
@@ -89,14 +69,13 @@ namespace SharpPropoPlus.Decoder.Ppm
             set
             {
                 _ppmTrig = value;
-                SaveConfigInternal();
+
+                if (!_ppmTrig.Equals(Settings.PpmTrig))
+                {
+                    SaveConfigInternal();
+                }
             }
         }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        //public virtual double PpmSeparatorDefault => PPM_SEPARATOR_DEFAULT;
 
         /// <summary>
         /// PPM_SEP
@@ -108,14 +87,13 @@ namespace SharpPropoPlus.Decoder.Ppm
             set
             {
                 _ppmSeparator = value;
-                SaveConfigInternal();
+
+                if (!_ppmSeparator.Equals(Settings.PpmSeparator))
+                {
+                    SaveConfigInternal();
+                }
             }
         }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        //public virtual double PpmGlitchDefault => PPM_GLITCH_DEFAULT;
 
         /// <summary>
         /// PPM_GLITCH
@@ -127,14 +105,13 @@ namespace SharpPropoPlus.Decoder.Ppm
             set
             {
                 _ppmGlitch = value;
-                SaveConfigInternal();
+
+                if (!_ppmGlitch.Equals(Settings.PpmGlitch))
+                {
+                    SaveConfigInternal();
+                }                
             }
         }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        //public virtual double PpmJitterDefault => PPM_JITTER_DEFAULT;
 
         /// <summary>
         /// PPM_JITTER
@@ -164,7 +141,11 @@ namespace SharpPropoPlus.Decoder.Ppm
             {
                 _loadingConfig = true;
 
-                //LoadConfig();
+                if (Settings.UpgradeRequired)
+                {
+                    Settings.Upgrade();
+                    Settings.UpgradeRequired = false;
+                }
 
                 PpmMinPulseWidth =  Settings.PpmMinPulseWidth.Equals(0d) ? Settings.PpmMinPulseWidthDefault : Settings.PpmMinPulseWidth;
                 PpmMaxPulseWidth = Settings.PpmMaxPulseWidth.Equals(0d) ? Settings.PpmMaxPulseWidthDefault : Settings.PpmMaxPulseWidth;

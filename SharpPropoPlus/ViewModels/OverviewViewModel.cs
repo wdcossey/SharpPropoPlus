@@ -92,6 +92,13 @@ namespace SharpPropoPlus.ViewModels
                 case RecordingState.Started:
                     break;
                 case RecordingState.Stopped:
+
+                    for (var i = 0; i < ChannelData.Count; i++)
+                    {
+                        RawChannelData[i].SetValue(0);
+                        FilteredChannelData[i].SetValue(0);
+                    }
+
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

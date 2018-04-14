@@ -6,10 +6,18 @@ namespace SharpPropoPlus.Decoder.Ppm
     public abstract class PpmSettings : ApplicationSettingsBase, IPropoPlusPpmSettings
     {
         [UserScopedSetting]
+        [DefaultSettingValue("true")]
+        public bool UpgradeRequired
+        {
+            get => (bool) this[nameof(UpgradeRequired)];
+            set => this[nameof(UpgradeRequired)] = value;
+        }
+
+        [UserScopedSetting]
         [DefaultSettingValue("0")]
         public double PpmMinPulseWidth
         {
-            get => (double)this["PpmMinPulseWidth"];
+            get => (double) this["PpmMinPulseWidth"];
             set => this["PpmMinPulseWidth"] = value;
         }
 
@@ -19,7 +27,7 @@ namespace SharpPropoPlus.Decoder.Ppm
         [DefaultSettingValue("0")]
         public double PpmMaxPulseWidth
         {
-            get => (double)this["PpmMaxPulseWidth"];
+            get => (double) this["PpmMaxPulseWidth"];
             set => this["PpmMaxPulseWidth"] = value;
         }
 
@@ -29,7 +37,7 @@ namespace SharpPropoPlus.Decoder.Ppm
         [DefaultSettingValue("0")]
         public double PpmTrig
         {
-            get => (double)this["PpmTrig"];
+            get => (double) this["PpmTrig"];
             set => this["PpmTrig"] = value;
         }
 
@@ -39,7 +47,7 @@ namespace SharpPropoPlus.Decoder.Ppm
         [DefaultSettingValue("0")]
         public double PpmSeparator
         {
-            get => (double)this["PpmSeparator"];
+            get => (double) this["PpmSeparator"];
             set => this["PpmSeparator"] = value;
         }
 
@@ -49,7 +57,7 @@ namespace SharpPropoPlus.Decoder.Ppm
         [DefaultSettingValue("0")]
         public double PpmGlitch
         {
-            get => (double)this["PpmGlitch"];
+            get => (double) this["PpmGlitch"];
             set => this["PpmGlitch"] = value;
         }
 
@@ -59,12 +67,12 @@ namespace SharpPropoPlus.Decoder.Ppm
         [DefaultSettingValue("0")]
         public double PpmJitter
         {
-            get => (double)this["PpmJitter"];
+            get => (double) this["PpmJitter"];
             set => this["PpmJitter"] = value;
         }
 
         public virtual double PpmJitterDefault => 5d;
-        
+
         public void RestoreDefaults()
         {
             PpmMinPulseWidth = PpmMinPulseWidthDefault;
@@ -75,10 +83,21 @@ namespace SharpPropoPlus.Decoder.Ppm
             PpmJitter = PpmJitterDefault;
         }
 
-
         public override void Save()
         {
             base.Save();
         }
+
+        public override void Upgrade()
+        {
+            base.Upgrade();
+        }
+
+        public bool IsDefaultSettings => PpmMinPulseWidth.Equals(PpmMinPulseWidthDefault) &&
+                                         PpmMaxPulseWidth.Equals(PpmMaxPulseWidthDefault) &&
+                                         PpmTrig.Equals(PpmTrigDefault) &&
+                                         PpmSeparator.Equals(PpmSeparatorDefault) &&
+                                         PpmGlitch.Equals(PpmGlitchDefault) &&
+                                         PpmJitter.Equals(PpmJitterDefault);
     }
 }

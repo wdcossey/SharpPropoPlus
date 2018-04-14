@@ -70,7 +70,7 @@ namespace SharpPropoPlus
                         break;
                 }
 
-                var data = args.PreferedChannel == AudioChannel.Left ? left[sample] : right[sample];
+                var data = (args.PreferedChannel == AudioChannel.Left && channels > 1) ? left[sample] : right[sample];
 
                 DecoderManager.Decoder.ProcessPulse(sampleRate, data, FilterManager.IsEnabled, FilterManager.Filter);
             }
