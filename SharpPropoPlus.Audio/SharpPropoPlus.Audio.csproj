@@ -44,8 +44,10 @@
     <Compile Include="AudioHelper.cs" />
     <Compile Include="Enums\AudioBitrate.cs" />
     <Compile Include="Enums\AudioChannel.cs" />
+    <Compile Include="Enums\AudioDeviceState.cs" />
     <Compile Include="EventArguments\DeviceInfoEventArgs.cs" />
     <Compile Include="EventArguments\AudioDataEventArgs.cs" />
+    <Compile Include="EventArguments\DeviceStateChangedEventArgs.cs" />
     <Compile Include="EventArguments\PeakValueEventArgs.cs" />
     <Compile Include="EventArguments\PreferredChannelEventArgs.cs" />
     <Compile Include="Models\AudioEndPoint.cs" />

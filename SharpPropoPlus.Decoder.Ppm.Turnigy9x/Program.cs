@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading;
-using SharpPropoPlus.Contracts;
 using SharpPropoPlus.Contracts.Enums;
 using SharpPropoPlus.Contracts.Interfaces;
 using SharpPropoPlus.Decoder.Contracts;
@@ -24,17 +23,9 @@ namespace SharpPropoPlus.Decoder.Ppm.Turnigy9x
 
         //static int i = 0;
 
-
-        #region  PPM Values (Turnigy)
-
-        public override double PpmSeparatorDefault => 61.44;
-
-        public override double PpmMinPulseWidthDefault => 130.56;
-
-        public override double PpmMaxPulseWidthDefault => 322.56;
-    
-
-        #endregion PPM Values (Turnigy)
+        private static readonly Lazy<IPropoPlusPpmSettings> SettingsStatic = new Lazy<IPropoPlusPpmSettings>(() => new Settings());
+        
+        public override IPropoPlusPpmSettings Settings => SettingsStatic.Value;
 
         public override string[] Description => new[]
         {
@@ -46,6 +37,7 @@ namespace SharpPropoPlus.Decoder.Ppm.Turnigy9x
             Reset();
         }
 
+        
         /// <summary>
         /// <para>Process Pulse for Turnigy 9X PPM</para>
         /// <para>This is how it works:</para>
@@ -55,6 +47,8 @@ namespace SharpPropoPlus.Decoder.Ppm.Turnigy9x
         /// </summary>
         /// <param name="width"></param>
         /// <param name="input"></param>
+        /// <param name="filterChannels"></param>
+        /// <param name="filter"></param>
         protected override void Process(int width, bool input, bool filterChannels, IPropoPlusFilter filter)
         {
             if (Monitor.IsEntered(MonitorLock))
@@ -76,8 +70,6 @@ namespace SharpPropoPlus.Decoder.Ppm.Turnigy9x
                 return;
                 _lastSeparatorWidth = width; /* Added to sypport PPM for Turngy 9x */
             }
-            ;
-
 
             // Two separators in a row is an error - resseting
             if ((width < PpmSeparator) && _prevSep)
@@ -87,8 +79,6 @@ namespace SharpPropoPlus.Decoder.Ppm.Turnigy9x
                 DataCount = 0;
                 return;
             }
-            ;
-
 
             /* sync is detected at the end of a very long pulse (over 200 samples = 4.5mSec) */
             if ( /*sync == 0 && */width > PpmTrig)

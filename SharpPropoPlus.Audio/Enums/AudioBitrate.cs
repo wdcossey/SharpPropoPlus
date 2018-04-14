@@ -12,7 +12,7 @@ namespace SharpPropoPlus.Audio.Enums
         /// <summary>
         /// 8bit
         /// </summary>
-        [Description("8bit")] Eightbit,
+        [Description("8bit")] EightBit,
 
         /// <summary>
         /// 16bit

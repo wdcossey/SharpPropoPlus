@@ -11,6 +11,13 @@ namespace SharpPropoPlus.ViewModels
     {
         public ShellViewModel()
         {
+            if (Settings.Default.UpgradeRequired)
+            {
+                Settings.Default.Upgrade();
+                Settings.Default.UpgradeRequired = false;
+                Settings.Default.Save();
+            }
+
             IsShellStateChecked = Settings.Default.Enabled;
             ShellStateCommand = new RelayCommand<bool>(CommandAction);
         }

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Threading;
-using SharpPropoPlus.Contracts;
+﻿using System.Threading;
 using SharpPropoPlus.Contracts.Enums;
 using SharpPropoPlus.Contracts.Interfaces;
 using SharpPropoPlus.Decoder.Contracts;
@@ -40,6 +38,8 @@ namespace SharpPropoPlus.Decoder.Pcm.AirtronicsSanwa
         /// </summary>
         /// <param name="width"></param>
         /// <param name="input"></param>
+        /// <param name="filterChannels"></param>
+        /// <param name="filter"></param>
         protected override void Process(int width, bool input, bool filterChannels, IPropoPlusFilter filter)
         {
 
@@ -82,7 +82,7 @@ namespace SharpPropoPlus.Decoder.Pcm.AirtronicsSanwa
                     ChannelData[7] = Smooth(ChannelData[7], Convert15Bits(DataBuffer[4])); // Aux2 (Ch8)
 
                     JoystickInteraction.Instance.Send(RawChannelCount, ChannelData, filterChannels, filter);
-                };
+                }
 
 
                 // Sync bit is set for the first 10 bits of the chunk (No channel data here)
@@ -98,7 +98,7 @@ namespace SharpPropoPlus.Decoder.Pcm.AirtronicsSanwa
                 {
                     PosUpdateCounter++;
                 }
-            };
+            }
 
 
             //  9: Read the first 10 bits

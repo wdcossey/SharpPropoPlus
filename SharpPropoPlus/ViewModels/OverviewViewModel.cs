@@ -29,6 +29,8 @@ namespace SharpPropoPlus.ViewModels
         private string _filterDescription;
         private bool _isFilterEnabled;
         private ObservableCollection<IJoystickChannelData> _channelData;
+        private ObservableCollection<IChannelData> _rawChannelData;
+        private ObservableCollection<IChannelData> _filteredChannelData;
 
         public OverviewViewModel()
         {
@@ -41,6 +43,7 @@ namespace SharpPropoPlus.ViewModels
             GlobalEventAggregator.Instance.AddListener<JoystickChangedEventArgs>(JoystickChangedListener);
             GlobalEventAggregator.Instance.AddListener<DecoderChangedEventArgs>(DecoderChangedListener);
             GlobalEventAggregator.Instance.AddListener<JoystickUpdateEventArgs>(JoystickUpdateListener);
+            GlobalEventAggregator.Instance.AddListener<ChannelsUpdateEventArgs>(ChannelsUpdateListener);
             GlobalEventAggregator.Instance.AddListener<FilterChangedEventArgs>(FilterChangedListener);
             GlobalEventAggregator.Instance.AddListener<RecordingStateEventArgs>(RecordingStateListner);
 
@@ -58,18 +61,28 @@ namespace SharpPropoPlus.ViewModels
             Device = AudioHelper.Instance.Device;
             JoystickName = JoystickInteraction.Instance.CurrentDevice.Name;
 
-            ChannelData = new ObservableCollection<IJoystickChannelData>()
+            ChannelData = new ObservableCollection<IJoystickChannelData>
             {
-                new JoystickChannelDataViewModel(JoystickChannel.JoystickAxisX) { Value = 0 },
-                new JoystickChannelDataViewModel(JoystickChannel.JoystickAxisY) { Value = 0 },
-                new JoystickChannelDataViewModel(JoystickChannel.JoystickAxisZ) { Value = 0 },
-                new JoystickChannelDataViewModel(JoystickChannel.JoystickRotationX) { Value = 0 },
-                new JoystickChannelDataViewModel(JoystickChannel.JoystickRotationY) { Value = 0 },
-                new JoystickChannelDataViewModel(JoystickChannel.JoystickRotationZ) { Value = 0 },
-                new JoystickChannelDataViewModel(JoystickChannel.JoystickSlider0) { Value = 0 },
-                new JoystickChannelDataViewModel(JoystickChannel.JoystickSlider1) { Value = 0 },
+                new JoystickChannelDataViewModel(JoystickChannel.JoystickAxisX, 0),
+                new JoystickChannelDataViewModel(JoystickChannel.JoystickAxisY, 0),
+                new JoystickChannelDataViewModel(JoystickChannel.JoystickAxisZ, 0),
+                new JoystickChannelDataViewModel(JoystickChannel.JoystickRotationX, 0),
+                new JoystickChannelDataViewModel(JoystickChannel.JoystickRotationY, 0),
+                new JoystickChannelDataViewModel(JoystickChannel.JoystickRotationZ, 0),
+                new JoystickChannelDataViewModel(JoystickChannel.JoystickSlider0, 0),
+                new JoystickChannelDataViewModel(JoystickChannel.JoystickSlider1, 0),
             };
 
+            const string strRawChannel = "Transmitter Channel";
+            const string strFilterChannel = "Filter Channel";
+
+            RawChannelData = new ObservableCollection<IChannelData>();
+            FilteredChannelData = new ObservableCollection<IChannelData>();
+            for (var i = 1; i < 9; i++)
+            {
+                RawChannelData.Add(new ChannelDataViewModel($"{strRawChannel} {i}", 0));
+                FilteredChannelData.Add(new ChannelDataViewModel($"{strFilterChannel} {((char)(64+i))}", 0));
+            }
         }
 
         private void RecordingStateListner(RecordingStateEventArgs args)
@@ -79,6 +92,13 @@ namespace SharpPropoPlus.ViewModels
                 case RecordingState.Started:
                     break;
                 case RecordingState.Stopped:
+
+                    for (var i = 0; i < ChannelData.Count; i++)
+                    {
+                        RawChannelData[i].SetValue(0);
+                        FilteredChannelData[i].SetValue(0);
+                    }
+
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -109,6 +129,36 @@ namespace SharpPropoPlus.ViewModels
             ChannelData?.FirstOrDefault(fd => fd.Channel == JoystickChannel.JoystickRotationZ)?.SetValue(args.RotationZ);
             ChannelData?.FirstOrDefault(fd => fd.Channel == JoystickChannel.JoystickSlider0)?.SetValue(args.Slider0);
             ChannelData?.FirstOrDefault(fd => fd.Channel == JoystickChannel.JoystickSlider1)?.SetValue(args.Slider1);
+        }
+
+        private void ChannelsUpdateListener(ChannelsUpdateEventArgs args)
+        {
+            if (args == null)
+                return;
+
+            //var rawChannelData = new int[8];
+            //Array.Copy(args.RawChannels, rawChannelData, Math.Min(args.RawCount, rawChannelData.Length));
+            //RawChannelData = new ObservableCollection<IChannelData>(rawChannelData.Select(s => new ChannelDataViewModel("", s)));
+
+            if (RawChannelData != null)
+            {
+                for (var i = 0; i < RawChannelData.Count; i++)
+                {
+                    RawChannelData[i].SetValue(args.RawChannels[i]);
+                }
+            }
+
+            //var filteredChannelData = new int[8];
+            //Array.Copy(args.FilterChannels, filteredChannelData, Math.Min(args.RawCount, filteredChannelData.Length));
+            //FilteredChannelData = new ObservableCollection<IChannelData>(filteredChannelData.Select(s => new ChannelDataViewModel("", s)));
+
+            if (FilteredChannelData != null)
+            {
+                for (var i = 0; i < FilteredChannelData.Count; i++)
+                {
+                    FilteredChannelData[i].SetValue(args.FilterChannels[i]);
+                }
+            }
 
         }
 
@@ -131,6 +181,34 @@ namespace SharpPropoPlus.ViewModels
                     return;
 
                 _channelData = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public ObservableCollection<IChannelData> RawChannelData
+        {
+            get => _rawChannelData;
+
+            private set
+            {
+                if (_rawChannelData == value)
+                    return;
+
+                _rawChannelData = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public ObservableCollection<IChannelData> FilteredChannelData
+        {
+            get => _filteredChannelData;
+
+            private set
+            {
+                if (_filteredChannelData == value)
+                    return;
+
+                _filteredChannelData = value;
                 OnPropertyChanged();
             }
         }
@@ -301,6 +379,7 @@ namespace SharpPropoPlus.ViewModels
             GlobalEventAggregator.Instance.RemoveListener<JoystickChangedEventArgs>(JoystickChangedListener);
             GlobalEventAggregator.Instance.RemoveListener<DecoderChangedEventArgs>(DecoderChangedListener);
             GlobalEventAggregator.Instance.RemoveListener<JoystickUpdateEventArgs>(JoystickUpdateListener);
+            GlobalEventAggregator.Instance.RemoveListener<ChannelsUpdateEventArgs>(ChannelsUpdateListener);
             GlobalEventAggregator.Instance.RemoveListener<FilterChangedEventArgs>(FilterChangedListener);
             GlobalEventAggregator.Instance.RemoveListener<RecordingStateEventArgs>(RecordingStateListner); ;
 

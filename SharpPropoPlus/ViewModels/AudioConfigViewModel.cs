@@ -4,6 +4,7 @@ using System.Linq;
 using SharpPropoPlus.Audio;
 using SharpPropoPlus.Audio.Enums;
 using SharpPropoPlus.Audio.EventArguments;
+using SharpPropoPlus.Audio.Interfaces;
 using SharpPropoPlus.Audio.Models;
 using SharpPropoPlus.Contracts.Enums;
 using SharpPropoPlus.Contracts.EventArguments;
@@ -16,11 +17,11 @@ namespace SharpPropoPlus.ViewModels
     {
         private ReadOnlyObservableCollection<AudioBitrate> _bitrateCollection;
         private ReadOnlyObservableCollection<AudioChannel> _channelCollection;
-        private ReadOnlyObservableCollection<AudioEndPoint> _audioEndPointCollection;
+        private ReadOnlyObservableCollection<AudioEndPointViewModel> _audioEndPointCollection;
 
         private AudioBitrate _selectedBitrateItem;
         private AudioChannel _selectedChannelItem;
-        private AudioEndPoint _selectedAudioEndPoint;
+        private IAudioEndPoint _selectedAudioEndPoint;
 
         private int _leftChannelPeak;
         private int? _rightChannelPeak;
@@ -37,21 +38,56 @@ namespace SharpPropoPlus.ViewModels
                     .GetValues(typeof(AudioChannel)).Cast<AudioChannel>()));
 
             AudioEndPointCollection =
-                new ReadOnlyObservableCollection<AudioEndPoint>(new ObservableCollection<AudioEndPoint>(AudioHelper.Instance.Devices));
+                new ReadOnlyObservableCollection<AudioEndPointViewModel>(new ObservableCollection<AudioEndPointViewModel>(AudioHelper.Instance.Devices.Select(s => new AudioEndPointViewModel()
+                {
+                    Channels = s.Channels,
+                    Disabled = s.Disabled,
+                    DeviceId = s.DeviceId,
+                    DeviceName = s.DeviceName,
+                    JackColor = s.JackColor
+                })));
 
             SelectedAudioEndPoint =
-                AudioEndPointCollection.FirstOrDefault(fd => fd.DeviceId == AudioHelper.Instance.Device.DeviceId);
+                AudioEndPointCollection.FirstOrDefault(fd => fd.DeviceId == AudioHelper.Instance.Device.DeviceId/* && !AudioHelper.Instance.Device.Disabled*/);
 
             _selectedBitrateItem = AudioHelper.Instance.Bitrate;
             _selectedChannelItem = AudioHelper.Instance.Channel;
 
             GlobalEventAggregator.Instance.AddListener<PeakValueEventArgs>(PeakValueChangedListner);
             GlobalEventAggregator.Instance.AddListener<RecordingStateEventArgs>(RecordingStateListner);
+            GlobalEventAggregator.Instance.AddListener<DeviceStateChangedEventArgs>(DeviceStateListner);
+        }
+
+        private void DeviceStateListner(DeviceStateChangedEventArgs args)
+        {
+            if (args == null)
+            {
+                return;
+            }
+
+            var device = AudioEndPointCollection.FirstOrDefault(fd => fd.DeviceId.Equals(args.DeviceId, StringComparison.InvariantCultureIgnoreCase));
+
+            if (device == null)
+            {
+                return;
+            }
+
+            switch (args.State)
+            {
+                case AudioDeviceState.Active:
+                    device.Disabled = false;
+                    break;
+                case AudioDeviceState.Disabled:
+                case AudioDeviceState.NotPresent:
+                case AudioDeviceState.UnPlugged:
+                    device.Disabled = true;
+                    break;
+            }
         }
 
         private void RecordingStateListner(RecordingStateEventArgs args)
         {
-            if (args.State == RecordingState.Stopped)
+            if (args?.State == RecordingState.Stopped)
             {
                 LeftChannelPeak = 0;
                 if (RightChannelPeak.HasValue)
@@ -70,7 +106,7 @@ namespace SharpPropoPlus.ViewModels
 
         public ReadOnlyObservableCollection<AudioBitrate> BitrateCollection
         {
-            get { return _bitrateCollection; }
+            get => _bitrateCollection;
             private set
             {
                 _bitrateCollection = value;
@@ -80,7 +116,7 @@ namespace SharpPropoPlus.ViewModels
 
         public AudioBitrate SelectedBitrateItem
         {
-            get { return _selectedBitrateItem; }
+            get => _selectedBitrateItem;
             set
             {
                 if (_selectedBitrateItem == value)
@@ -96,7 +132,7 @@ namespace SharpPropoPlus.ViewModels
 
         public int LeftChannelPeak
         {
-            get { return _leftChannelPeak; }
+            get => _leftChannelPeak;
             private set
             {
                 if (Equals(_leftChannelPeak, value))
@@ -109,7 +145,7 @@ namespace SharpPropoPlus.ViewModels
 
         public int? RightChannelPeak
         {
-            get { return _rightChannelPeak; }
+            get => _rightChannelPeak;
             private set
             {
                 if (Equals(_rightChannelPeak, value))
@@ -122,7 +158,7 @@ namespace SharpPropoPlus.ViewModels
 
         public bool Muted
         {
-            get { return _muted; }
+            get => _muted;
             private set
             {
                 if (Equals(_muted, value))
@@ -135,7 +171,7 @@ namespace SharpPropoPlus.ViewModels
 
         public ReadOnlyObservableCollection<AudioChannel> ChannelCollection
         {
-            get { return _channelCollection; }
+            get => _channelCollection;
             private set
             {
                 _channelCollection = value;
@@ -143,9 +179,9 @@ namespace SharpPropoPlus.ViewModels
             }
         }
 
-        public ReadOnlyObservableCollection<AudioEndPoint> AudioEndPointCollection
+        public ReadOnlyObservableCollection<AudioEndPointViewModel> AudioEndPointCollection
         {
-            get { return _audioEndPointCollection; }
+            get => _audioEndPointCollection;
             private set
             {
                 _audioEndPointCollection = value;
@@ -155,7 +191,7 @@ namespace SharpPropoPlus.ViewModels
 
         public AudioChannel SelectedChannelItem
         {
-            get { return _selectedChannelItem; }
+            get => _selectedChannelItem;
             set
             {
                 if (_selectedChannelItem == value)
@@ -169,9 +205,9 @@ namespace SharpPropoPlus.ViewModels
             }
         }
 
-        public AudioEndPoint SelectedAudioEndPoint
+        public IAudioEndPoint SelectedAudioEndPoint
         {
-            get { return _selectedAudioEndPoint; }
+            get => _selectedAudioEndPoint;
             set
             {
                 if (_selectedAudioEndPoint == value)
@@ -206,6 +242,7 @@ namespace SharpPropoPlus.ViewModels
         {
             GlobalEventAggregator.Instance.RemoveListener<PeakValueEventArgs>(PeakValueChangedListner);
             GlobalEventAggregator.Instance.RemoveListener<RecordingStateEventArgs>(RecordingStateListner);
+            GlobalEventAggregator.Instance.RemoveListener<DeviceStateChangedEventArgs>(DeviceStateListner);
 
             base.Dispose();
         }

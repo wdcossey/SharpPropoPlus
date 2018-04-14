@@ -29,6 +29,13 @@ namespace SharpPropoPlus.Decoder
 
         public DecoderManager()
         {
+            if (Settings.Default.UpgradeRequired)
+            {
+                Settings.Default.Upgrade();
+                Settings.Default.UpgradeRequired = false;
+                Settings.Default.Save();
+            }
+
             //An aggregate catalog that combines multiple catalogs
             _catalog = new AggregateCatalog();
 
@@ -107,7 +114,7 @@ namespace SharpPropoPlus.Decoder
 
         private Lazy<IPropoPlusDecoder, IDecoderMetadata> GetDecoder(string uniqueIdentifier)
         {
-            return Decoders.Single(s => s.Metadata.UniqueIdentifier == uniqueIdentifier);
+            return Decoders.SingleOrDefault(s => s.Metadata.UniqueIdentifier == uniqueIdentifier);
         }
 
         public IDecoderMetadata GetDecoderMetadata(IPropoPlusDecoder decoder)

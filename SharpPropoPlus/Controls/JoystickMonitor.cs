@@ -10,8 +10,8 @@ namespace SharpPropoPlus.Controls
     {
         public ObservableCollection<IJoystickChannelData> Data
         {
-            get { return (ObservableCollection<IJoystickChannelData>) this.GetValue(DataProperty); }
-            set { this.SetValue(DataProperty, value); }
+            get => (ObservableCollection<IJoystickChannelData>) this.GetValue(DataProperty);
+            set => this.SetValue(DataProperty, value);
         }
 
         public static readonly DependencyProperty DataProperty = DependencyProperty.Register(

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading;
-using SharpPropoPlus.Contracts;
 using SharpPropoPlus.Contracts.Enums;
 using SharpPropoPlus.Contracts.Interfaces;
 using SharpPropoPlus.Decoder.Contracts;
@@ -13,7 +12,7 @@ namespace SharpPropoPlus.Decoder.Pcm.JrGraupner
         /// <summary>
         /// Number of samples normalized to 192K samples per second
         /// </summary>
-        private const double PwJr = 31.95d;
+        private const double PW_JR = 31.95d;
 
 
         private int _i;
@@ -63,6 +62,8 @@ namespace SharpPropoPlus.Decoder.Pcm.JrGraupner
         /// </summary>
         /// <param name="width"></param>
         /// <param name="input"></param>
+        /// <param name="filterChannels"></param>
+        /// <param name="filter"></param>
         protected override void Process(int width, bool input, bool filterChannels, IPropoPlusFilter filter)
         {
             if (Monitor.IsEntered(MonitorLock))
@@ -72,7 +73,7 @@ namespace SharpPropoPlus.Decoder.Pcm.JrGraupner
             //    fprintf(gCtrlLogFile, "\n%s - ProcessPulseJrPcm(%d)", tbuffer, width);
 
 
-            if (!Sync && Convert.ToInt32(Math.Floor(2.0 * width / PwJr + 0.5)) == 5)
+            if (!Sync && Convert.ToInt32(Math.Floor(2.0 * width / PW_JR + 0.5)) == 5)
             {
                 Sync = true;
                 if (DataCount >= 8)
@@ -91,7 +92,7 @@ namespace SharpPropoPlus.Decoder.Pcm.JrGraupner
                 return;
             }
 
-            width = Convert.ToInt32(Math.Floor((double) width / PwJr + 0.5));
+            width = Convert.ToInt32(Math.Floor((double) width / PW_JR + 0.5));
             BitStream = ((BitStream << 1) + 1) << (width - 1);
             BitCount += width;
 
@@ -100,7 +101,7 @@ namespace SharpPropoPlus.Decoder.Pcm.JrGraupner
                 BitCount -= 8;
                 if ((DataBuffer[DataCount++] = JrSymbol[(BitStream >> BitCount) & 0xFF]) < 0)
                 {
-                    for (int dt = 0; dt < DataBuffer.Length; dt++)
+                    for (var dt = 0; dt < DataBuffer.Length; dt++)
                     {
                         DataBuffer[dt] = 0;
                     }
@@ -144,8 +145,6 @@ namespace SharpPropoPlus.Decoder.Pcm.JrGraupner
                     JoystickInteraction.Instance.Send(RawChannelCount, ChannelData, filterChannels, filter);
                     break;
             }
-            ;
-
         }
 
         /// <summary>

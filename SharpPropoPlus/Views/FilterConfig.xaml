@@ -66,7 +66,7 @@
                                                     <RowDefinition/>
                                                 </Grid.RowDefinitions>
                                                 <Grid Grid.Row="0" Margin="0" Background="#01000000" Opacity="0.75" >
-                                                    <Border VerticalAlignment="Stretch" SnapsToDevicePixels="True" BorderBrush="#f0f0f0" BorderThickness="0 0 0 1" HorizontalAlignment="Stretch" Margin="8 0" Padding="8 6 40 6">
+                                                    <Border VerticalAlignment="Stretch" SnapsToDevicePixels="True" BorderBrush="{StaticResource LightBorderColorBrush}" BorderThickness="0 0 0 1" HorizontalAlignment="Stretch" Margin="8 0" Padding="8 6 40 6">
                                                         <ContentPresenter x:Name="ContentControl" Content="{Binding Name, Mode=OneWay, Converter={StaticResource DescriptionAttributeValueConverter}}" TextBlock.FontWeight="Light" TextBlock.FontSize="11" TextBlock.FontFamily="pack://application:,,,/Fonts/#Montserrat Light" />
                                                     </Border>
                                                 </Grid>
@@ -82,5 +82,44 @@
             </ComboBox>
         </controls:ControlContainer>
 
+        <!--<controls:ControlContainer Title="Toggle Visuals" Description="Show or hide channel Input &amp; Output.">
+            <ToggleButton IsChecked="{Binding IsEnabled, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                          HorizontalAlignment="Right" 
+                          VerticalAlignment="Center" 
+                          Height="20" 
+                          Style="{StaticResource AnimatedSwitch}"/>
+        </controls:ControlContainer>-->
+
+        <controls:ControlContainer Title="Input">
+            <controls:ControlContainer.Style>
+                <Style TargetType="{x:Type controls:ControlContainer}" BasedOn="{StaticResource {x:Type controls:ControlContainer}}">
+                    <Setter Property="Visibility" Value="Hidden"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsEnabled}" Value="True">
+                            <Setter Property="Visibility" Value="Visible"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </controls:ControlContainer.Style>
+            <controls:ControlContainer.Description>
+                <controls:ChannelMonitor Margin="0 2 0 0" BarWidth="12" HorizontalAlignment="Left" Height="60" Data="{Binding RawChannelData}" Background="Crimson"/>
+            </controls:ControlContainer.Description>
+        </controls:ControlContainer>
+
+        <controls:ControlContainer Title="Output">
+            <controls:ControlContainer.Style>
+                <Style TargetType="{x:Type controls:ControlContainer}" BasedOn="{StaticResource {x:Type controls:ControlContainer}}">
+                    <Setter Property="Visibility" Value="Hidden"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsEnabled}" Value="True">
+                            <Setter Property="Visibility" Value="Visible"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </controls:ControlContainer.Style>
+            <controls:ControlContainer.Description>
+                <controls:ChannelMonitor Margin="0 2 0 0" BarWidth="12" HorizontalAlignment="Left" Height="60" Data="{Binding FilteredChannelData}" Background="DodgerBlue"/>
+            </controls:ControlContainer.Description>
+        </controls:ControlContainer>
     </StackPanel>
 </UserControl>

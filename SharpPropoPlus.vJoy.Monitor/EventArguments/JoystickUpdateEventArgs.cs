@@ -15,12 +15,12 @@ namespace SharpPropoPlus.vJoyMonitor.EventArguments
 
         private JoystickUpdateEventArgs()
         {
-            
+
         }
 
         public JoystickUpdateEventArgs(
-            int axisX, 
-            int axisY, 
+            int axisX,
+            int axisY,
             int axisZ,
             int rotationX,
             int rotationY,

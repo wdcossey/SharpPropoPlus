@@ -2,13 +2,10 @@
 
 namespace SharpPropoPlus.Interfaces
 {
-    public interface IJoystickChannelData
+    public interface IJoystickChannelData : IChannelData
     {
-        JoystickChannel Channel { get; set; }
-        int Value { get; set; }
+        JoystickChannel Channel { get; }
         string Title { get; set; }
         string Description { get; set; }
-
-        void SetValue(int value);
     }
 }

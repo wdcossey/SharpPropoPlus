@@ -9,18 +9,20 @@ namespace SharpPropoPlus.ViewModels
         private string _title;
         private string _description;
         private JoystickChannel _channel;
+        private string _toolTip;
 
         public JoystickChannel Channel
         {
             get => _channel;
-            set
+            private set
             {
-                if (value == _channel)
+                if (value == _channel && !string.IsNullOrWhiteSpace(ToolTip))
                 {
                     return;
                 }
 
                 _channel = value;
+                ToolTip = value.ToString();
                 OnPropertyChanged();
             }
         }
@@ -28,7 +30,7 @@ namespace SharpPropoPlus.ViewModels
         public int Value
         {
             get => _value;
-            set
+            private set
             {
                 if (value == _value)
                 {
@@ -36,6 +38,16 @@ namespace SharpPropoPlus.ViewModels
                 }
 
                 _value = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string ToolTip
+        {
+            get => _toolTip;
+            private set
+            {
+                _toolTip = value;
                 OnPropertyChanged();
             }
         }
@@ -78,6 +90,12 @@ namespace SharpPropoPlus.ViewModels
         public JoystickChannelDataViewModel(JoystickChannel channel)
         {
             Channel = channel;
+        }
+
+        public JoystickChannelDataViewModel(JoystickChannel channel, int value)
+        : this(channel)
+        {
+            Value = value;
         }
     }
 }

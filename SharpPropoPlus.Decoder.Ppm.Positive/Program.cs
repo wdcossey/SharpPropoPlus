@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading;
-using SharpPropoPlus.Contracts;
 using SharpPropoPlus.Contracts.Enums;
 using SharpPropoPlus.Contracts.Interfaces;
 using SharpPropoPlus.Decoder.Contracts;
@@ -21,10 +20,9 @@ namespace SharpPropoPlus.Decoder.Ppm.Positive
 
         //static int i = 0;
 
+        private static readonly Lazy<IPropoPlusPpmSettings> SettingsStatic = new Lazy<IPropoPlusPpmSettings>(() => new Settings());
 
-        #region PPM Values (Positive)
-
-        #endregion
+        public override IPropoPlusPpmSettings Settings => SettingsStatic.Value;
 
         public override string[] Description => new[]
         {
@@ -41,6 +39,8 @@ namespace SharpPropoPlus.Decoder.Ppm.Positive
         /// </summary>
         /// <param name="width"></param>
         /// <param name="input"></param>
+        /// <param name="filterChannels"></param>
+        /// <param name="filter"></param>
         protected override void Process(int width, bool input, bool filterChannels, IPropoPlusFilter filter)
         {
             if (Monitor.IsEntered(MonitorLock))
@@ -59,7 +59,7 @@ namespace SharpPropoPlus.Decoder.Ppm.Positive
             {
                 FormerSync = false;
                 return;
-            };
+            }
 
             /* sync is detected at the end of a very long pulse (over 200 samples = 4.5mSec) */
             if (!input && width > PpmTrig)

@@ -1,8 +1,5 @@
 ﻿using System;
-using System.ComponentModel;
-using System.Linq;
 using System.Threading;
-using SharpPropoPlus.Contracts;
 using SharpPropoPlus.Contracts.Enums;
 using SharpPropoPlus.Contracts.Interfaces;
 using SharpPropoPlus.Decoder.Contracts;
@@ -22,15 +19,9 @@ namespace SharpPropoPlus.Decoder.Ppm.RadioLinkAT9
 
         //static int i = 0;
 
+        private static readonly Lazy<IPropoPlusPpmSettings> SettingsStatic = new Lazy<IPropoPlusPpmSettings>(() => new Settings());
 
-        #region PPM Values (RadioLink AT9)
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public override double PpmTrigDefault => 600.0;
-
-        #endregion
+        public override IPropoPlusPpmSettings Settings => SettingsStatic.Value;
 
         public override string[] Description => new[]
         {

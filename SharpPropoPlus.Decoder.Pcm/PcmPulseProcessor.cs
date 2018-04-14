@@ -18,24 +18,24 @@ namespace SharpPropoPlus.Decoder.Pcm
 
         protected abstract override void Process(int width, bool input, bool filterChannels, IPropoPlusFilter filter);
 
-        public override string[] Description { get; }
+        public abstract override string[] Description { get; }
 
         protected int Bit
         {
-            get { return _bit; }
-            set { _bit = value; }
+            get => _bit;
+            set => _bit = value;
         }
 
         protected int BitCount
         {
-            get { return _bitCount; }
-            set { _bitCount = value; }
+            get => _bitCount;
+            set => _bitCount = value;
         }
 
         protected int BitStream
         {
-            get { return _bitStream; }
-            set { _bitStream = value; }
+            get => _bitStream;
+            set => _bitStream = value;
         }
 
         public override void Reset()

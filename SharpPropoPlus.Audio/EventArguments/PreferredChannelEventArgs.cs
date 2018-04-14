@@ -3,33 +3,25 @@ using SharpPropoPlus.Audio.Enums;
 
 namespace SharpPropoPlus.Audio.EventArguments
 {
-  public class PreferredChannelEventArgs : EventArgs
-  {
-    private AudioChannel _channel;
-
-    public AudioChannel Channel
+    public class PreferredChannelEventArgs : EventArgs
     {
-      get { return _channel; }
-      internal set { _channel = value; }
+        public AudioChannel Channel { get; internal set; }
+
+        public PreferredChannelEventArgs()
+        {
+            Channel = AudioChannel.Left;
+        }
+
+        public PreferredChannelEventArgs(AudioChannel channel)
+            : this()
+        {
+            Channel = channel;
+        }
+
+        public PreferredChannelEventArgs(float leftPeak, float? rightPeak)
+            : this()
+        {
+            Channel = (rightPeak.HasValue && rightPeak > leftPeak) ? AudioChannel.Right : AudioChannel.Left;
+        }
     }
-
-    public PreferredChannelEventArgs()
-    {
-      Channel = AudioChannel.Left;
-    }
-
-    public PreferredChannelEventArgs(AudioChannel channel)
-      : this()
-    {
-      Channel = channel;
-    }
-
-    public PreferredChannelEventArgs(float leftPeak, float? rightPeak)
-      : this()
-    {
-      Channel = (rightPeak.HasValue && rightPeak > leftPeak) ? AudioChannel.Right : AudioChannel.Left;
-    }
-
-
-  }
 }

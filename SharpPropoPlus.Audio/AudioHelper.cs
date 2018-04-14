@@ -16,6 +16,7 @@ using SharpPropoPlus.Audio.Interfaces;
 using SharpPropoPlus.Audio.Models;
 using SharpPropoPlus.Contracts.EventArguments;
 using SharpPropoPlus.Events;
+using DeviceStateChangedEventArgs = SharpPropoPlus.Audio.EventArguments.DeviceStateChangedEventArgs;
 using RecordingState = SharpPropoPlus.Contracts.Enums.RecordingState;
 
 namespace SharpPropoPlus.Audio
@@ -24,11 +25,8 @@ namespace SharpPropoPlus.Audio
     {
 
         private Task _pollingTask;
-        //private bool _quitPolling;
         private CancellationTokenSource _pollingCancellationTokenSource;
         private readonly MMDeviceEnumerator _deviceEnumerator;
-        //private string _deviceId;
-        private IAudioEndPoint _device;
         private readonly PeakValues _lastPeakValues;
         private static readonly object _sync = new object();
         private static volatile AudioHelper _instance;
@@ -53,8 +51,12 @@ namespace SharpPropoPlus.Audio
 
             GlobalEventAggregator.Instance.AddListener<SleepStateEventArgs>(SleepStateListner);
 
-            //_quitPolling = false;
             _deviceEnumerator = new MMDeviceEnumerator();
+
+            _deviceEnumerator.DeviceAdded += DeviceAdded;
+            _deviceEnumerator.DeviceRemoved += DeviceRemoved;
+            _deviceEnumerator.DeviceStateChanged += DeviceStateChanged;
+            _deviceEnumerator.DevicePropertyChanged += DevicePropertyChanged;
             _lastPeakValues = new PeakValues();
 
             SetBitrate((AudioBitrate)Settings.Default.Bitrate);
@@ -62,10 +64,38 @@ namespace SharpPropoPlus.Audio
 
             _currentDevice = GetDefaultDevice();
 
-            //DeviceId = _currentDevice.DeviceID;
             Device = new AudioEndPoint(_currentDevice.FriendlyName, _currentDevice.DeviceID, GetDeviceFormat(_currentDevice).Channels, _currentDevice.DeviceState != DeviceState.Active, (int?)((_currentDevice.GetJackDescriptions()?.FirstOrDefault())?.Color)?.Value); ;
 
             _isStartUp = false;
+        }
+
+        private void DevicePropertyChanged(object sender, DevicePropertyChangedEventArgs args)
+        {
+
+        }
+
+        private void DeviceStateChanged(object sender, CSCore.CoreAudioAPI.DeviceStateChangedEventArgs args)
+        {
+            GlobalEventAggregator.Instance.SendMessage(new DeviceStateChangedEventArgs(args.DeviceId, (AudioDeviceState)(int)args.DeviceState));
+
+            var device = _deviceEnumerator.GetDevice(args.DeviceId);
+
+            if (device == null || device.DeviceState != DeviceState.Active)
+            {
+                //do something with the disabled device!
+            }
+
+            RefreshDevices();
+        }
+
+        private void DeviceRemoved(object sender, DeviceNotificationEventArgs args)
+        {
+
+        }
+
+        private void DeviceAdded(object sender, DeviceNotificationEventArgs args)
+        {
+
         }
 
         private void SleepStateListner(SleepStateEventArgs args)
@@ -91,7 +121,7 @@ namespace SharpPropoPlus.Audio
                 {
                     var device = _deviceEnumerator.GetDevice(Settings.Default.InputDevice);
 
-                    if (device != null)
+                    if (device != null && device.DeviceState == DeviceState.Active)
                         return device;
                 }
                 catch (CoreAudioAPIException ex)
@@ -112,8 +142,6 @@ namespace SharpPropoPlus.Audio
         {
             get
             {
-                //var x = _deviceEnumerator.EnumerateAudioEndPoints(DataFlow.Capture, DeviceState.Active);
-
                 if (_devices == null)
                 {
                     RefreshDevices();
@@ -154,17 +182,8 @@ namespace SharpPropoPlus.Audio
             }
         }
 
-        public IAudioEndPoint Device
-        {
-            get { return _device; }
-            private set { _device = value; }
-        }
+        public IAudioEndPoint Device { get; private set; }
 
-        //public string DeviceId
-        //{
-        //    get { return _deviceId; }
-        //    private set { _deviceId = value; }
-        //}
 
         public AudioChannel Channel
         {
@@ -233,7 +252,7 @@ namespace SharpPropoPlus.Audio
             StartRecording(_currentDevice);
         }
 
-        public void StartRecording(AudioEndPoint audioEndPoint)
+        public void StartRecording(IAudioEndPoint audioEndPoint)
         {
             _currentDevice = _deviceEnumerator.GetDevice(audioEndPoint.DeviceId);
 
@@ -262,11 +281,15 @@ namespace SharpPropoPlus.Audio
 
         private void StartRecording(MMDevice mmDevice)
         {
-
             StopRecording();
 
             if (mmDevice == null || mmDevice.DataFlow != DataFlow.Capture)
                 throw new ArgumentNullException(nameof(mmDevice), "Selected Audio device is invalid.");
+
+            if (mmDevice.DeviceState != DeviceState.Active)
+            {
+                return;
+            }
 
             Device = new AudioEndPoint(mmDevice.FriendlyName, mmDevice.DeviceID, GetDeviceFormat(mmDevice).Channels, mmDevice.DeviceState != DeviceState.Active, (int?)((mmDevice.GetJackDescriptions()?.FirstOrDefault())?.Color)?.Value);
 
@@ -293,7 +316,7 @@ namespace SharpPropoPlus.Audio
             _convertedSource = soundInSource
                 .ChangeSampleRate(192000) // sample rate
                 .ToSampleSource()
-                .ToWaveSource(/*_audioBitrate == AudioBitrate.Eightbit ? 8 :*/ 16); //bits per sample
+                .ToWaveSource(/*_audioBitrate == AudioBitrate.EightBit ? 8 :*/ 16); //bits per sample
 
             //var singleBlockNotificationStream = new SingleBlockNotificationStream(soundInSource.ToSampleSource());
             //_finalSource = singleBlockNotificationStream.ToWaveSource();
@@ -357,11 +380,6 @@ namespace SharpPropoPlus.Audio
 
         private void PollAudioLevels()
         {
-
-            //_quitPolling = false;
-
-            
-
             _pollingTask = Task.Factory.StartNew(() =>
             {
 
@@ -395,45 +413,20 @@ namespace SharpPropoPlus.Audio
                     PreferredChannel = preferredChannel.Channel;
 
                     GlobalEventAggregator.Instance.SendMessage(preferredChannel);
-
-                    //Task.Delay(200, _pollingCancellationTokenSource.Token);
                 }
-
-                //_quitPolling = false;
 
                 audioEndpointVolume?.Dispose();
                 audioMeterInformation?.Dispose();
 
             }, _pollingCancellationTokenSource.Token);
-
-           
-
         }
-
-        //protected virtual void OnPeakValuesChanged(PeakValueEventArgs e)
-        //{
-        //  var handler = PeakValuesChanged;
-        //  handler?.Invoke(this, e);
-        //}
-
-        //protected virtual void OnDeviceChanged(DeviceInfoEventArgs e)
-        //{
-        //  var handler = DeviceChanged;
-        //  handler?.Invoke(this, e);
-        //}
-
-        //public event EventHandler<PeakValueEventArgs> PeakValuesChanged;
-
-        //public event EventHandler<DeviceInfoEventArgs> DeviceChanged;
 
         public void Dispose()
         {
-            if (_pollingTask.Status == TaskStatus.Running || !_pollingCancellationTokenSource.IsCancellationRequested)
+            if (_pollingTask?.Status == TaskStatus.Running || _pollingCancellationTokenSource?.IsCancellationRequested != true)
                 StopRecording();
 
             _soundIn?.Dispose();
-
-            //_device?.Dispose();
 
             _deviceEnumerator?.Dispose();
 

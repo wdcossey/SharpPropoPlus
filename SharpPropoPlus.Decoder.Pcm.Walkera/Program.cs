@@ -1,6 +1,4 @@
-﻿using System;
-using System.Threading;
-using SharpPropoPlus.Contracts;
+﻿using System.Threading;
 using SharpPropoPlus.Contracts.Enums;
 using SharpPropoPlus.Contracts.Interfaces;
 using SharpPropoPlus.Decoder.Contracts;
@@ -43,6 +41,8 @@ namespace SharpPropoPlus.Decoder.Pcm.Walkera
         /// </summary>
         /// <param name="width"></param>
         /// <param name="input"></param>
+        /// <param name="filterChannels"></param>
+        /// <param name="filter"></param>
         protected override void Process(int width, bool input, bool filterChannels, IPropoPlusFilter filter)
         {
             if (Monitor.IsEntered(MonitorLock))
@@ -51,7 +51,6 @@ namespace SharpPropoPlus.Decoder.Pcm.Walkera
             //const int fixed_n_channel = 8;
             //var m_nChannels = 8;
             int vPulse;
-            int[] cs;
 
             width = (int)(width * 44.1 / 192); // Normalize to 44.1K
 
@@ -82,34 +81,34 @@ namespace SharpPropoPlus.Decoder.Pcm.Walkera
             if (_nPulse == 50)
             {
                 /* Channels */
-                var Elevator = WalkeraElevator(_cycle);
-                var Ailerons = WalkeraAilerons(_cycle);
-                var Throttle = WalkeraThrottle(_cycle);
-                var Rudder = WalkeraRudder(_cycle);
-                var Gear = WalkeraGear(_cycle);
-                var Pitch = WalkeraPitch(_cycle);
-                var Gyro = WalkeraGyro(_cycle); /* version 3.3.1 */
-                var Ch8 = WalkeraChannel8(_cycle); /* version 3.3.1 */
+                var elevator = WalkeraElevator(_cycle);
+                var ailerons = WalkeraAilerons(_cycle);
+                var throttle = WalkeraThrottle(_cycle);
+                var rudder = WalkeraRudder(_cycle);
+                var gear = WalkeraGear(_cycle);
+                var pitch = WalkeraPitch(_cycle);
+                var gyro = WalkeraGyro(_cycle); /* version 3.3.1 */
+                var ch8 = WalkeraChannel8(_cycle); /* version 3.3.1 */
 
                 /* Checksum */
-                cs = WalkeraCheckSum(_cycle); /* version 3.3.1 */
+                var checkSum = WalkeraCheckSum(_cycle);
 
                 /* Copy data to joystick positions if checksum is valid (ch1-ch4) */
-                if (cs[0] == _cycle[21] && cs[1] == _cycle[22])
+                if (checkSum[0] == _cycle[21] && checkSum[1] == _cycle[22])
                 {
-                    ChannelData[0] = Smooth(ChannelData[0], Elevator);
-                    ChannelData[1] = Smooth(ChannelData[1], Ailerons);
-                    ChannelData[2] = Smooth(ChannelData[2], Throttle);
-                    ChannelData[3] = Smooth(ChannelData[3], Rudder);
+                    ChannelData[0] = Smooth(ChannelData[0], elevator);
+                    ChannelData[1] = Smooth(ChannelData[1], ailerons);
+                    ChannelData[2] = Smooth(ChannelData[2], throttle);
+                    ChannelData[3] = Smooth(ChannelData[3], rudder);
                 }
 
                 /* Copy data to joystick positions if checksum is valid (ch5-ch8) */
-                if (cs[2] == _cycle[47] && cs[3] == _cycle[48])
+                if (checkSum[2] == _cycle[47] && checkSum[3] == _cycle[48])
                 {
-                    ChannelData[4] = Smooth(ChannelData[4], Gear);
-                    ChannelData[5] = Smooth(ChannelData[5], Pitch);
-                    ChannelData[6] = Smooth(ChannelData[6], Gyro);
-                    ChannelData[7] = Smooth(ChannelData[7], Ch8);
+                    ChannelData[4] = Smooth(ChannelData[4], gear);
+                    ChannelData[5] = Smooth(ChannelData[5], pitch);
+                    ChannelData[6] = Smooth(ChannelData[6], gyro);
+                    ChannelData[7] = Smooth(ChannelData[7], ch8);
                 }
 
                 _nPulse = 0;
@@ -229,9 +228,7 @@ namespace SharpPropoPlus.Decoder.Pcm.Walkera
         /// <returns></returns>
         private static int WalkeraElevator(int[] cycle)
         {
-            int value;
-
-            value = cycle[2] * 64 + cycle[3] * 32 + cycle[4] * 4 + cycle[5] * 2 + (cycle[6] >> 2);
+            var value = cycle[2] * 64 + cycle[3] * 32 + cycle[4] * 4 + cycle[5] * 2 + (cycle[6] >> 2);
 
             /* Mid-point is 511 */
             if (cycle[1] != 0)
@@ -255,12 +252,10 @@ namespace SharpPropoPlus.Decoder.Pcm.Walkera
         /// <returns></returns>
         private static int WalkeraAilerons(int[] cycle)
         {
-            int value, msb;
-
-            msb = cycle[6] & 1;
+            var msb = cycle[6] & 1;
 
             /* Offset from mid-point */
-            value = msb * 256 + cycle[7] * 128 + cycle[8] * 16 + cycle[9] * 8 + cycle[10];
+            var value = msb * 256 + cycle[7] * 128 + cycle[8] * 16 + cycle[9] * 8 + cycle[10];
 
             /* Mid-point is 511 */
             if ((cycle[6] & 2) != 0)
@@ -284,9 +279,7 @@ namespace SharpPropoPlus.Decoder.Pcm.Walkera
         /// <returns></returns>
         private static int WalkeraThrottle(int[] cycle)
         {
-            int value;
-
-            value = cycle[12] * 64 + cycle[13] * 32 + cycle[14] * 4 + cycle[15] * 2 + ((cycle[16] & 4) >> 2);
+            var value = cycle[12] * 64 + cycle[13] * 32 + cycle[14] * 4 + cycle[15] * 2 + ((cycle[16] & 4) >> 2);
 
             /* Mid-point is 511 */
             if (cycle[11] != 0)
@@ -310,12 +303,10 @@ namespace SharpPropoPlus.Decoder.Pcm.Walkera
         /// <returns></returns>
         private static int WalkeraRudder(int[] cycle)
         {
-            int value, msb;
-
-            msb = cycle[16] & 1;
+            var msb = cycle[16] & 1;
 
             /* Offset from mid-point */
-            value = msb * 256 + cycle[17] * 128 + cycle[18] * 16 + cycle[19] * 8 + cycle[20];
+            var value = msb * 256 + cycle[17] * 128 + cycle[18] * 16 + cycle[19] * 8 + cycle[20];
 
             /* Mid-point is 511 */
             if ((cycle[16] & 2) != 0)
@@ -333,9 +324,7 @@ namespace SharpPropoPlus.Decoder.Pcm.Walkera
         /// <returns></returns>
         private static int WalkeraGear(int[] cycle)
         {
-            int value;
-
-            value = cycle[24] * 64 + cycle[25] * 32 + cycle[26] * 4 + cycle[27] * 2 + ((cycle[28] & 4) >> 2);
+            var value = cycle[24] * 64 + cycle[25] * 32 + cycle[26] * 4 + cycle[27] * 2 + ((cycle[28] & 4) >> 2);
 
             /* Mid-point is 511 */
             if (cycle[23] != 0)
@@ -359,13 +348,10 @@ namespace SharpPropoPlus.Decoder.Pcm.Walkera
         /// <returns></returns>
         private static int WalkeraPitch(int[] cycle)
         {
-            int value, msb;
-
-            msb = cycle[28] & 1;
-
+            var msb = cycle[28] & 1;
 
             /* Offset from mid-point */
-            value = msb * 256 + cycle[29] * 128 + cycle[30] * 16 + cycle[31] * 8 + cycle[32];
+            var value = msb * 256 + cycle[29] * 128 + cycle[30] * 16 + cycle[31] * 8 + cycle[32];
 
             /* Mid-point is 511 */
             if ((cycle[28] & 2) != 0)
@@ -378,9 +364,7 @@ namespace SharpPropoPlus.Decoder.Pcm.Walkera
 
         private static int WalkeraGyro(int[] cycle)
         {
-            int value;
-
-            value = cycle[34] * 64 + cycle[35] * 32 + cycle[36] * 4 + cycle[37] * 2 + ((cycle[38] & 4) >> 2);
+            var value = cycle[34] * 64 + cycle[35] * 32 + cycle[36] * 4 + cycle[37] * 2 + ((cycle[38] & 4) >> 2);
 
             /* Mid-point is 511 */
             if (cycle[33] != 0)
@@ -393,13 +377,10 @@ namespace SharpPropoPlus.Decoder.Pcm.Walkera
 
         private static int WalkeraChannel8(int[] cycle)
         {
-            int value, msb;
-
-            msb = cycle[38] & 1;
-
+            var msb = cycle[38] & 1;
 
             /* Offset from mid-point */
-            value = msb * 256 + cycle[39] * 128 + cycle[40] * 16 + cycle[41] * 8 + cycle[42];
+            var value = msb * 256 + cycle[39] * 128 + cycle[40] * 16 + cycle[41] * 8 + cycle[42];
 
             /* Mid-point is 511 */
             if ((cycle[38] & 2) != 0)
