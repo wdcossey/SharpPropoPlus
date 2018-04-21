@@ -2,7 +2,7 @@
 
 namespace SharpPropoPlus.vJoyMonitor
 {
-    public class DeviceInformation
+    public class DeviceInformation : IDeviceInformation
     {
         private readonly string _name;
 

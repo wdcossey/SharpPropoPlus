@@ -18,6 +18,7 @@ namespace SharpPropoPlus.Decoder
         private JoystickInteraction()
         {
             GlobalEventAggregator.Instance.AddListener<JoystickChangedEventArgs>(JoystickChangedListener);
+            GlobalEventAggregator.Instance.AddListener<JoystickMappingChangedEventArgs>(JoystickMappingChangedListener);
         }
 
         private void JoystickChangedListener(JoystickChangedEventArgs args)
@@ -34,6 +35,11 @@ namespace SharpPropoPlus.Decoder
 
                 CurrentDevice = new JoystickInformation(args.Id, args.Name, args.Guid);
             }
+        }
+
+        private void JoystickMappingChangedListener(JoystickMappingChangedEventArgs joystickMappingChangedEventArgs)
+        {
+
         }
 
         public JoystickInformation CurrentDevice
@@ -65,15 +71,6 @@ namespace SharpPropoPlus.Decoder
         {
             get
             {
-                //if (_instance == null)
-                //{
-                //  lock (Sync)
-                //  {
-                //    if (_instance == null)
-                //      _instance = new JoystickInteraction();
-                //  }
-                //}
-
                 if (!_initialized)
                     throw new NullReferenceException($"{nameof(JoystickInteraction)} must be initialized before use!");
 
@@ -162,7 +159,9 @@ namespace SharpPropoPlus.Decoder
             {
 
                 //iMapped = Map2Nibble(m_Mapping, i); // Prepare mapping re-indexing
-                var iMapped = Map2Nibble(0x12345678, i);
+
+                var mapping = Mapping2Int(new[] {1, 2, 3, 4, 5, 6, 7, 8});
+                var iMapped = Map2Nibble(mapping, i);
 
                 if (iMapped > channelCount)
                     continue;
@@ -222,9 +221,22 @@ namespace SharpPropoPlus.Decoder
 
         }
 
+        private static int Mapping2Int(int[] mapping)
+        {
+            if (mapping.Length < 8)
+            {
+                Array.Resize(ref mapping, 8);
+            }
+
+            var result = Convert.ToInt32($"0x{string.Join("", mapping.Take(8))}", 16);
+
+            return result;
+        }
+
         private static int Map2Nibble(int map, int i)
         {
-            return ((map & (0xF << (4 * (7 - i)))) >> (4 * (7 - i))) & 0xF;
+            var result = ((map & (0xF << (4 * (7 - i)))) >> (4 * (7 - i))) & 0xF;
+            return result;
         }
 
         private static void SetDefaultBtnMap(ref int[] btnMap)
@@ -326,6 +338,7 @@ namespace SharpPropoPlus.Decoder
         public void Dispose()
         {
             GlobalEventAggregator.Instance.RemoveListener<JoystickChangedEventArgs>(JoystickChangedListener);
+            GlobalEventAggregator.Instance.RemoveListener<JoystickMappingChangedEventArgs>(JoystickMappingChangedListener);
         }
     }
 }

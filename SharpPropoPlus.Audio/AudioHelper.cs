@@ -47,6 +47,13 @@ namespace SharpPropoPlus.Audio
 
         private AudioHelper()
         {
+            if (Settings.Default.UpgradeRequired)
+            {
+                Settings.Default.Upgrade();
+                Settings.Default.UpgradeRequired = false;
+                Settings.Default.Save();
+            }
+
             _isStartUp = true;
 
             GlobalEventAggregator.Instance.AddListener<SleepStateEventArgs>(SleepStateListner);
@@ -115,11 +122,11 @@ namespace SharpPropoPlus.Audio
 
         private MMDevice GetDefaultDevice()
         {
-            if (!string.IsNullOrWhiteSpace(Settings.Default.InputDevice))
+            if (!string.IsNullOrWhiteSpace(Settings.Default.Device))
             {
                 try
                 {
-                    var device = _deviceEnumerator.GetDevice(Settings.Default.InputDevice);
+                    var device = _deviceEnumerator.GetDevice(Settings.Default.Device);
 
                     if (device != null && device.DeviceState == DeviceState.Active)
                         return device;
@@ -263,7 +270,7 @@ namespace SharpPropoPlus.Audio
 
             StartRecording(_currentDevice);
 
-            Settings.Default.InputDevice = audioEndPoint.DeviceId;
+            Settings.Default.Device = audioEndPoint.DeviceId;
             Settings.Default.Save();
         }
 

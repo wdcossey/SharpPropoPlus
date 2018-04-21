@@ -23,12 +23,25 @@ namespace SharpPropoPlus.vJoyMonitor
         private static readonly object Sync = new object();
 
         private Guid _deviceGuid;
+        private IList<DeviceInformation> _devices;
+
         //private Joystick _joystick;
 
         public event EventHandler<JoystickUpdateEventArgs> JoystickUpdate;
 
+        public IDeviceInformation Device { get; }
+
         public JoystickHelper()
         {
+            if (Settings.Default.UpgradeRequired)
+            {
+                Settings.Default.Upgrade();
+                Settings.Default.UpgradeRequired = false;
+                Settings.Default.Save();
+            }
+
+            Device = GetDefaultDevice();
+
             _quitPolling = false;
             _directInput = new DirectInput();
         }
@@ -105,11 +118,78 @@ namespace SharpPropoPlus.vJoyMonitor
         //  StartCapture(joystickGuid);
         //}
 
-        public void StartCapture(Guid deviceGuid)
+        private IDeviceInformation GetDefaultDevice()
+        {
+
+            using (var enumerator = new DeviceEnumerator())
+            {
+
+                var devices =
+                    enumerator.GetDevices(new[]
+                    {
+                        VjdStat.VJD_STAT_BUSY,
+                        VjdStat.VJD_STAT_FREE,
+                        VjdStat.VJD_STAT_OWN
+                    });
+
+                if (!string.IsNullOrWhiteSpace(Settings.Default.Device))
+                {
+
+                    try
+                    {
+                        var device = devices.FirstOrDefault(fd => fd.Guid == new Guid(Settings.Default.Device));
+
+                        if (device != null &&
+                            new[] {VjdStat.VJD_STAT_OWN, VjdStat.VJD_STAT_FREE}.Contains(device.Status))
+                            return device;
+                    }
+                    catch
+                    {
+                        //
+                    }
+                }
+
+                return devices.FirstOrDefault(fd =>
+                    new[] {VjdStat.VJD_STAT_OWN, VjdStat.VJD_STAT_FREE}.Contains(fd.Status));
+
+            }
+        }
+
+        public IList<DeviceInformation> Devices
+        {
+            get
+            {
+                if (_devices == null)
+                {
+                    RefreshDevices();
+                }
+
+                return _devices;
+            }
+
+            private set => _devices = value;
+        }
+
+        public void RefreshDevices()
+        {
+            using (var enumerator = new DeviceEnumerator())
+            {
+
+                _devices =
+                    enumerator.GetDevices(new[]
+                    {
+                        VjdStat.VJD_STAT_BUSY,
+                        VjdStat.VJD_STAT_FREE,
+                        VjdStat.VJD_STAT_OWN
+                    });
+            }
+        }
+
+        public void StartCapture(IDeviceInformation device)
         {
             StopCapture();
 
-            _deviceGuid = deviceGuid;
+            _deviceGuid = device.Guid;
 
             //_joystick?.Dispose();
 
@@ -126,6 +206,9 @@ namespace SharpPropoPlus.vJoyMonitor
             _quitPolling = false;
 
             PollJoystick();
+
+            Settings.Default.Device = device.Guid.ToString();
+            Settings.Default.Save();
 
             // Spin for a while waiting for the started thread to become alive
             //while (!pollingThread.IsAlive) ;

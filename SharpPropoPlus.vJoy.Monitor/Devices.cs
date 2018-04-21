@@ -7,8 +7,9 @@ namespace SharpPropoPlus.vJoyMonitor
 {
     public class DeviceEnumerator : IDisposable
     {
+        private const string VJOY_DEVICE_ID = "bead1234-0000-0000-0000-504944564944";
 
-        public static readonly Guid VJoyProductGuid = new Guid("bead1234-0000-0000-0000-504944564944");
+        public static readonly Guid VJoyProductGuid = new Guid(VJOY_DEVICE_ID);
 
         public DeviceInformationCollection GetDevices(VjdStat[] status)
         {

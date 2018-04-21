@@ -10,66 +10,17 @@ namespace SharpPropoPlus.ViewModels
 {
     public class JoystickConfigViewModel : BaseViewModel, IJoystickConfigViewModel
     {
-        private const int WM_DEVICECHANGE = 0x0219;
-
-
         public JoystickConfigViewModel()
         {
+            Devices = new ReadOnlyObservableCollection<IDeviceInformation>(
+                new ObservableCollection<IDeviceInformation>(JoystickHelper.Instance.Devices.OrderBy(ob => ob.Id)));
 
-            using (var enumerator = new DeviceEnumerator())
-            {
-                Devices = new ReadOnlyObservableCollection<DeviceInformation>(
-                    new ObservableCollection<DeviceInformation>(
-                        enumerator.GetDevices(new[]
-                        {
-                            VjdStat.VJD_STAT_BUSY,
-                            VjdStat.VJD_STAT_FREE,
-                            VjdStat.VJD_STAT_OWN,
-                        }).OrderBy(ob => ob.Id)));
-
-                this.SelectedDeviceItem = Devices.FirstOrDefault();
-            }
-
-            //using (var input = new DirectInput())
-            //{
-            //  var inputDevices = input.GetDevices().Where(w => w.ProductGuid.Equals(DeviceEnumerator.VJoyProductGuid)).ToArray();
-            //  foreach (var deviceInstance in inputDevices)
-            //  {
-            //    var device = new Joystick(input, deviceInstance.ProductGuid);
-
-            //    device.Properties.BufferSize = 128;
-
-            //    device.Acquire();
-            //    JoystickState joystickState = new JoystickState();
-            //    device.GetCurrentState(ref joystickState);
-            //    //Debug.WriteLine(joystickState.Y);
-            //    var x = device.GetObjects(DeviceObjectTypeFlags.All).FirstOrDefault(fd => !fd.ReportId.Equals(0));
-
-
-
-
-
-            //    Debug.WriteLine(device.Properties.JoystickId);
-            //    Debug.WriteLine(device.Properties.ProductName);
-            //    Debug.WriteLine(device.Properties.ProductId);
-            //    //Debug.WriteLine(device.Properties.UserName);
-            //    Debug.WriteLine(device.Properties.InstanceName);
-            //    Debug.WriteLine(device.Properties.InterfacePath);
-            //    //Debug.WriteLine(device.Properties.PortDisplayName);
-            //  }
-
-            //  using (var helper = new JoystickHelper())
-            //  {
-            //    helper.StartCapture(inputDevices[0].ProductGuid);
-            //  }
-
-
-            //}
+            SelectedDeviceItem = Devices.FirstOrDefault(fd => fd.Guid == JoystickHelper.Instance.Device.Guid);
         }
 
-        private string _vjoyVersion = null;
-        private ReadOnlyObservableCollection<DeviceInformation> _devices;
-        private DeviceInformation _selectedDeviceItem;
+        private string _vjoyVersion;
+
+        private IDeviceInformation _selectedDeviceItem;
 
         public string VJoyVersion
         {
@@ -84,15 +35,11 @@ namespace SharpPropoPlus.ViewModels
             }
         }
 
-        public ReadOnlyObservableCollection<DeviceInformation> Devices
-        {
-            get { return _devices; }
-            private set { _devices = value; }
-        }
+        public ReadOnlyObservableCollection<IDeviceInformation> Devices { get; }
 
-        public DeviceInformation SelectedDeviceItem
+        public IDeviceInformation SelectedDeviceItem
         {
-            get { return _selectedDeviceItem; }
+            get => _selectedDeviceItem;
             set
             {
                 if (_selectedDeviceItem == value)
@@ -103,7 +50,7 @@ namespace SharpPropoPlus.ViewModels
                 GlobalEventAggregator.Instance.SendMessage(new JoystickChangedEventArgs(_selectedDeviceItem.Id,
                     _selectedDeviceItem.Name, _selectedDeviceItem.Guid));
 
-                JoystickHelper.Instance.StartCapture(_selectedDeviceItem.Guid);
+                JoystickHelper.Instance.StartCapture(_selectedDeviceItem);
 
                 OnPropertyChanged();
             }

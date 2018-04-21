@@ -71,8 +71,14 @@
     <Compile Include="DeviceInformation.cs" />
     <Compile Include="Devices.cs" />
     <Compile Include="EventArguments\JoystickUpdateEventArgs.cs" />
+    <Compile Include="IDeviceInformation.cs" />
     <Compile Include="JoystickHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
     <Compile Include="vJoyCollection.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -84,7 +90,12 @@
       <Link>vJoyInterface.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="app.config" />
     <None Include="packages.config" />
+    <None Include="Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SharpPropoPlus.Events\SharpPropoPlus.Events.csproj">
